@@ -26,6 +26,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RookiEcom.Modules.Product.I
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RookiEcom.IdentityServer", "src\Hosts\RookiEcom.IdentityServer\RookiEcom.IdentityServer.csproj", "{24709A12-7333-4110-BC12-959F47C00441}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RookiEcom.FrontStore", "src\Hosts\RookiEcom.FrontStore\RookiEcom.FrontStore.csproj", "{A14AFBAA-6B52-4106-9AFA-A11E51A5BCB5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,6 +46,7 @@ Global
 		{FE34A00E-4528-4144-9379-47921FE3CDCE} = {01F286FA-E020-4699-AE85-9CC065BA935A}
 		{A19D83F8-F3CD-463E-8F6C-C3B6D85CEDD6} = {01F286FA-E020-4699-AE85-9CC065BA935A}
 		{24709A12-7333-4110-BC12-959F47C00441} = {64F33469-7617-406A-905C-4B82AED601A6}
+		{A14AFBAA-6B52-4106-9AFA-A11E51A5BCB5} = {64F33469-7617-406A-905C-4B82AED601A6}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{EBB6E6A4-C20D-4243-826C-498483C4BF89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -78,5 +81,9 @@ Global
 		{24709A12-7333-4110-BC12-959F47C00441}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24709A12-7333-4110-BC12-959F47C00441}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24709A12-7333-4110-BC12-959F47C00441}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A14AFBAA-6B52-4106-9AFA-A11E51A5BCB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A14AFBAA-6B52-4106-9AFA-A11E51A5BCB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A14AFBAA-6B52-4106-9AFA-A11E51A5BCB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A14AFBAA-6B52-4106-9AFA-A11E51A5BCB5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
