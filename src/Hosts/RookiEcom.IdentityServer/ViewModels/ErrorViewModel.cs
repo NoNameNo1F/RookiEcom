@@ -1,4 +1,4 @@
-namespace RookiEcom.IdentityServer.Models;
+namespace RookiEcom.IdentityServer.ViewModels;
 
 public class ErrorViewModel
 {

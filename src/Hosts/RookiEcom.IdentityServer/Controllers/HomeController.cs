@@ -1,6 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using RookiEcom.IdentityServer.Models;
+using RookiEcom.IdentityServer.ViewModels;
 
 namespace RookiEcom.IdentityServer.Controllers;
 

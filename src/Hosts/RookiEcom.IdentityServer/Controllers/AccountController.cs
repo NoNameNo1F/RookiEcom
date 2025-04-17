@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using RookiEcom.IdentityServer.Domain;
-using RookiEcom.IdentityServer.Models;
+using RookiEcom.IdentityServer.ViewModels;
 
 namespace RookiEcom.IdentityServer.Controllers;
 
@@ -93,9 +93,69 @@ public class AccountController : Controller
     }
     
     [HttpGet]
+    public IActionResult Register(string returnUrl)
+    {
+        if (string.IsNullOrEmpty(returnUrl) || !Url.IsLocalUrl(returnUrl))
+        {
+            returnUrl = "/";
+        }
+
+        return View(new RegisterViewModel { ReturnUrl = returnUrl });
+    }
+    
+    [HttpPost]
+    public async Task<IActionResult> Register(RegisterViewModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+        
+        if (model.RePassword != model.Password)
+        {
+            ModelState.AddModelError(string.Empty, "Password should be match with RePassword.");
+            return View(model);
+        }
+        
+        var user = new User
+        {
+            UserName = model.UserName,
+            Email = model.Email,
+            FirstName = model.FirstName,
+            LastName = model.LastName,
+            DoB = model.DoB
+        };
+
+        var result = await _userManager.CreateAsync(user, model.Password);
+        if (!result.Succeeded)
+        {
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+            return View(model);
+        }
+        
+        await _userManager.AddToRoleAsync(user, "Customer");
+        var claims = new List<Claim>
+        {
+            new Claim("sub", user.Id.ToString()),
+            new Claim(ClaimTypes.Name, $"{model.FirstName} {model.LastName}"),
+            new Claim(ClaimTypes.Role, "Customer")
+        };
+        await _userManager.AddClaimsAsync(user, claims);
+        _logger.LogInformation($"User {user.FirstName} {user.LastName} registered.");
+
+        if (_interactionService.IsValidReturnUrl(model.ReturnUrl) || Url.IsLocalUrl(model.ReturnUrl))
+        {
+            return Redirect(model.ReturnUrl);
+        }
+        return Redirect("~/");
+    }
+    
+    [HttpGet]
     public async Task<IActionResult> Logout(string logoutId)
     {
-        // await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         await _signInManager.SignOutAsync();
         var logoutContext = await _interactionService.GetLogoutContextAsync(logoutId);
         return Redirect(logoutContext?.PostLogoutRedirectUri ?? "/");

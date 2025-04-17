@@ -1,0 +1,72 @@
+﻿@model RookiEcom.IdentityServer.ViewModels.RegisterViewModel
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Register - RookiEcom";
+}
+
+<section class="vh-100 gradient-form">
+  <div class="d-flex align-items-center h-100 gradient-custom-3">
+    <div class="container h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-12 col-md-9 col-lg-7 col-xl-6">
+          <div class="card" style="border-radius: 15px;">
+            <div class="card-body p-5">
+              <h2 class="text-uppercase text-center mb-5" style="color: #030712;">Register an account</h2>
+
+              <form asp-action="Register" method="post">
+                <input asp-for="ReturnUrl" type="hidden" />
+                
+                <div data-mdb-input-init class="form-outline mb-4">
+                  <input type="text" asp-for="FirstName" class="form-control form-control-lg" />
+                  <label class="form-label" asp-validation-for="FirstName">First Name</label>
+                </div>
+
+                <div data-mdb-input-init class="form-outline mb-4">
+                  <input type="text" asp-for="LastName" class="form-control form-control-lg" />
+                  <label class="form-label" asp-validation-for="LastName">Last Name</label>
+                </div>
+                
+                <div data-mdb-input-init class="form-outline mb-4">
+                  <input type="date" asp-for="DoB" class="form-control form-control-lg" />
+                  <label class="form-label" asp-validation-for="DoB">Date Of Birth</label>
+                </div>
+                
+                <div data-mdb-input-init class="form-outline mb-4">
+                  <input type="text" asp-for="UserName" class="form-control form-control-lg" />
+                  <label class="form-label" asp-validation-for="UserName">UserName</label>
+                </div>
+                <div data-mdb-input-init class="form-outline mb-4">
+                  <input type="email" asp-for="Email"  class="form-control form-control-lg" />
+                  <label class="form-label" asp-validation-for="Email">Email</label>
+                </div>
+                
+                <div data-mdb-input-init class="form-outline mb-4">
+                  <input type="password" asp-for="Password"  class="form-control form-control-lg" />
+                  <label class="form-label" asp-validation-for="Password">Enter your password</label>
+                </div>
+                
+                <div data-mdb-input-init class="form-outline mb-4">
+                  <input type="password" asp-for="RePassword"  class="form-control form-control-lg" />
+                  <label class="form-label" asp-validation-for="RePassword">Repeat your password</label>
+                </div>
+
+                <div class="d-flex justify-content-center">
+                  <button type="submit"
+                          data-mdb-ripple-init class="btn btn-success btn-block btn-lg gradient-custom-2" 
+                          style="color: #fafafa;">Register</button>
+                </div>
+
+                <p class="text-center text-muted mt-5 mb-0">
+                  Have already an account?
+                  <a asp-action="Login" asp-controller="Account" asp-route-returnUrl="@Model.ReturnUrl"
+                     class="fw-bold text-body"><u>Login here</u></a>
+                </p>
+
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -32,4 +32,12 @@
       <ProjectReference Include="..\..\BuildingBlocks\RookiEcom.Domain\RookiEcom.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Models\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Views\Account\Login.cshtml.css" />
+    </ItemGroup>
+
 </Project>

@@ -30,7 +30,9 @@ builder.Services.AddIdentity<User, IdentityRole<Guid>>(options =>
     .AddDefaultTokenProviders();
 
 builder.Services
-    .AddIdentityServer()
+    .AddIdentityServer(options =>
+        options.KeyManagement.Enabled = false
+    )
     .AddConfigurationStore(options =>
     {
         options.ConfigureDbContext = b =>
@@ -82,8 +84,16 @@ builder.Services
             }
             await Task.CompletedTask;
         };
+        
     });
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowClients", policy =>
+        policy.WithOrigins("https://localhost:5001", "https://localhost:7670")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials());
+});
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -98,6 +108,8 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+app.UseCors("AllowClients");
 
 app.UseRouting();
 app.UseIdentityServer();
