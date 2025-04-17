@@ -1,0 +1,79 @@
+﻿@model RookiEcom.FrontStore.ViewModels.ProductViewModel;
+<h2>Products</h2>
+@if (ViewData["Error"] != null)
+{
+    <p style="color: red;">@ViewData["Error"]</p>
+}
+else
+{
+    @if (Model.Product == null)
+    {
+        <p>No products available.</p>
+    }
+    else
+    {
+        <li><strong>ID:</strong> @Model.Product.Id</li>
+        <li><strong>SKU:</strong> @Model.Product.SKU</li>
+        <li><strong>Name:</strong> @Model.Product.Name</li>
+        <li><strong>Description:</strong> @Model.Product.Description</li>
+        <li><strong>Market Price:</strong> @Model.Product.MarketPrice.ToString("C") VND</li>
+        <li><strong>Price:</strong> @Model.Product.Price.ToString("C") VND</li>
+        <li><strong>Status:</strong> @Model.Product.Status</li>
+        <li><strong>Sold:</strong> @Model.Product.Sold</li>
+        <li><strong>Stock:</strong> @Model.Product.StockQuantity</li>
+        <li><strong>Category ID:</strong> @Model.Product.CategoryId</li>
+        <li>
+            <strong>MediaTypeNames.Image Gallery:</strong>
+            @if (Model.Product.Images == null || !Model.Product.Images.Any())
+            {
+                <span>No images available</span>
+            }
+            else
+            {
+                <ul>
+                    @foreach (var image in Model.Product.Images)
+                    {
+                        <li>@image</li>
+                    }
+                </ul>
+            }
+        </li>
+        <li>
+            <strong>Product Attributes:</strong>
+            @if (Model.Product == null || !Model.Product.ProductAttributes.Any())
+            {
+                <span>No attributes available</span>
+            }
+            else
+            {
+                <ul>
+                    @foreach (var attr in Model.Product.ProductAttributes)
+                    {
+                        <li>@attr.Code: @attr.Value</li>
+                    }
+                </ul>
+            }
+        </li>
+        <li>
+            <strong>Variation Options:</strong>
+            @if (Model.Product.ProductOptions == null)
+            {
+                <span>No variation options available</span>
+            }
+            else
+            {
+                <ul>
+                    <span>@Model.Product.ProductOptions.Code</span>
+                    @foreach (var option in Model.Product.ProductOptions.Values)
+                    {
+                        <li>
+                            @option
+                        </li>
+                    }
+                </ul>
+            }
+        </li>
+        <hr />
+    }
+}
+<a asp-action="Index" asp-controller="Home">Back to Home</a>

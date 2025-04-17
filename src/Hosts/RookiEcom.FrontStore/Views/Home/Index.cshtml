@@ -1,0 +1,48 @@
+﻿@model RookiEcom.FrontStore.ViewModels.HomeViewModel;
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<h2>Products</h2>
+@if (ViewData["Error"] != null)
+{
+    <p style="color: red;">@ViewData["Error"]</p>
+}
+else
+{
+    @if (!Model.Products.Items.Any())
+    {
+        <p>No products available.</p>
+    }
+    else
+    {
+        <ul>
+            @foreach (var product in Model.Products.Items)
+            {
+                <li><strong>ID:</strong> @product.Id</li>
+                <li><strong>SKU:</strong> @product.SKU</li>
+                <li><strong>Name:</strong> @product.Name</li>
+                <li><strong>Description:</strong> @product.Description</li>
+                <li><strong>Market Price:</strong> @product.MarketPrice.ToString("C")</li>
+                <li><strong>CategoryId:</strong> @product.CategoryId</li>
+                <li><strong>Status:</strong> @product.Status</li>
+                <li><strong>Sold:</strong> @product.Sold</li>
+                <li><strong>Stock:</strong> @product.StockQuantity</li>
+                <li><strong>IsFeature:</strong> @product.IsFeature</li>
+                <li>
+                    <strong>Image Gallery:</strong>
+                    @if (!product.Images.Any())
+                    {
+                        <span>No images available</span>
+                    }
+                    else
+                    {
+                        <img src="@product.Images" alt="@product.Name"/>
+                    }
+                </li>
+                <hr />
+            }
+        </ul>
+    }
+}
+<a asp-action="Index" asp-controller="Home">Back to Home</a>
