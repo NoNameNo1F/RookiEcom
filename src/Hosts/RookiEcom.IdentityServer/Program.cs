@@ -59,7 +59,6 @@ builder.Services
     })
     .AddCookie(options =>
     {
-        options.Cookie.Name = "identityserver";
         options.Cookie.SameSite = SameSiteMode.Lax;
         options.Cookie.HttpOnly = true;
         options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
@@ -89,7 +88,7 @@ builder.Services
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowClients", policy =>
-        policy.WithOrigins("https://localhost:5001", "https://localhost:7670")
+        policy.WithOrigins("https://localhost:5001", "https://localhost:3000")
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials());

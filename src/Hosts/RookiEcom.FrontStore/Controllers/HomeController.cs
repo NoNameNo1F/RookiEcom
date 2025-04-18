@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Net;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RookiEcom.FrontStore.ViewModels;
@@ -37,6 +38,7 @@ public class HomeController : Controller
         //
         // // await Task.WhenAll(products);
         // return View(new HomeViewModel{Products = products});
+        
         return View(new HomeViewModel
         { 
             Products = new Pagination<ProductDto>
@@ -53,7 +55,7 @@ public class HomeController : Controller
                 Items = new List<ProductDto>(),
                 PageNumber = 1,
                 PageSize = 25
-            },
+            }
         });
     }
 

@@ -25,7 +25,7 @@ public class OAuthConfig
             AccessTokenType = AccessTokenType.Jwt,
             AllowedCorsOrigins = { "https://localhost:5001"},
             AlwaysSendClientClaims = true,
-            ClientClaimsPrefix = ""
+            ClientClaimsPrefix = "",
         },
         new Client
         {
@@ -66,6 +66,7 @@ public class OAuthConfig
     public static IEnumerable<IdentityResource> IdentityResources => new IdentityResource[]
     {
         new IdentityResources.OpenId(),
-        new IdentityResources.Profile()
+        new IdentityResources.Profile(),
+        new IdentityResources.Email(),
     };
 }
