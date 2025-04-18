@@ -40,6 +40,7 @@ public class CustomProfileService : IProfileService
             claims.Add(new Claim(ClaimTypes.Role, role));
         }
         
+        context.IssuedClaims.AddRange(claims);
     }
 
     public async Task IsActiveAsync(IsActiveContext context)

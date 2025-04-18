@@ -18,7 +18,7 @@ public static class AuthenticationServiceExtensions
         .AddCookie(options =>
         {
             options.Cookie.Name = "frontstore";
-            options.Cookie.SameSite = SameSiteMode.Lax;
+            options.Cookie.SameSite = SameSiteMode.Strict;
             options.Cookie.HttpOnly = true;
             options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
         })
