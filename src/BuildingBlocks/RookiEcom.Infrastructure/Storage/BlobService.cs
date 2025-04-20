@@ -39,9 +39,8 @@ public class BlobService : IBlobService
         {
             ContentType = file.ContentType
         };
-        // file.GetPathWithFileName()
+        
         var result = await blobClient.UploadAsync(file.Content,httpHeaders);
-        // var result = await blobClient.UploadAsync(file.OpenReadStream(), httpHeaders);
         if (result != null)
         {
             return await GetBlob(blobName, containerName);

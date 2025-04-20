@@ -5,6 +5,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>
@@ -14,30 +15,34 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="Asp.Versioning.Http" Version="8.1.0" />
+      <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
       <PackageReference Include="Duende.AccessTokenManagement" Version="3.2.0" />
       <PackageReference Include="Duende.AccessTokenManagement.OpenIdConnect" Version="3.2.0" />
       <PackageReference Include="Duende.IdentityServer" Version="7.2.0" />
       <PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="7.2.0" />
       <PackageReference Include="Duende.IdentityServer.EntityFramework" Version="7.2.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.15" />
       <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.15" />
+      <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.15" />
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.15" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.15" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.15">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
+      <PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.1" />
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\BuildingBlocks\RookiEcom.Application\RookiEcom.Application.csproj" />
       <ProjectReference Include="..\..\BuildingBlocks\RookiEcom.Domain\RookiEcom.Domain.csproj" />
+      <ProjectReference Include="..\..\BuildingBlocks\RookiEcom.Infrastructure\RookiEcom.Infrastructure.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Models\" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Remove="Views\Account\Login.cshtml.css" />
+      <Folder Include="Application\Dtos\" />
+      <Folder Include="Domain\" />
     </ItemGroup>
 
 </Project>

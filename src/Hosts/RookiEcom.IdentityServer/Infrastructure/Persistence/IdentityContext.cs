@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using RookiEcom.IdentityServer.Domain;
 
-namespace RookiEcom.IdentityServer.Persistence;
+namespace RookiEcom.IdentityServer.Infrastructure.Persistence;
 
 public class IdentityContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 {

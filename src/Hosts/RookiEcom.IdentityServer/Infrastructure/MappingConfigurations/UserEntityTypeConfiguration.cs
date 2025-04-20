@@ -1,8 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using RookiEcom.IdentityServer.Domain;
 
-namespace RookiEcom.IdentityServer.MappingConfigurations;
+namespace RookiEcom.IdentityServer.Infrastructure.MappingConfigurations;
 
 public class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
 {

@@ -3,9 +3,8 @@ using Duende.IdentityServer.Extensions;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;
 using Microsoft.AspNetCore.Identity;
-using RookiEcom.IdentityServer.Domain;
 
-namespace RookiEcom.IdentityServer.Extensions;
+namespace RookiEcom.IdentityServer.Configurations.Extensions;
 
 public class CustomProfileService : IProfileService
 {

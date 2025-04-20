@@ -2,7 +2,7 @@
 using RookiEcom.Domain.SeedWork;
 using RookiEcom.Domain.Shared;
 
-namespace RookiEcom.IdentityServer.Domain;
+namespace RookiEcom.IdentityServer.Domain.Entities;
 
 public class User : IdentityUser<Guid>, IAggregateRoot
 {

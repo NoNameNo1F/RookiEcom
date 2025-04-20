@@ -1,0 +1,9 @@
+﻿global using RookiEcom.IdentityServer.Application.Exceptions;
+global using RookiEcom.IdentityServer.Application.Queries;
+global using RookiEcom.IdentityServer.ConfigurationOptions;
+global using RookiEcom.IdentityServer.Controllers;
+global using RookiEcom.IdentityServer.Domain.Entities;
+global using RookiEcom.IdentityServer.Configurations.Extensions;
+global using RookiEcom.IdentityServer.Infrastructure.Persistence;
+global using RookiEcom.IdentityServer.ViewModels;
+global using RookiEcom.IdentityServer.Common;
