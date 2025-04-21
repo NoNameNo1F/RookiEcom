@@ -29,7 +29,7 @@ public static class InfrastructureServiceCollectionExtensions
             opt.Configuration = settings.Redis.Configuration;
             opt.InstanceName = settings.Redis.InstanceName;
         });
-        
+
         return services;
     }
 }

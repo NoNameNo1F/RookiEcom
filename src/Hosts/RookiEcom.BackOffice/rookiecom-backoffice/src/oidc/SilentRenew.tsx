@@ -11,7 +11,7 @@ const SilentRenew = () => {
         if (window.location.pathname === "/signin-oidc") {
             if (auth.isAuthenticated && !auth.isLoading) {
                 console.log("Sign-in complete, redirecting to /dashboard");
-                navigate("/dashboard", { replace: true });
+                navigate("/", { replace: true });
             } else if (auth.error) {
                 console.error("Sign-in error:", auth.error);
                 navigate("/", { replace: true });
@@ -19,9 +19,13 @@ const SilentRenew = () => {
         }
         // Handle silent renew (/silent-renew)
         if (window.location.pathname === "/silent-renew") {
-            auth.signinSilent().catch((error) => {
-                console.error("Silent renew error:", error);
-            });
+            if (auth.isAuthenticated && !auth.isLoading) {
+                auth.signinSilent().catch((error) => {
+                    console.error("Silent renew error:", error);
+                });
+            } else {
+                navigate("/", { replace: true });
+            }
         }
     }, [auth, navigate]);
 
