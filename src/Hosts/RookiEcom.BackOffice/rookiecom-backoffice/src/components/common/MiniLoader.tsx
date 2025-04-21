@@ -1,13 +1,11 @@
-function MiniLoaderPage({ type = "warning", size = 100 }) {
+import { Box, CircularProgress, Typography } from "@mui/material";
+
+function MiniLoaderPage({ text = "" }) {
   return (
-    <div style={{ position: "absolute", top: "15px", right: "15px" }}>
-      <div
-        className={`spinner-border text-${type}`}
-        style={{ scale: `${size}%` }}
-      >
-        {" "}
-      </div>
-    </div>
+    <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
+      <CircularProgress />
+      <Typography sx={{ ml: 2 }}>{text}</Typography>
+    </Box>
   );
 }
 
