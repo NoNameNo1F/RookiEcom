@@ -3,6 +3,7 @@ import { useAuth } from "react-oidc-context";
 import DashboardPage from "./Dashboard";
 import { useEffect } from 'react';
 import { Box, Typography } from '@mui/material';
+import withAuth from "../oidc/withAuth";
 
 const HomePage = () => {
     const auth = useAuth();
@@ -31,7 +32,17 @@ const HomePage = () => {
     }
 
     const handleLogout = () => {
-        auth.signoutRedirect();
+        auth.revokeTokens(["access_token", "refresh_token"]).then(() => {
+            return auth.signoutRedirect({
+                id_token_hint: auth.user?.id_token!,
+                post_logout_redirect_uri: "https://localhost:3000/logout-callback",
+            });
+        }).then(() => {
+            auth.removeUser();
+        }).catch(error => {
+            console.error("Logout error:", error);
+        });
+
     };
 
     return (
@@ -55,4 +66,4 @@ const HomePage = () => {
     );
 };
 
-export default HomePage;
+export default withAuth(HomePage);

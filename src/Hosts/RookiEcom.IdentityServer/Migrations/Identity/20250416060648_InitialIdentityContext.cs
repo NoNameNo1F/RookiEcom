@@ -1,7 +1,5 @@
-﻿using System;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Migrations;
-using RookiEcom.IdentityServer.Domain;
 
 #nullable disable
 

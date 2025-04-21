@@ -26,6 +26,7 @@ public class OAuthConfig
             AllowedCorsOrigins = { "https://localhost:5001"},
             AlwaysSendClientClaims = true,
             ClientClaimsPrefix = "",
+            CoordinateLifetimeWithUserSession = false
         },
         new Client
         {
@@ -35,11 +36,12 @@ public class OAuthConfig
             RequirePkce = true,
             RequireClientSecret = false,
             RedirectUris = { "https://localhost:3000/signin-oidc" },
-            PostLogoutRedirectUris = { "https://localhost:3000" },
+            PostLogoutRedirectUris = { "https://localhost:3000/logout-callback" },
             AllowedCorsOrigins = { "https://localhost:3000" },
             AllowedScopes = { OpenIdConnectScope.OpenId, OpenIdConnectScope.Profile, "rookiecom-webapi", "role" },
             AllowOfflineAccess = true,
             AccessTokenType = AccessTokenType.Jwt,
+            CoordinateLifetimeWithUserSession = false
         }
     };
 
