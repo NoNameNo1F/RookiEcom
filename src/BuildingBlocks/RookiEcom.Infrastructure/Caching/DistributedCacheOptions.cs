@@ -1,4 +1,4 @@
-﻿namespace RookiEcom.Infrastructure.Cache;
+﻿namespace RookiEcom.Infrastructure.Caching;
 
 public class DistributedCacheOptions
 {
