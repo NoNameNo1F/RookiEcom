@@ -1,0 +1,6 @@
+#@RookiEcom.WebAPI_HostAddress = https://localhost:7670
+#
+#GET {{RookiEcom.WebAPI_HostAddress}}/weatherforecast/
+#Accept: application/json
+#
+####

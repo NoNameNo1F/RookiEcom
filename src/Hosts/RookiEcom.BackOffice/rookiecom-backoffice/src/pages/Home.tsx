@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { Box, Typography } from '@mui/material';
 import withAuth from "../oidc/withAuth";
 
+
 const HomePage = () => {
     const auth = useAuth();
 
@@ -42,7 +43,6 @@ const HomePage = () => {
         }).catch(error => {
             console.error("Logout error:", error);
         });
-
     };
 
     return (
