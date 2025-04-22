@@ -1,7 +1,8 @@
 import { useAuth, withAuthenticationRequired, } from "react-oidc-context";
-
+import { jwtDecode } from "jwt-decode";
 import React, { useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
+import { IJwtPayloadModel } from "../interfaces";
 
 const withAuth = <P extends object>(
     WrappedComponent: React.ComponentType<P>
@@ -11,18 +12,14 @@ const withAuth = <P extends object>(
             const auth = useAuth();
             const navigate = useNavigate();
 
-            const roles = Array.isArray(auth.user!.profile!.roles)
-                ? auth.user?.profile.roles
-                : typeof auth.user?.profile.roles === "string"
-                    ? [auth.user?.profile.roles] : [];
+            const decodedToken = jwtDecode<IJwtPayloadModel>(auth.user?.access_token!);
+            const role = decodedToken?.role!;
 
             useEffect(() => {
-
-
-                if (!roles?.includes("Admin")) {
+                if (role === "Admin") {
                     navigate("/", { replace: true });
                 }
-            }, [roles, navigate]);
+            }, [role, navigate]);
 
             if (auth.isLoading || !auth.isAuthenticated) {
                 return null;

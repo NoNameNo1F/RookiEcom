@@ -1,38 +1,60 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { apiWebClient } from '../apis/apiClient';
-import { IApiResponse, ICategoryModel } from '../interfaces';
+import { ICategoryModel } from '../interfaces';
 
-export const useGetCategories = () => {
+import { CategoryService } from '../services';
+
+const categoryService = new CategoryService();
+
+
+
+export const useGetCategories = (pageNumber: number = 1, pageSize:number = 25) => {
   return useQuery({
-    queryKey: ['categories'],
-    queryFn: () =>
-      apiWebClient('/api/v1/categories', {
-        method: 'GET',
-      }) as Promise<IApiResponse>,
+    queryKey: ['categories', pageNumber, pageSize],
+    queryFn: () => categoryService.getCategories(pageNumber, pageSize),
   });
 };
 
 export const useGetCategoryTree = (categoryId: number) => {
   return useQuery({
     queryKey: ['categoryTree', categoryId],
-    queryFn: () =>
-      apiWebClient(`/api/v1/categories/${categoryId}/tree`, {
-        method: 'GET',
-      }) as Promise<ICategoryModel[]>,
-    enabled: !!categoryId,
+    queryFn: () => categoryService.getCategoryTree(categoryId),
   });
 };
 
+export const useGetCategoryById = (categoryId: number) => {
+    return useQuery({
+        queryKey: ['category', categoryId],
+        queryFn: () => categoryService.getCategoryById(categoryId),
+    });
+};
+
 export const useCreateCategory = () => {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (category: Omit<ICategoryModel, 'id'>) =>
-      apiWebClient('/api/v1/categories', {
-        method: 'POST',
-        body: JSON.stringify(category),
-      }) as Promise<ICategoryModel>,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['categories'] });
-    },
-  });
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (category: Omit<ICategoryModel, 'id' | 'hasChild'> & { imageFile?: File }) => categoryService.createCategory(category),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['categories'] });
+        },
+    });
+};
+
+export const useUpdateCategory = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: ({ categoryId, category }: { categoryId: number; category: Omit<ICategoryModel, 'id' | 'hasChild'> & { imageFile?: File; }; }) => 
+            categoryService.updateCategory(categoryId, category),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['categories'] });
+        },
+    });
+};
+
+export const useDeleteCategory = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (categoryId: number) => categoryService.deleteCategory(categoryId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['categories'] });
+        },
+    });
 };

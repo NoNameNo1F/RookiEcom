@@ -1,16 +1,15 @@
 import { useState } from 'react';
-import { useCreateProduct, useGetBlobImages, useGetCategories } from '../../hooks/';
+import { useCreateProduct, useGetCategories } from '../../hooks';
 
 import withAuth from '../../oidc/withAuth';
 import { Box, Typography, TextField, Button, MenuItem, Select, FormControl, InputLabel, CircularProgress, Alert, FormHelperText } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { IProductModel, ICategoryModel, IBlobImage } from '../../interfaces';
+import { IProductModel, ICategoryModel } from '../../interfaces';
 import { MiniLoaderPage } from '../../components/common';
 
-const ProductCreatePage = () => {
+const CreateProductPage = () => {
     const navigate = useNavigate();
     const { data: categories, isLoading: categoriesLoading } = useGetCategories();
-    const { data: blobImages, isLoading: imagesLoading } = useGetBlobImages();
     const createProductMutation = useCreateProduct();
 
     const [formData, setFormData] = useState<Partial<IProductModel>>({
@@ -19,12 +18,12 @@ const ProductCreatePage = () => {
         description: '',
         price: 0,
         marketPrice: 0,
-        status: 1, // Available
         stock: 0,
         categoryId: 0,
+        isFeature: false,
         imageGallery: [],
         productAttributes: [],
-        variationOptions: [],
+        variationOption: { code: "", values: [] },
     });
 
     const [errors, setErrors] = useState<{ [key: string]: string; }>({});
@@ -33,7 +32,9 @@ const ProductCreatePage = () => {
         const newErrors: { [key: string]: string; } = {};
         if (!formData.sku) newErrors.sku = 'SKU is required';
         if (!formData.name) newErrors.name = 'Name is required';
+        if (!formData.description) newErrors.description = 'Description is required';
         if (!formData.price || formData.price <= 0) newErrors.price = 'Price must be greater than 0';
+        if (!formData.marketPrice || formData.marketPrice <= 0) newErrors.marketPrice = 'MarketPrice must be greater than 0';
         if (!formData.stock || formData.stock < 0) newErrors.stock = 'Stock must be 0 or greater';
         if (!formData.categoryId) newErrors.categoryId = 'Category is required';
         setErrors(newErrors);
@@ -48,7 +49,7 @@ const ProductCreatePage = () => {
     const handleImageSelect = (imageId: string) => {
         setFormData((prev) => ({
             ...prev,
-            imageGallery: [imageId], // Store the selected image Guid
+            imageGallery: [imageId],
         }));
     };
 
@@ -60,7 +61,7 @@ const ProductCreatePage = () => {
         });
     };
 
-    if (categoriesLoading || imagesLoading) {
+    if (categoriesLoading) {
         return <MiniLoaderPage text="Loading..." />;
     }
 
@@ -111,6 +112,16 @@ const ProductCreatePage = () => {
                     required
                 />
                 <TextField
+                    label="MarketPrice"
+                    name="marketPrice"
+                    type="number"
+                    value={formData.marketPrice}
+                    onChange={handleChange}
+                    error={!!errors.marketPrice}
+                    helperText={errors.marketPrice}
+                    required
+                />
+                <TextField
                     label="Stock"
                     name="stock"
                     type="number"
@@ -120,6 +131,16 @@ const ProductCreatePage = () => {
                     helperText={errors.stock}
                     required
                 />
+                <TextField
+                    label="IsFeature"
+                    name="isFeature"
+                    type="number"
+                    value={formData.isFeature}
+                    onChange={handleChange}
+                    error={!!errors.isFeature}
+                    helperText={errors.isFeature}
+                    required
+                />
                 <FormControl error={!!errors.categoryId}>
                     <InputLabel>Category</InputLabel>
                     <Select
@@ -127,7 +148,7 @@ const ProductCreatePage = () => {
                         value={formData.categoryId}
                         onChange={(e) => setFormData((prev) => ({ ...prev, categoryId: Number(e.target.value) }))}
                     >
-                        {(categories?.result as Array<ICategoryModel> || []).map((category: ICategoryModel) => (
+                        {(categories?.items as Array<ICategoryModel> || []).map((category: ICategoryModel) => (
                             <MenuItem key={category.id} value={category.id}>
                                 {category.name}
                             </MenuItem>
@@ -136,7 +157,7 @@ const ProductCreatePage = () => {
                     {errors.categoryId && <FormHelperText>{errors.categoryId}</FormHelperText>}
                 </FormControl>
                 <Typography variant="h6">Select Image</Typography>
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
+                {/* <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
                     {(blobImages || []).map((image: IBlobImage) => (
                         <Box
                             key={image.id}
@@ -149,7 +170,7 @@ const ProductCreatePage = () => {
                             <img src={image.url} alt="Blob Image" style={{ width: 100, height: 100 }} />
                         </Box>
                     ))}
-                </Box>
+                </Box> */}
                 <Button variant="contained" color="primary" onClick={handleSubmit} disabled={createProductMutation.isPending}>
                     {createProductMutation.isPending ? <CircularProgress size={24} /> : 'Create Product'}
                 </Button>
@@ -158,4 +179,4 @@ const ProductCreatePage = () => {
     );
 };
 
-export default withAuth(ProductCreatePage);
+export default withAuth(CreateProductPage);

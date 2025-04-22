@@ -1,6 +1,4 @@
-import { OidcClient, WebStorageStateStore } from "oidc-client-ts";
-
-import { redirect } from "react-router-dom";
+import { WebStorageStateStore } from "oidc-client-ts";
 
 const oidcConfig = {
     authority: "https://localhost:8080",

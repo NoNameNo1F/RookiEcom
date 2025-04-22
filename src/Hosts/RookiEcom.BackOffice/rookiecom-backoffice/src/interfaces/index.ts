@@ -15,5 +15,5 @@ export type {
     IProductModel,
     IProductAttribute,
     IVariationOption,
-    IProductReview
+    IProductReview,
 }

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useAuth } from "react-oidc-context";
 import { useNavigate } from "react-router-dom";
-import { Box, CircularProgress, Typography } from "@mui/material";
+import { MiniLoaderPage } from "../components/common";
 
 const SilentRenew = () => {
     const auth = useAuth();
@@ -10,30 +10,21 @@ const SilentRenew = () => {
     useEffect(() => {
         if (window.location.pathname === "/signin-oidc") {
             if (auth.isAuthenticated && !auth.isLoading) {
-                console.log("Sign-in complete, redirecting to /dashboard");
                 navigate("/", { replace: true });
             } else if (auth.error) {
                 console.error("Sign-in error:", auth.error);
                 navigate("/", { replace: true });
             }
         }
-        // Handle silent renew (/silent-renew)
         if (window.location.pathname === "/silent-renew") {
-            if (auth.isAuthenticated && !auth.isLoading) {
-                auth.signinSilent().catch((error) => {
-                    console.error("Silent renew error:", error);
-                });
-            } else {
-                navigate("/", { replace: true });
-            }
+            auth.signinSilent().catch((error) => {
+                console.error("Silent renew error:", error);
+            });
         }
     }, [auth, navigate]);
 
     return (
-        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
-            <CircularProgress />
-            <Typography sx={{ ml: 2 }}>Processing authentication...</Typography>
-        </Box>
+        <MiniLoaderPage text={"Processing authentication..."} />
     );
 };
 

@@ -1,4 +1,4 @@
-import ProductCreatePage from "./ProductCreate";
+import CreateProductPage from "./CreateProduct";
 import ProductListPage from "./ProductList";
 
-export { ProductCreatePage, ProductListPage };
+export { CreateProductPage, ProductListPage };

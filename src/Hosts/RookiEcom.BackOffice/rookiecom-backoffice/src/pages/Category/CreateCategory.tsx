@@ -1,24 +1,22 @@
 import { useState } from "react";
-import { useCreateCategory, useGetBlobImages, useGetCategories } from "../../hooks/";
+import { useCreateCategory, useGetCategories } from "../../hooks";
 import { MiniLoaderPage } from "../../components/common";
 import { Alert, Box, Button, Checkbox, CircularProgress, FormControl, FormControlLabel, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
-import { IBlobImage, ICategoryModel } from "../../interfaces";
+import { ICategoryModel } from "../../interfaces";
 import { useNavigate } from "react-router-dom";
 import withAuth from "../../oidc/withAuth";
 
-const CategoryCreatePage = () => {
+const CreateCategoryPage = () => {
     const navigate = useNavigate();
-    const { data: categories, isLoading: categoriesLoading } = useGetCategories();
-    const { data: blobImages, isLoading: imagesLoading } = useGetBlobImages();
+    const { data: categories, isLoading, error } = useGetCategories();
     const createCategoryMutation = useCreateCategory();
 
     const [formData, setFormData] = useState<Partial<ICategoryModel>>({
         name: '',
-        parentId: undefined,
+        description: '',
+        parentId: 0,
         isPrimary: false,
-        isProductListingEnabled: true,
         image: '',
-        hasChild: false,
     });
 
     const [errors, setErrors] = useState<{ [key: string]: string; }>({});
@@ -52,13 +50,13 @@ const CategoryCreatePage = () => {
         });
     };
 
-    if (categoriesLoading || imagesLoading) {
-        return <MiniLoaderPage text="Loading..." />;
-    }
+    // if (categoriesLoading) {
+    //     return <MiniLoaderPage text="Loading..." />;
+    // }
 
-    if (createCategoryMutation.error) {
-        return <Alert severity="error">{createCategoryMutation.error.message}</Alert>;
-    }
+    // if (createCategoryMutation.error) {
+    //     return <Alert severity="error">{createCategoryMutation.error.message}</Alert>;
+    // }
 
     return (
         <Box sx={{ maxWidth: 800, mx: 'auto', mt: 4, p: 2 }}>
@@ -111,7 +109,7 @@ const CategoryCreatePage = () => {
                     label="Enable Product Listing"
                 />
                 <Typography variant="h6">Select Image</Typography>
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
+                {/* <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
                     {(blobImages || []).map((image: IBlobImage) => (
                         <Box
                             key={image.id}
@@ -124,7 +122,7 @@ const CategoryCreatePage = () => {
                             <img src={image.url} alt="Blob Image" style={{ width: 100, height: 100 }} />
                         </Box>
                     ))}
-                </Box>
+                </Box> */}
                 <Button variant="contained" color="primary" onClick={handleSubmit} disabled={createCategoryMutation.isPending}>
                     {createCategoryMutation.isPending ? <CircularProgress size={24} /> : 'Create Category'}
                 </Button>
@@ -133,4 +131,4 @@ const CategoryCreatePage = () => {
     );
 };
 
-export default withAuth(CategoryCreatePage);
+export default withAuth(CreateCategoryPage);
