@@ -11,4 +11,6 @@ public class Category : IEntity<int>, IAggregateRoot
     public bool IsPrimary { get; set; }
     public string Image { get; set; }
     public bool HasChild { get; set; }
+    public DateTime CreatedDateTime { get; set; }
+    public DateTime UpdatedDateTime { get; set; }
 }

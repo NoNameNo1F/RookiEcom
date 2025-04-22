@@ -3,7 +3,7 @@ using RookiEcom.Application.Exceptions;
 using RookiEcom.Application.Storage;
 using RookiEcom.Modules.Product.Domain.ProductAggregate;
 
-namespace RookiEcom.Modules.Product.Application.Commands;
+namespace RookiEcom.Modules.Product.Application.Commands.Product.Create;
 
 public class CreateProductCommandHandler : ICommandHandler<CreateProductCommand>
 {
@@ -62,8 +62,6 @@ public class CreateProductCommandHandler : ICommandHandler<CreateProductCommand>
         catch (Exception e)
         {
             await transaction.RollbackAsync(cancellationToken);
-
-            // Delete uploaded blobs
             foreach (var (blobName, containerName) in uploadedBlobs)
             {
                 await _blobService.DeleteBlob(blobName, containerName);

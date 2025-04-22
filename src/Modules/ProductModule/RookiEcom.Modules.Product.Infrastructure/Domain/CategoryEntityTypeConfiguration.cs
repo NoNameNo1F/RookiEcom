@@ -40,6 +40,12 @@ public class CategoryEntityTypeConfiguration : IEntityTypeConfiguration<Category
         builder.Property(c => c.Image)
             .HasColumnName("Image");
         
+        builder.Property<DateTime>(c => c.CreatedDateTime)
+            .HasColumnName("CreatedDateTime");
+
+        builder.Property<DateTime>(c => c.UpdatedDateTime)
+            .HasColumnName("UpdatedDateTime");
+        
         builder.HasOne<Category>()
             .WithMany()
             .HasForeignKey(c => c.ParentId)

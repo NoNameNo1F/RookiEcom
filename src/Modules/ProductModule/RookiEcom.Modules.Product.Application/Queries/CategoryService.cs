@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RookiEcom.Application.Common;
 using RookiEcom.Application.Storage;
+using RookiEcom.Modules.Product.Application.Exceptions;
 using RookiEcom.Modules.Product.Domain.CategoryAggregate;
 
 namespace RookiEcom.Modules.Product.Application.Queries;
@@ -8,31 +9,27 @@ namespace RookiEcom.Modules.Product.Application.Queries;
 public class CategoryService
 {
     private readonly ProductContext _dbContext;
-    private readonly IBlobService _blobService;
         
-    public CategoryService(
-        ProductContext dbContext,
-        IBlobService blobService)
+    public CategoryService(ProductContext dbContext)
     {
         _dbContext = dbContext;
-        _blobService = blobService;
-    }
-
-    public async Task<int> CreateCategory(
-        string name,
-        string description,
-        int? parentId,
-        IFormFile image, 
-        CancellationToken cancellationToken)
-    {
-        return 1;
     }
     
-    public async Task<IEnumerable<Category>> GetAllCategories(CancellationToken cancellationToken)
+    public async Task<PagedResult<Category>> GetAllCategories(int pageSize, int pageNumber,CancellationToken cancellationToken)
     {
-        return await _dbContext.Categories
-            .Where(c => c.IsPrimary == true)
+        var query = _dbContext.Categories
+            .AsNoTracking()
+            .Where(c => c.IsPrimary == true);
+
+        var categories = await query
+            .OrderBy(c => c.UpdatedDateTime)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
             .ToListAsync(cancellationToken);
+
+        var count = await query.CountAsync(cancellationToken);
+
+        return new PagedResult<Category>(categories, pageNumber, pageSize, count);
     }
 
     public async Task<IEnumerable<Category>> GetCategoryTree(int categoryId, CancellationToken cancellationToken)
@@ -53,5 +50,19 @@ public class CategoryService
         return await _dbContext.Categories
             .FromSqlRaw(query, new Microsoft.Data.SqlClient.SqlParameter("@categoryId", categoryId))
             .ToListAsync(cancellationToken);
+    }
+
+    public async Task<Category> GetCategoryById(int categoryId, CancellationToken cancellationToken)
+    {
+        var category = await _dbContext.Categories
+            .AsNoTracking()
+            .FirstOrDefaultAsync(c => c.Id == categoryId, cancellationToken);
+        
+        if (category == null)
+        {
+            throw new CategoryNotFoundException(categoryId);
+        }
+
+        return category;
     }
 }

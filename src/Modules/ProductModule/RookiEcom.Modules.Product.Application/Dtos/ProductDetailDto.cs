@@ -1,6 +1,6 @@
 ﻿using RookiEcom.Modules.Product.Domain.ProductAggregate;
 
-namespace RookiEcom.Modules.Product.Application.Services.Product.Dtos;
+namespace RookiEcom.Modules.Product.Application.Dtos;
 
 public class ProductDetailDto
 {

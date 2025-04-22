@@ -2,7 +2,7 @@
 using RookiEcom.Application.Contracts;
 using RookiEcom.Modules.Product.Domain.ProductAggregate;
 
-namespace RookiEcom.Modules.Product.Application.Commands;
+namespace RookiEcom.Modules.Product.Application.Commands.Product.Update;
 
 public sealed class UpdateProductCommand(
     int id,
