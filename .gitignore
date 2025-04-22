@@ -38,6 +38,8 @@ ScaffoldingReadMe.txt
 
 # Others
 ~$*
+**/node_modules
+**/lib
 *~
 CodeCoverage/
 
