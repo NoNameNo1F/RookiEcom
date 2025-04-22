@@ -1,9 +1,10 @@
-import { Button } from "@mui/material";
+import { Button, Paper } from "@mui/material";
 import { useAuth } from "react-oidc-context";
 import DashboardPage from "./Dashboard";
 import { useEffect } from 'react';
 import { Box, Typography } from '@mui/material';
 import withAuth from "../oidc/withAuth";
+import { MiniLoaderPage } from "../components/common";
 
 
 const HomePage = () => {
@@ -16,15 +17,10 @@ const HomePage = () => {
     }, [auth.isAuthenticated, auth.isLoading]);
 
     if (auth.isLoading) {
-        return (
-            <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
-                <Typography>Loading...</Typography>
-            </Box>
-        );
+        return (<MiniLoaderPage text={"Loading..."} />);
     }
 
     if (!auth.isAuthenticated) {
-        // Return null while redirecting
         return null;
     }
 
@@ -45,23 +41,13 @@ const HomePage = () => {
         });
     };
 
+    const userInfo = auth.user?.profile || {};
+
     return (
         <Box sx={{ maxWidth: 800, mx: "auto", mt: 4, p: 2 }}>
             <Typography variant="h4" gutterBottom>
                 Welcome to RookiEcom BackOffice Home
             </Typography>
-            <p className="text-danger">
-                {auth.user?.access_token!}
-            </p>
-
-            <Button
-                variant="contained"
-                color="error"
-                onClick={handleLogout}
-                sx={{ mt: 2 }}
-            >
-                Sign Out
-            </Button>
         </Box>
     );
 };

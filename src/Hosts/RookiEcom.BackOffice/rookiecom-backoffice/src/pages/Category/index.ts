@@ -1,4 +1,4 @@
-import CategoryCreatePage from "./CategoryCreate";
+import CategoryCreatePage from "./CreateCategory";
 import CategoryListPage from "./CategoryList";
 
 export { CategoryCreatePage, CategoryListPage };

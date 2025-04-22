@@ -46,7 +46,6 @@ const App = () => {
             <Route path="/signin-oidc" element={<SilentRenew />} />
             <Route path="/silent-renew" element={<SilentRenew />} />
             <Route path="/logout-callback" element={<LogoutCallback />} />
-            {/* <Route path="/dashboard" element={<DashboardPage />} /> */}
             <Route path="/">
               <Route index element={<DashboardPage />} />
               <Route path="products">

@@ -1,6 +1,6 @@
 import { IProductAttribute, IVariationOption } from "./index";
 
-export default interface IProductModel {
+interface IProductModel {
     id: string;
     sku: string;
     name: string;
@@ -11,7 +11,31 @@ export default interface IProductModel {
     sold: number;
     stock: number;
     categoryId: number;
+    isFeature: boolean;
     imageGallery: string[];
     productAttributes: IProductAttribute[];
-    variationOptions: IVariationOption[];
+    variationOption: IVariationOption;
 };
+
+
+interface IProductUpdateModel {
+  id: string;
+  sku: string;
+  name: string;
+  description: string;
+  price: number;
+  marketPrice: number;
+  status: number;
+  stock: number;
+  categoryId: number;
+  oldImages: string[];
+  newImages: File[];
+  productAttributes: IProductAttribute[];
+  variationOption: IVariationOption;
+  isFeature: boolean;
+}
+
+export type {
+    IProductModel,
+    IProductUpdateModel
+}

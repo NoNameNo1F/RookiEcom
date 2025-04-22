@@ -1,104 +1,62 @@
-// import { Header } from "../components";
-
-// export default function DashboardPage({
-//     customers,
-//     orders,
-//     revenues,
-//     products
-// }: {
-//     customers: React.ReactElement,
-//     orders: React.ReactElement,
-//     revenues: React.ReactElement,
-//     products: React.ReactElement,
-// }) {
-//     return (
-//         <div className="d-flex flex-column min-vh-100">
-//             <Header />
-
-//             <div className="container-fluid flex-grow-1 py-4">
-//                 <div className="row">
-//                     <aside className="col-md-3 d-none d-md-block bg-dark text-white p-3">
-//                         <h2>Sidebar</h2>
-//                         <ul className="nav flex-column">
-//                             <li className="nav-item">
-//                                 <a href="/" className="nav-link text-white">
-//                                     <i className="bi bi-person-lines-fill"></i>
-//                                     &nbsp; Dashboard
-//                                 </a>
-//                             </li>
-//                             <li className="nav-item">
-//                                 <a className="nav-link text-white" href="/orders">
-//                                     <i className="bi bi-person-lines-fill"></i>
-//                                     &nbsp; Orders
-//                                 </a>
-//                             </li>
-
-//                             <li className="nav-item">
-//                                 <a href="/products" className="nav-link text-white">
-//                                     <i className="bi bi-person-lines-fill"></i>
-//                                     Products
-//                                 </a>
-//                             </li>
-
-//                             {/* {(user.role === "Admin") && ( */}
-//                             <li className="nav-item">
-//                                 <a href="/users" className="nav-link text-white">
-//                                     <i className="bi bi-person-lines-fill"></i> &nbsp; Users
-//                                 </a>
-//                             </li>
-//                             {/* )} > */}
-//                         </ul>
-//                     </aside>
-//                     <main className="col-12 col-md-9">
-//                         <div className="row mb-4">
-//                             <div className="col-12 col-md-4 mb-3 mb-md-0">
-//                                 {revenues}
-//                             </div>
-//                             <div className="col-12 col-md-4 mb-3 mb-md-0">
-//                                 {orders}
-//                             </div>
-//                             <div className="col-12 col-md-4 mb-3 mb-md-0">
-//                                 {customers}
-//                             </div>
-//                         </div>
-//                         <div className="row">
-//                             <div className="col-12">
-//                                 {products}
-//                             </div>
-//                         </div>
-//                     </main>
-
-//                 </div>
-//             </div>
-//         </div>
-//     );
-// };
-
-import { Box, Button, Typography } from "@mui/material";
-import { useEffect } from "react";
+import { Box, Drawer, List, ListItem, ListItemIcon, ListItemText, Toolbar, Typography } from "@mui/material";
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import CategoryIcon from '@mui/icons-material/Category';
+import PeopleIcon from '@mui/icons-material/People';
 import { useAuth } from "react-oidc-context";
 import withAuth from "../oidc/withAuth";
+import { IJwtPayloadModel } from "../interfaces";
+import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
+import { Header, Sidebar } from "../components";
 
 const DashboardPage = () => {
     const auth = useAuth();
+    const navigate = useNavigate();
 
-    const handleLogout = () => {
-        auth.signoutRedirect();
-    };
+    const decodedToken = auth.user?.access_token ? jwtDecode<IJwtPayloadModel>(auth.user.access_token) : null;
+    const role = decodedToken?.role;
 
+    const navItems = [
+        { text: "Dashboard", path: "/", icon: <DashboardIcon /> },
+        { text: "Orders", path: "/orders", icon: <ShoppingCartIcon /> },
+        { text: "Products", path: "/products", icon: <CategoryIcon /> },
+        { text: "Categories", path: "/categories", icon: <CategoryIcon /> },
+        ...(role === "Admin" ? [{ text: "Users", path: "/users", icon: <PeopleIcon /> }] : []),
+    ];
+    
     return (
-        <Box sx={{ maxWidth: 800, mx: "auto", mt: 4, p: 2 }}>
-            <Typography variant="h4" gutterBottom>
-                Welcome to RookiEcom BackOffice Dashboard
-            </Typography>
-            <Button
-                variant="contained"
-                color="error"
-                onClick={handleLogout}
-                sx={{ mt: 2 }}
-            >
-                Sign Out
-            </Button>
+    <Box sx={{ display: 'flex', minHeight: '100vh' }}>
+            <Header />
+            <Sidebar />
+            <Box component="main" sx={{ flexGrow: 1, p: 3, backgroundColor: '#f8f9fa' }}>
+                <Toolbar />
+                <Box sx={{ maxWidth: 1200, mx: 'auto' }}>
+                    <Typography variant="h4" gutterBottom>
+                        Dashboard
+                    </Typography>
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 4 }}>
+                        <Box sx={{ flex: '1 1 300px', p: 2, backgroundColor: '#fff', borderRadius: 1, boxShadow: 1 }}>
+                            <Typography variant="h6">Revenues</Typography>
+                            <Typography variant="body1">Placeholder for revenue data</Typography>
+                        </Box>
+                        <Box sx={{ flex: '1 1 300px', p: 2, backgroundColor: '#fff', borderRadius: 1, boxShadow: 1 }}>
+                            <Typography variant="h6">Orders</Typography>
+                            <Typography variant="body1">Placeholder for order data</Typography>
+                        </Box>
+                        {/* Customers Widget */}
+                        <Box sx={{ flex: '1 1 300px', p: 2, backgroundColor: '#fff', borderRadius: 1, boxShadow: 1 }}>
+                            <Typography variant="h6">Customers</Typography>
+                            <Typography variant="body1">Placeholder for customer data</Typography>
+                        </Box>
+                    </Box>
+                    {/* Products Widget */}
+                    <Box sx={{ p: 2, backgroundColor: '#fff', borderRadius: 1, boxShadow: 1 }}>
+                        <Typography variant="h6">Products</Typography>
+                        <Typography variant="body1">Placeholder for product data</Typography>
+                    </Box>
+                </Box>
+            </Box>
         </Box>
     );
 };

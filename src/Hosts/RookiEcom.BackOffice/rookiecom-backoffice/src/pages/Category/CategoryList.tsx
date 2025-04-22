@@ -1,15 +1,18 @@
 import { useState } from "react";
 import { useGetCategories, useGetCategoryTree } from "../../hooks/";
 import { MiniLoaderPage } from "../../components/common";
-import { Alert, Box, Button, CircularProgress, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material";
+import { Alert, Box, Button, CircularProgress, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography } from "@mui/material";
 import { ICategoryModel } from "../../interfaces";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import withAuth from "../../oidc/withAuth";
 
 const CategoryListPage = () => {
-    const { data: categories, isLoading, error } = useGetCategories();
-    const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
-    const { data: categoryTree, isLoading: treeLoading } = useGetCategoryTree(selectedCategoryId!);
+    const navigate = useNavigate();
+    const [pageNumber, setPageNumber] = useState(1);
+    const [rowsPerPage, setRowsPerPage] = useState(25);
+    
+    const { data: categories, isLoading } = useGetCategories(pageNumber, rowsPerPage);
+
     // const deleteCategoryMutation = useDeleteCategory();
 
     // const handleDelete = (categoryId: number) => {
@@ -18,83 +21,78 @@ const CategoryListPage = () => {
     //     }
     // };
 
-    const handleViewTree = (categoryId: number) => {
-        setSelectedCategoryId(categoryId);
+    const handleChangePage = (_event: unknown, newPage: number) => {
+        setPageNumber(newPage);
     };
 
-    if (isLoading) {
-        return <MiniLoaderPage text="Loading..." />;
-    }
-
-    if (error) {
-        return <Alert severity="error">{error.message}</Alert>;
-    }
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPageNumber(1);
+    };
 
     return (
-        <Box sx={{ maxWidth: 1200, mx: 'auto', mt: 4, p: 2 }}>
-            <Typography variant="h4" gutterBottom>
-                Category List
-            </Typography>
-            <Button variant="contained" color="primary" component={Link} to="/categories/create" sx={{ mb: 2 }}>
-                Create Category
-            </Button>
-            <Table>
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Name</TableCell>
-                        <TableCell>Parent ID</TableCell>
-                        <TableCell>Is Primary</TableCell>
-                        <TableCell>Actions</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {(categories?.result as Array<ICategoryModel> || []).map((category: ICategoryModel) => (
-                        <TableRow key={category.id}>
-                            <TableCell>{category.name}</TableCell>
-                            <TableCell>{category.parentId || 'None'}</TableCell>
-                            <TableCell>{category.isPrimary ? 'Yes' : 'No'}</TableCell>
-                            <TableCell>
-                                <Button component={Link} to={`/categories/edit/${category.id}`} color="primary">
-                                    Edit
-                                </Button>
-                                {/* <Button onClick={() => handleDelete(category.id)} color="error">
-                                    Delete
-                                </Button> */}
-                                <Button onClick={() => handleViewTree(category.id)} color="info">
-                                    View Tree
-                                </Button>
-                            </TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-            {selectedCategoryId && (
-                <Box sx={{ mt: 4 }}>
-                    <Typography variant="h5" gutterBottom>
-                        Category Tree for {categories?.result.find((c: ICategoryModel) => c.id === selectedCategoryId)?.name}
-                    </Typography>
-                    {treeLoading ? (
-                        <CircularProgress />
-                    ) : (
-                        <Table>
-                            <TableHead>
+        <Box sx={{ display: 'flex', minHeight: '100vh' }}>
+            <Box sx={{ maxWidth: 1200, mx: 'auto', mt: 4, p: 2 }}>
+                <Typography variant="h4" gutterBottom>
+                    Categories
+                </Typography>
+                <Box sx={{ mb: 2 }}>
+                    <Button variant="contained" color="primary" onClick={() => navigate("/categories/create")}>
+                        Create Category
+                    </Button>
+                </Box>
+                <TableContainer component={Paper}>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Id</TableCell>
+                                <TableCell>Name</TableCell>
+                                <TableCell>Description</TableCell>
+                                <TableCell>Parent ID</TableCell>
+                                <TableCell>Is Primary</TableCell>
+                                <TableCell>Actions</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {isLoading ? (
                                 <TableRow>
-                                    <TableCell>Name</TableCell>
-                                    <TableCell>Parent ID</TableCell>
+                                    <TableCell colSpan={5}>Loading...</TableCell>
                                 </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {(categoryTree || []).map((category: ICategoryModel) => (
+                            ) : categories?.items.length === 0 ? (
+                                <TableRow>
+                                    <TableCell colSpan={5}>No categories found</TableCell>
+                                </TableRow>
+                            ) : (
+                                categories?.items!.map((category: ICategoryModel) => (
                                     <TableRow key={category.id}>
                                         <TableCell>{category.name}</TableCell>
-                                        <TableCell>{category.parentId || 'None'}</TableCell>
+                                        <TableCell>{category.description || "N/A"}</TableCell>
+                                        <TableCell>
+                                            {categories?.items!.find((c) => c.id === category.parentId)?.name || "None"}
+                                        </TableCell>
+                                        <TableCell>{category.isPrimary ? "Yes" : "No"}</TableCell>
+                                        <TableCell>
+                                            <Button onClick={() => navigate(`/categories/edit/${category.id}`)}>
+                                                Edit
+                                            </Button>
+                                            <Button color="error">Delete</Button>
+                                        </TableCell>
                                     </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    )}
-                </Box>
-            )}
+                                ))
+                            )}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+                <TablePagination
+                    rowsPerPageOptions={[5, 10, 25]}
+                    component="div"
+                    count={-1} // Replace with total count from API if available
+                    rowsPerPage={rowsPerPage}
+                    page={pageNumber}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+            </Box>
         </Box>
     );
 };
