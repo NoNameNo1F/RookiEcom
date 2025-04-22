@@ -1,4 +1,4 @@
-﻿namespace RookiEcom.Modules.Product.Application.Services.Product.Dtos;
+﻿namespace RookiEcom.Modules.Product.Application.Dtos;
 
 public class ProductDto
 {

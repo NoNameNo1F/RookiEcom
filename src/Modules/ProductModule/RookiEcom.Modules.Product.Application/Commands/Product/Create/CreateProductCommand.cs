@@ -2,7 +2,7 @@
 using RookiEcom.Application.Contracts;
 using RookiEcom.Modules.Product.Domain.ProductAggregate;
 
-namespace RookiEcom.Modules.Product.Application.Commands;
+namespace RookiEcom.Modules.Product.Application.Commands.Product.Create;
 
 public class CreateProductCommand(
     string sku,

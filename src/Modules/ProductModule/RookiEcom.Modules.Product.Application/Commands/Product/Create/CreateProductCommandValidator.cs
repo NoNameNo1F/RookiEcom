@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace RookiEcom.Modules.Product.Application.Commands;
+namespace RookiEcom.Modules.Product.Application.Commands.Product.Create;
 
 public class CreateProductCommandValidator : AbstractValidator<CreateProductCommand>
 {

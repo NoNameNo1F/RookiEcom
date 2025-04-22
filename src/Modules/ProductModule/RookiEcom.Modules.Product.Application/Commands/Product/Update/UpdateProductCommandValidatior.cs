@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
-using RookiEcom.Modules.Product.Application.Commands;
 
-namespace RookiEcom.Modules.Product.Application.Validators;
+namespace RookiEcom.Modules.Product.Application.Commands.Product.Update;
 
 public class UpdateProductCommandValidator : AbstractValidator<UpdateProductCommand>
 {

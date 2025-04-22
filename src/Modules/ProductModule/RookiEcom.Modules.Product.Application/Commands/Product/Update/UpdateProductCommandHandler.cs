@@ -4,7 +4,7 @@ using RookiEcom.Application.Exceptions;
 using RookiEcom.Application.Storage;
 using RookiEcom.Modules.Product.Application.Exceptions;
 
-namespace RookiEcom.Modules.Product.Application.Commands;
+namespace RookiEcom.Modules.Product.Application.Commands.Product.Update;
 
 public class UpdateProductCommandHandler : ICommandHandler<UpdateProductCommand>
 {

@@ -30,7 +30,7 @@ public class ProductService
         return new PagedResult<Domain.ProductAggregate.Product>(products, pageNumber, pageSize, count);
     }
 
-    public async Task<PagedResult<Domain.ProductAggregate.Product>> GetProductByCategoryId(int pageNumber, int pageSize, int categoryId,
+    public async Task<PagedResult<Domain.ProductAggregate.Product>> GetProductsByCategoryId(int pageNumber, int pageSize, int categoryId,
         CancellationToken cancellationToken)
     {
         var query = _dbContext.Products
@@ -53,8 +53,7 @@ public class ProductService
     {
         var product = await _dbContext.Products
             .AsNoTracking()
-            .Where(p => p.Id == productId)
-            .FirstOrDefaultAsync(cancellationToken);
+            .FirstOrDefaultAsync(p => p.Id == productId, cancellationToken);
 
         if (product == null)
         {
@@ -69,8 +68,7 @@ public class ProductService
     {
         var product = await _dbContext.Products
             .AsNoTracking()
-            .Where(p => p.SKU == productSKU)
-            .FirstOrDefaultAsync(cancellationToken);
+            .FirstOrDefaultAsync(p => p.SKU == productSKU, cancellationToken);
 
         if (product == null)
         {

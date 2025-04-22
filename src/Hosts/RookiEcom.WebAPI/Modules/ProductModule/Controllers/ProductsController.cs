@@ -4,8 +4,9 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RookiEcom.Application.Pagination;
-using RookiEcom.Modules.Product.Application.Commands;
+using RookiEcom.Modules.Product.Application.Commands.Product.Create;
 using RookiEcom.Modules.Product.Application.Commands.Product.Delete;
+using RookiEcom.Modules.Product.Application.Commands.Product.Update;
 using RookiEcom.Modules.Product.Application.Queries;
 
 using ProductDto = RookiEcom.WebAPI.Modules.ProductModule.Dtos.ProductDto;
@@ -37,7 +38,7 @@ public class ProductsController : ControllerBase
         [FromRoute] int categoryId,
         CancellationToken cancellationToken = default)
     {
-        var products = await _productService.GetProductByCategoryId(pagingRequest.PageNumber, pagingRequest.PageSize,
+        var products = await _productService.GetProductsByCategoryId(pagingRequest.PageNumber, pagingRequest.PageSize,
             categoryId, cancellationToken);
         
         return Ok(new ApiResponse
@@ -125,23 +126,12 @@ public class ProductsController : ControllerBase
     [HttpPut("{productId}")]
     [Authorize(Roles = "Admin")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateProduct(
         [FromRoute] int productId,
         [FromForm] ProductUpdateDto body,
         CancellationToken cancellationToken = default)
     {
-        if (productId == null)
-        {
-            return BadRequest(new ApiResponse
-            {
-                IsSuccess = false,
-                StatusCode = HttpStatusCode.BadRequest,
-                Errors = ["productId is missing."]
-            });
-        }
-        
         var command = new UpdateProductCommand(
             productId,
             body.SKU,
@@ -162,24 +152,14 @@ public class ProductsController : ControllerBase
         return NoContent();
     }
 
-    [HttpDelete]
+    [HttpDelete("{productId}")]
     [Authorize(Roles = "Admin")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteProduct(
-        [FromBody] int productId,
+        [FromRoute] int productId,
         CancellationToken cancellationToken = default)
     {
-        if (productId == null)
-        {
-            return BadRequest(new ApiResponse
-            {
-                IsSuccess = false,
-                StatusCode = HttpStatusCode.BadRequest,
-                Errors = ["productId is missing."]
-            });
-        }
-
         var command = new DeleteProductCommand(productId);
         await _mediator.Send(command, cancellationToken);
 

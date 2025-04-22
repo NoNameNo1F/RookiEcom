@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RookiEcom.Modules.Product.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using RookiEcom.Modules.Product.Infrastructure.Persistence;
 namespace RookiEcom.WebAPI.Migrations.ProductModule
 {
     [DbContext(typeof(ProductContextImpl))]
-    partial class ProductContextImplModelSnapshot : ModelSnapshot
+    [Migration("20250422033221_UpdateCategoryTracking")]
+    partial class UpdateCategoryTracking
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
