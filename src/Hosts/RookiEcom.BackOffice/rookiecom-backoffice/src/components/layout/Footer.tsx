@@ -1,4 +1,4 @@
-export default function Footer() {
+export const Footer = () => {
     return (
         <footer>
             <div className="bg-body-tertiary">

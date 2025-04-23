@@ -14,7 +14,7 @@ interface ICategoryUpdateModel {
     description: string;
     parentId?: number;
     isPrimary: boolean;
-    image: File;
+    image: string;
 }
 
 export type {

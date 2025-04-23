@@ -2,8 +2,9 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { ICategoryModel } from '../interfaces';
 
 import { CategoryService } from '../services';
+import { apiWebClient } from '../apis/apiClient';
 
-const categoryService = new CategoryService();
+const categoryService = new CategoryService(apiWebClient);
 
 
 

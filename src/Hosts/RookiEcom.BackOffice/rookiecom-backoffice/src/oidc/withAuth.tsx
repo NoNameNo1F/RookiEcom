@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { IJwtPayloadModel } from "../interfaces";
 
 const withAuth = <P extends object>(
-    WrappedComponent: React.ComponentType<P>
+    WrappedComponent: React.FC<P>
 ) => {
     const AuthComponent = withAuthenticationRequired(
         (props: P) => {
@@ -19,7 +19,10 @@ const withAuth = <P extends object>(
                 if (role === "Admin") {
                     navigate("/", { replace: true });
                 }
-            }, [role, navigate]);
+                else {
+                    navigate("access-denied", { replace: true });
+                }
+            }, []);
 
             if (auth.isLoading || !auth.isAuthenticated) {
                 return null;

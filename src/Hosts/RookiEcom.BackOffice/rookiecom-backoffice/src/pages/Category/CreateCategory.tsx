@@ -6,17 +6,17 @@ import { ICategoryModel } from "../../interfaces";
 import { useNavigate } from "react-router-dom";
 import withAuth from "../../oidc/withAuth";
 
-const CreateCategoryPage = () => {
+const CreateCategoryPage: React.FC  = () => {
     const navigate = useNavigate();
     const { data: categories, isLoading, error } = useGetCategories();
     const createCategoryMutation = useCreateCategory();
 
-    const [formData, setFormData] = useState<Partial<ICategoryModel>>({
+    const [formData, setFormData] = useState<Partial<ICategoryModel> & { imageFile?: File}>({
         name: '',
         description: '',
         parentId: 0,
         isPrimary: false,
-        image: '',
+        imageFile: {} as File,
     });
 
     const [errors, setErrors] = useState<{ [key: string]: string; }>({});
@@ -24,6 +24,8 @@ const CreateCategoryPage = () => {
     const validateForm = () => {
         const newErrors: { [key: string]: string; } = {};
         if (!formData.name) newErrors.name = 'Name is required';
+        if (!formData.description) newErrors.description = 'Description is required';
+        if (!formData.imageFile) newErrors.imageFile = 'Image for Category is required';
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -38,25 +40,25 @@ const CreateCategoryPage = () => {
         setFormData((prev) => ({ ...prev, [name!]: checked }));
     };
 
-    const handleImageSelect = (imageId: string) => {
-        setFormData((prev) => ({ ...prev, image: imageId }));
+    const handleFileChange = (image: File) => {
+        setFormData((prev) => ({ ...prev, imageFile: image }));
     };
 
     const handleSubmit = () => {
         if (!validateForm()) return;
-        createCategoryMutation.mutate(formData as Omit<ICategoryModel, 'id'>, {
+        createCategoryMutation.mutate(formData as Omit<ICategoryModel, 'id' | 'hasChild' |'image'>, {
             onSuccess: () => navigate('/categories'),
             onError: (error) => alert(error.message),
         });
     };
 
-    // if (categoriesLoading) {
-    //     return <MiniLoaderPage text="Loading..." />;
-    // }
+    if (isLoading) {
+        return <MiniLoaderPage text="Loading..." />;
+    }
 
-    // if (createCategoryMutation.error) {
-    //     return <Alert severity="error">{createCategoryMutation.error.message}</Alert>;
-    // }
+    if (createCategoryMutation.error) {
+        return <Alert severity="error">{createCategoryMutation.error.message}</Alert>;
+    }
 
     return (
         <Box sx={{ maxWidth: 800, mx: 'auto', mt: 4, p: 2 }}>
@@ -73,6 +75,14 @@ const CreateCategoryPage = () => {
                     helperText={errors.name}
                     required
                 />
+                <TextField
+                    label="Description"
+                    name="description"
+                    value={formData.description}
+                    onChange={handleChange}
+                    multiline
+                    rows={4}
+                />
                 <FormControl>
                     <InputLabel>Parent Category</InputLabel>
                     <Select
@@ -81,7 +91,8 @@ const CreateCategoryPage = () => {
                         onChange={(e) => setFormData((prev) => ({ ...prev, parentId: Number(e.target.value) || undefined }))}
                     >
                         <MenuItem value="">None</MenuItem>
-                        {(categories?.result as Array<ICategoryModel> || []).map((category: ICategoryModel) => (
+                        {(categories?.items as Array<ICategoryModel> || []).map((category: ICategoryModel) => (category.id !== formData.parentId) &&
+                        (
                             <MenuItem key={category.id} value={category.id}>
                                 {category.name}
                             </MenuItem>
@@ -98,32 +109,23 @@ const CreateCategoryPage = () => {
                     }
                     label="Is Primary"
                 />
-                <FormControlLabel
-                    control={
-                        <Checkbox
-                            name="isProductListingEnabled"
-                            checked={formData.isProductListingEnabled || false}
-                            onChange={handleCheckboxChange}
-                        />
-                    }
-                    label="Enable Product Listing"
-                />
-                <Typography variant="h6">Select Image</Typography>
-                {/* <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
-                    {(blobImages || []).map((image: IBlobImage) => (
-                        <Box
-                            key={image.id}
-                            sx={{
-                                border: formData.image === image.id ? '2px solid blue' : 'none',
-                                cursor: 'pointer',
-                            }}
-                            onClick={() => handleImageSelect(image.id)}
-                        >
-                            <img src={image.url} alt="Blob Image" style={{ width: 100, height: 100 }} />
-                        </Box>
-                    ))}
-                </Box> */}
-                <Button variant="contained" color="primary" onClick={handleSubmit} disabled={createCategoryMutation.isPending}>
+                <Button component="label" variant="outlined">
+                    Upload Image
+                    <input
+                        type="file"
+                        hidden
+                        onChange={() => handleFileChange}
+                        accept="image/*"
+                    />
+                </Button>
+                {formData.imageFile && <Typography>Image selected: {formData.imageFile.name}</Typography>}
+                
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleSubmit}
+                    disabled={createCategoryMutation.isPending}
+                >
                     {createCategoryMutation.isPending ? <CircularProgress size={24} /> : 'Create Category'}
                 </Button>
             </Box>
