@@ -1,60 +1,66 @@
-import { apiWebClient } from "../apis/apiClient";
+import ApiWebClient from "../apis/apiClient";
 import { IApiResponse, ICategoryModel } from "../interfaces";
 import { PagedResult } from "../interfaces/pagedResult";
 
 export class CategoryService {
-    async getCategories(pageNumber: number = 1, pageSize: number = 10): Promise<PagedResult<ICategoryModel>> {
-    const response = await apiWebClient(`/api/v1/categories?pageNumber=${pageNumber}&pageSize=${pageSize}`, {
-      method: 'GET',
-    }) as IApiResponse;
-    return response.result as PagedResult<ICategoryModel>;
-  }
+    private readonly client: ApiWebClient;
 
-  async getCategoryById(categoryId: number): Promise<ICategoryModel> {
-    const response = await apiWebClient(`/api/v1/categories/${categoryId}`, {
-      method: 'GET',
-    }) as IApiResponse;
-    return response.result as ICategoryModel;
-  }
+    public constructor(client: ApiWebClient) {
+        this.client = client;
+    }
+    
+    public async getCategories(pageNumber: number = 1, pageSize: number = 10): Promise<PagedResult<ICategoryModel>> {
+        const response = await this.client.get(`/api/v1/categories?pageNumber=${pageNumber}&pageSize=${pageSize}`) as IApiResponse;
 
-  async getCategoryTree(categoryId: number): Promise<ICategoryModel[]> {
-    const response = await apiWebClient(`/api/v1/categories/${categoryId}/tree`, {
-      method: 'GET',
-    }) as IApiResponse;
-    return response.result as ICategoryModel[];
-  }
+        return response.result as PagedResult<ICategoryModel>;
+    }
 
-  async createCategory(category: Omit<ICategoryModel, 'id' | 'hasChild'> & { imageFile?: File }): Promise<IApiResponse> {
-    const formData = new FormData();
-    formData.append('Name', category.name);
-    formData.append('Description', category.description || '');
-    formData.append('ParentId', category.parentId.toString());
-    formData.append('IsPrimary', category.isPrimary.toString());
-    if (category.imageFile) formData.append('Image', category.imageFile);
+    public async getCategoryById(categoryId: number): Promise<ICategoryModel> {
+        const response = await this.client.get(`/api/v1/categories/${categoryId}`) as IApiResponse;
+        
+        return response.result as ICategoryModel;
+    }
 
-    return apiWebClient('/api/v1/categories', {
-      method: 'POST',
-      body: formData,
-    }) as Promise<IApiResponse>;
-  }
+    public async getCategoryTree(categoryId: number): Promise<ICategoryModel[]> {
+        const response = await this.client.get(`/api/v1/categories/${categoryId}/tree`) as IApiResponse;
+        
+        return response.result as ICategoryModel[];
+    }
 
-  async updateCategory(categoryId: number, category: Omit<ICategoryModel, 'id' | 'hasChild'> & { imageFile?: File }): Promise<IApiResponse> {
-    const formData = new FormData();
-    formData.append('Name', category.name);
-    formData.append('Description', category.description || '');
-    formData.append('ParentId', category.parentId.toString());
-    formData.append('IsPrimary', category.isPrimary.toString());
-    if (category.imageFile) formData.append('Image', category.imageFile);
+    public async createCategory(category: Omit<ICategoryModel, 'id' | 'hasChild'> & { imageFile?: File; }): Promise<void> {
+        const formData = new FormData();
+        formData.append('Name', category.name);
+        formData.append('Description', category.description || '');
+        formData.append('ParentId', category.parentId!.toString());
+        formData.append('IsPrimary', category.isPrimary.toString());
+        if (category.imageFile) formData.append('Image', category.imageFile);
 
-    return apiWebClient(`/api/v1/categories/${categoryId}`, {
-      method: 'PUT',
-      body: formData,
-    }) as Promise<IApiResponse>;
-  }
+        await this.client.post(
+            '/api/v1/categories', formData, {
+            headers: {
+                "Content-Type": "multipart/form-data"
+            }
+        });
+    };
 
-  async deleteCategory(categoryId: number): Promise<IApiResponse> {
-    return apiWebClient(`/api/v1/categories/${categoryId}`, {
-      method: 'DELETE',
-    }) as Promise<IApiResponse>;
-  }
+    public async updateCategory(categoryId: number, category: Omit<ICategoryModel, 'id' | 'hasChild'> & { imageFile?: File }): Promise<void> {
+        const formData = new FormData();
+        formData.append('Name', category.name);
+        formData.append('Description', category.description || '');
+        formData.append('ParentId', category.parentId!.toString());
+        formData.append('IsPrimary', category.isPrimary.toString());
+        if (category.imageFile) formData.append('Image', category.imageFile);
+
+        await this.client.put(
+            `/api/v1/categories/${categoryId}`,
+            { data: formData }, {
+            headers: {
+            "Content-Type": "multipart/form-data"
+            }
+        });
+    }
+
+    public async deleteCategory(categoryId: number): Promise<void> {
+        await this.client.delete(`/api/v1/categories/${categoryId}`);
+    }
 }

@@ -13,38 +13,41 @@ const Sidebar = () => {
     const navigate = useNavigate();
 
     const decodedToken = auth.user?.access_token ? jwtDecode<IJwtPayloadModel>(auth.user.access_token) : null;
-    const role = decodedToken?.role;
+    const roles = decodedToken?.roles ?? [];
 
     const navItems = [
         { text: "Dashboard", path: "/", icon: <DashboardIcon /> },
         { text: "Orders", path: "/orders", icon: <ShoppingCartIcon /> },
         { text: "Products", path: "/products", icon: <CategoryIcon /> },
         { text: "Categories", path: "/categories", icon: <CategoryIcon /> },
-        ...(role === "Admin" ? [{ text: "Users", path: "/users", icon: <PeopleIcon /> }] : []),
+        ...(roles?.length > 0 &&roles?.includes("Admin") ? [{ text: "Users", path: "/users", icon: <PeopleIcon /> }] : []),
     ];
 
     return (
         <Drawer
             variant="permanent"
             sx={{
-                width: 240,
-                flexShrink: 0,
-                [`& .MuiDrawer-paper`]: { width: 240, boxSizing: 'border-box', backgroundColor: '#343a40', color: '#fff' },
+                width: { xs: '100%', sm: '15%' },
+                flexShrink: 1,
+                // [`& .MuiDrawer-paper`]: {
+                // width: { xs: '100%', sm: '20%' },
+                // boxSizing: 'border-box',
+                // backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#1e1e1e' : '#343a40',
+                // color: '#fff',
+                // },
             }}
         >
             <Toolbar />
-            <Box sx={{ overflow: 'auto' }}>
+            <Box sx={{ overflow: '-moz-hidden-unscrollable', px: 4, py: 2 }}>
                 <List>
-                    {navItems.map((item) => {
-                        return (
-                            <ListItem
+                    {navItems.map((item) => (
+                        <ListItem
                             component="button"
-                                key={item.text} onClick={() => navigate(item.path)}>
-                                <ListItemIcon sx={{ color: '#fff' }}>{item.icon}</ListItemIcon>
-                                <ListItemText primary={item.text} />
-                            </ListItem>
-                        );
-                    })}
+                            key={item.text} onClick={() => navigate(item.path)}>
+                            <ListItemIcon sx={{ color: '#1e1e1e' }}>{item.icon}</ListItemIcon>
+                            <ListItemText primary={item.text} />
+                        </ListItem>
+                    ))}
                 </List>
             </Box>
         </Drawer>

@@ -3,7 +3,7 @@ import { useAuth } from "react-oidc-context";
 import { useNavigate } from "react-router-dom";
 import { MiniLoaderPage } from "../components/common";
 
-const SilentRenew = () => {
+const SilentRenew: React.FC  = () => {
     const auth = useAuth();
     const navigate = useNavigate();
 

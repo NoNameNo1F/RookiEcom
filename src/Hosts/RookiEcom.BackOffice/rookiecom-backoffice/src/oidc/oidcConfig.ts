@@ -1,6 +1,6 @@
-import { WebStorageStateStore } from "oidc-client-ts";
+import { UserManager, UserManagerSettings, WebStorageStateStore } from "oidc-client-ts";
 
-const oidcConfig = {
+const oidcConfig: UserManagerSettings = {
     authority: "https://localhost:8080",
     client_id: "rookiecom-backoffice",
     redirect_uri: "https://localhost:3000/signin-oidc",
@@ -9,7 +9,9 @@ const oidcConfig = {
     scope: "openid profile rookiecom-webapi role",
     automaticSilentRenew: false,
     silent_redirect_uri: 'https://localhost:3000/silent-renew',
-    userStore: new WebStorageStateStore({ store: window.sessionStorage }),
+    userStore: new WebStorageStateStore({ store: window.sessionStorage })
 };
 
-export default oidcConfig;
+const userManager = new UserManager(oidcConfig);
+
+export default userManager;

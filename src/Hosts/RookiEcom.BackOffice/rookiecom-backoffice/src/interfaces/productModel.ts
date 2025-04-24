@@ -1,7 +1,7 @@
 import { IProductAttribute, IVariationOption } from "./index";
 
 interface IProductModel {
-    id: string;
+    id: number;
     sku: string;
     name: string;
     description: string;
@@ -12,14 +12,14 @@ interface IProductModel {
     stock: number;
     categoryId: number;
     isFeature: boolean;
-    imageGallery: string[];
+    images: string[];
     productAttributes: IProductAttribute[];
     variationOption: IVariationOption;
 };
 
 
 interface IProductUpdateModel {
-  id: string;
+  id: number;
   sku: string;
   name: string;
   description: string;

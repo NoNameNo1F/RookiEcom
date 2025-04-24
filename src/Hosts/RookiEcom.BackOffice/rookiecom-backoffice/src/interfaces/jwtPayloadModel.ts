@@ -7,6 +7,6 @@ export default interface IJwtPayloadModel extends JwtPayload {
     auth_time ?: number;
     idp ?: string;
     name?: string;
-    role ?: string;
+    roles ?: string[];
     sid ?: string;
 }

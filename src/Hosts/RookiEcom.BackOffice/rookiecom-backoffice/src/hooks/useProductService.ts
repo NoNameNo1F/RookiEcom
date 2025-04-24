@@ -2,9 +2,10 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { IProductModel } from "../interfaces";
 
 import { IProductUpdateModel } from "../interfaces/productModel";
-import { ProductService } from "../services/productService";
+import { ProductService } from "../services";
+import { apiWebClient } from "../apis/apiClient";
 
-const productService = new ProductService();
+const productService = new ProductService(apiWebClient);
 export const useGetProductsPaging = (pageNumber: number = 1, pageSize: number = 25) => {
     return useQuery({
         queryKey: ['products', pageNumber, pageSize],
@@ -44,7 +45,7 @@ export const useCreateProduct = () => {
 export const useUpdateProduct = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: ({ productId, product }: { productId: number; product: IProductUpdateModel }) => productService.updateProduct(productId, product),
+        mutationFn: ({product }: {product: IProductUpdateModel }) => productService.updateProduct(product),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['products'] });
         },

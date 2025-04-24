@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { IJwtPayloadModel } from "../interfaces";
 
 const withAuth = <P extends object>(
-    WrappedComponent: React.ComponentType<P>
+    WrappedComponent: React.FC<P>
 ) => {
     const AuthComponent = withAuthenticationRequired(
         (props: P) => {
@@ -13,13 +13,12 @@ const withAuth = <P extends object>(
             const navigate = useNavigate();
 
             const decodedToken = jwtDecode<IJwtPayloadModel>(auth.user?.access_token!);
-            const role = decodedToken?.role!;
-
+            const roles = decodedToken?.roles!;
             useEffect(() => {
-                if (role === "Admin") {
-                    navigate("/", { replace: true });
+                if (!roles.includes("Admin")) {
+                    navigate("access-denied", { replace: true });
                 }
-            }, [role, navigate]);
+            }, []);
 
             if (auth.isLoading || !auth.isAuthenticated) {
                 return null;
