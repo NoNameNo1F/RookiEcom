@@ -5,7 +5,7 @@ using RookiEcom.Application.Storage;
 
 namespace RookiEcom.Modules.Product.Application.Commands.Category.Create;
 
-public class CreateCategoryCommandHandler : ICommandHandler<CreateCategoryCommand, int>
+public class CreateCategoryCommandHandler : ICommandHandler<CreateCategoryCommand>
 {
     private readonly ProductContext _dbContext;
     private readonly IBlobService _blobService;
@@ -16,7 +16,7 @@ public class CreateCategoryCommandHandler : ICommandHandler<CreateCategoryComman
         _blobService = blobService;
     }
 
-    public async Task<int> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
+    public async Task Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
     {
         await using var transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
         (string BlobName, string ContainerName)? uploadedBlob = null;
@@ -27,15 +27,15 @@ public class CreateCategoryCommandHandler : ICommandHandler<CreateCategoryComman
             {
                 Name = request.Name,
                 Description = request.Description,
-                ParentId = request.ParentId,
-                IsPrimary = request.IsPrimary,
                 HasChild = false,
+                IsPrimary = request.IsPrimary,
                 CreatedDateTime = DateTime.UtcNow,
                 UpdatedDateTime = DateTime.UtcNow
             };
             
             if (request.ParentId.Value != 0)
             {
+                category.ParentId = request.ParentId;
                 var parentCategory = await _dbContext.Categories
                     .FirstOrDefaultAsync(c => c.ParentId == request.ParentId.Value , cancellationToken);
                    
@@ -61,8 +61,6 @@ public class CreateCategoryCommandHandler : ICommandHandler<CreateCategoryComman
             _dbContext.Categories.Add(category);
             await _dbContext.SaveChangesAsync(cancellationToken);
             await transaction.CommitAsync(cancellationToken);
-            
-            return category.Id;
         }
         catch (Exception ex)
         {

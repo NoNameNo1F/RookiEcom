@@ -15,7 +15,7 @@ public class CategoryService
         _dbContext = dbContext;
     }
     
-    public async Task<PagedResult<Category>> GetAllCategories(int pageSize, int pageNumber,CancellationToken cancellationToken)
+    public async Task<PagedResult<Category>> GetAllCategories(int pageNumber, int pageSize,CancellationToken cancellationToken)
     {
         var query = _dbContext.Categories
             .AsNoTracking()

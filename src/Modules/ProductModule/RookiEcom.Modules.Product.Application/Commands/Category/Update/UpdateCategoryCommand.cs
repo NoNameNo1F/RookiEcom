@@ -1,4 +1,4 @@
-﻿using RookiEcom.Application.Common;
+﻿using Microsoft.AspNetCore.Http;
 using RookiEcom.Application.Contracts;
 
 namespace RookiEcom.Modules.Product.Application.Commands.Category.Update;
@@ -9,7 +9,7 @@ public sealed class UpdateCategoryCommand(
     string description, 
     int? parentId,
     bool isPrimary,
-    IFormFile image) : CommandBase<int>
+    IFormFile image) : CommandBase
 {
     public int Id { get; set; } = id;
     public string Name { get; set; } = name;

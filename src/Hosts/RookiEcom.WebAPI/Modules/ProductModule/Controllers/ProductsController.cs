@@ -31,6 +31,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet("c{categoryId:int}")]
+    [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetProductsByCategoryId(
@@ -53,8 +54,7 @@ public class ProductsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetProductsPaging(
         [FromQuery] PagingRequestDto pagingRequest,
-        CancellationToken cancellationToken
-    )
+        CancellationToken cancellationToken = default)
     {
         var pagedResult =
             await _productService.GetProducts(pagingRequest.PageNumber, pagingRequest.PageSize, cancellationToken);
@@ -83,7 +83,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet("{sku}")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Policy = "AdminOnly")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetProductBySKU(
@@ -99,7 +99,7 @@ public class ProductsController : ControllerBase
     }
     
     [HttpPost]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Policy = "AdminOnly")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateProduct(
@@ -124,7 +124,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPut("{productId}")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Policy = "AdminOnly")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateProduct(
@@ -153,7 +153,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpDelete("{productId}")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Policy = "AdminOnly")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteProduct(

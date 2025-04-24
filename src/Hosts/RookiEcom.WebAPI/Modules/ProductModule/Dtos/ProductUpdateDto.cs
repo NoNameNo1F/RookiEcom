@@ -1,5 +1,4 @@
 ﻿using RookiEcom.Modules.Product.Domain.ProductAggregate;
-using IFormFile = RookiEcom.Application.Common.IFormFile;
 
 namespace RookiEcom.WebAPI.Modules.ProductModule.Dtos;
 
