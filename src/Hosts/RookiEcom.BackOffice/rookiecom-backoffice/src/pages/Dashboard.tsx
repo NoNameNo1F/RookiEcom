@@ -6,7 +6,7 @@ import { ProductTable } from "../components/products";
 
 const DashboardPage: React.FC = () => {
     return (
-        <Box sx={{ maxWidth: 1200, mx: 'auto', py: 2 }}>
+        <Box sx={{ maxWidth: 1200, m: 0, py: 2 }}>
             <Typography variant="h4" gutterBottom>
                 Dashboard
             </Typography>

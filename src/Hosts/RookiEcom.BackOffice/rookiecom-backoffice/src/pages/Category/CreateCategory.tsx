@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useCreateCategory, useGetCategories } from "../../hooks";
 import { MiniLoaderPage } from "../../components/common";
 import { Alert, Box, Button, Checkbox, CircularProgress, FormControl, FormControlLabel, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
@@ -16,7 +16,7 @@ const CreateCategoryPage: React.FC  = () => {
         description: '',
         parentId: 0,
         isPrimary: false,
-        imageFile: {} as File,
+        imageFile: undefined,
     });
 
     const [errors, setErrors] = useState<{ [key: string]: string; }>({});
@@ -32,12 +32,13 @@ const CreateCategoryPage: React.FC  = () => {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | { name?: string; value: unknown; }>) => {
         const { name, value } = e.target;
+        console.log(name);
+        if (name === 'isPrimary')
+        {
+            setFormData((prev) => ({ ...prev, [name!]: !formData.isPrimary }));
+            return;
+        }
         setFormData((prev) => ({ ...prev, [name!]: value }));
-    };
-
-    const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, checked } = e.target;
-        setFormData((prev) => ({ ...prev, [name!]: checked }));
     };
 
     const handleFileChange = (image: File) => {
@@ -60,8 +61,31 @@ const CreateCategoryPage: React.FC  = () => {
         return <Alert severity="error">{createCategoryMutation.error.message}</Alert>;
     }
 
+    const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
+
+    useEffect(() => {
+        if (formData)
+        {
+            console.log(formData.name, formData.description, formData.parentId, formData.isPrimary);
+        }
+    }, [formData])
+    useEffect(() => {
+        let url: string | undefined = undefined;
+            
+        if (formData.imageFile) {
+            url = URL.createObjectURL(formData.imageFile);
+
+            setImageUrl(url);
+        }
+        return () => {
+            if (url) {
+                URL.revokeObjectURL(url);
+            }
+        };
+    }, [formData.imageFile]);
+
     return (
-        <Box sx={{ maxWidth: 800, mx: 'auto', mt: 4, p: 2 }}>
+        <Box sx={{ maxWidth: 1280, mx: 'auto', mt: 4, p: 2 }}>
             <Typography variant="h4" gutterBottom>
                 Create Category
             </Typography>
@@ -87,10 +111,10 @@ const CreateCategoryPage: React.FC  = () => {
                     <InputLabel>Parent Category</InputLabel>
                     <Select
                         name="parentId"
-                        value={formData.parentId || ''}
-                        onChange={(e) => setFormData((prev) => ({ ...prev, parentId: Number(e.target.value) || undefined }))}
+                        value={formData.parentId || 0}
+                        onChange={(e) => setFormData((prev) => ({ ...prev, parentId: Number(e.target.value) || 0 }))}
                     >
-                        <MenuItem value="">None</MenuItem>
+                        <MenuItem value={0}>Default</MenuItem>
                         {(categories?.items as Array<ICategoryModel> || []).map((category: ICategoryModel) => (category.id !== formData.parentId) &&
                         (
                             <MenuItem key={category.id} value={category.id}>
@@ -103,8 +127,9 @@ const CreateCategoryPage: React.FC  = () => {
                     control={
                         <Checkbox
                             name="isPrimary"
-                            checked={formData.isPrimary || false}
-                            onChange={handleCheckboxChange}
+                            value={formData.isPrimary}
+                            checked={formData.isPrimary}
+                            onChange={handleChange}
                         />
                     }
                     label="Is Primary"
@@ -114,11 +139,21 @@ const CreateCategoryPage: React.FC  = () => {
                     <input
                         type="file"
                         hidden
-                        onChange={() => handleFileChange}
+                        onChange={(event) => handleFileChange(event.target.files![0])}
                         accept="image/*"
                     />
                 </Button>
-                {formData.imageFile && <Typography>Image selected: {formData.imageFile.name}</Typography>}
+                {imageUrl && (
+                    <img
+                        width={164}
+                        height={164}
+                        style={{ objectFit: 'cover'}}
+                    srcSet={imageUrl}
+                    src={imageUrl}
+                    alt={formData.imageFile?.name}
+                    loading="lazy" 
+                    />
+                )}
                 
                 <Button
                     variant="contained"

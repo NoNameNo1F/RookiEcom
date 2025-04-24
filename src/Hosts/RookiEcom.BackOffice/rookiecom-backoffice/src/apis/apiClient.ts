@@ -59,28 +59,32 @@ export default class ApiWebClient {
             throw new ProblemDetailsError(error.response.data);
         });
     };
-    public async get(endpoint: string, config?: AxiosRequestConfig): Promise<IApiResponse> {
-        const response = await this.axios.get(endpoint, config);
+    
+    public async get<T>(endpoint: string, config?: AxiosRequestConfig): Promise<T> {
+        const response = await this.axios.get<T>(endpoint, config)
+        console.log('GET Response:', response);
+        
         return response.data;
     }
 
-    public async post(endpoint: string, data: any, config?: AxiosRequestConfig): Promise<IApiResponse> {
-        const response = await this.axios.post(endpoint, data, config);
+    public async post<T>(endpoint: string, data: any, config?: AxiosRequestConfig): Promise<T> {
+        const response = await this.axios.post<T>(endpoint, data, config);
         return response.data;
     }
 
-    public async put(endpoint: string, data: any, config?: AxiosRequestConfig): Promise<IApiResponse> {
+    public async put<T>(endpoint: string, data: any, config?: AxiosRequestConfig): Promise<T> {
         const response = await this.axios.put(endpoint, data, config);
         return response.data;
     }
 
-    public async delete(endpoint: string, config?: AxiosRequestConfig): Promise<IApiResponse> {
-        const response = await this.axios.delete(endpoint, config);
+    public async delete<T>(endpoint: string, config?: AxiosRequestConfig): Promise<T> {
+        const response = await this.axios.delete<T>(endpoint, config);
         return response.data;
     }
 }
 
-const apiWebClient = new ApiWebClient(API_BASE_URL);
-const idpClient = new ApiWebClient(API_IDP_URL);
+// const apiWebClient = new ApiWebClient(API_BASE_URL);
+const apiWebClient = new ApiWebClient("https://localhost:7670");
+const idpClient = new ApiWebClient("https://localhost:8080");
 
 export { apiWebClient, idpClient };

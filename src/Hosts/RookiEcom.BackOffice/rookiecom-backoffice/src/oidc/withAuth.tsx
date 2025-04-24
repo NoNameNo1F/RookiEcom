@@ -13,13 +13,9 @@ const withAuth = <P extends object>(
             const navigate = useNavigate();
 
             const decodedToken = jwtDecode<IJwtPayloadModel>(auth.user?.access_token!);
-            const role = decodedToken?.role!;
-
+            const roles = decodedToken?.roles!;
             useEffect(() => {
-                if (role === "Admin") {
-                    navigate("/", { replace: true });
-                }
-                else {
+                if (!roles.includes("Admin")) {
                     navigate("access-denied", { replace: true });
                 }
             }, []);

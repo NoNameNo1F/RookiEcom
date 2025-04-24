@@ -16,11 +16,15 @@ export const Header = () => {
 
     return (
         <AppBar
-            position="fixed"
+            position='fixed'
             sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
             color="primary">
             <Toolbar>
-                <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+                <Typography
+                    variant="h6"
+                    noWrap
+                    component="div"
+                    sx={{ alignItems: 'start', flexGrow: 1 }}>
                     RookiEcom BackOffice
                 </Typography>
                 <IconButton onClick={toggleTheme} color="inherit">

@@ -6,7 +6,7 @@ import { Outlet } from 'react-router-dom';
 
 const DashboardLayout: React.FC = () => {
   return (
-    <Box sx={{ display: 'flex', maxHeight: '100vh' }}>
+    <Box sx={{ display: 'flex', minHeight: '100vh' }}>
       <Header />
       <Sidebar />
       <Box
@@ -16,7 +16,7 @@ const DashboardLayout: React.FC = () => {
           p: 3,
           backgroundColor: (theme) => theme.palette.background.default,
           width: { xs: '100%', sm: '85%' },
-          ml: { sm: '15%' },
+          boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)'
         }}
       >
         <Toolbar />

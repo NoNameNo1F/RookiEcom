@@ -13,14 +13,14 @@ const Sidebar = () => {
     const navigate = useNavigate();
 
     const decodedToken = auth.user?.access_token ? jwtDecode<IJwtPayloadModel>(auth.user.access_token) : null;
-    const role = decodedToken?.role;
+    const roles = decodedToken?.roles ?? [];
 
     const navItems = [
         { text: "Dashboard", path: "/", icon: <DashboardIcon /> },
         { text: "Orders", path: "/orders", icon: <ShoppingCartIcon /> },
         { text: "Products", path: "/products", icon: <CategoryIcon /> },
         { text: "Categories", path: "/categories", icon: <CategoryIcon /> },
-        ...(role === "Admin" ? [{ text: "Users", path: "/users", icon: <PeopleIcon /> }] : []),
+        ...(roles?.length > 0 &&roles?.includes("Admin") ? [{ text: "Users", path: "/users", icon: <PeopleIcon /> }] : []),
     ];
 
     return (

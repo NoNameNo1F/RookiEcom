@@ -36,9 +36,7 @@ export class CategoryService {
         if (category.imageFile) formData.append('Image', category.imageFile);
 
         await this.client.post(
-            '/api/v1/categories', {
-            body: formData
-        }, {
+            '/api/v1/categories', formData, {
             headers: {
                 "Content-Type": "multipart/form-data"
             }
