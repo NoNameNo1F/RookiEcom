@@ -31,12 +31,13 @@ public class CreateProductCommandValidator : AbstractValidator<CreateProductComm
 
         RuleFor(x => x.Images)
             .NotNull().WithMessage("Images array must not be null.")
-            .Must(images => images.All(image => image != null && image.ContentType.StartsWith("image/")))
-            .WithMessage("All uploaded files must be images (e.g., JPEG, PNG).")
-            .Must(images => images.Length <= 5)
-            .WithMessage("Number of images must not exceed 5.");
-
-
+            .Must(images => images != null && images.Length >= 1)
+            .WithMessage($"At least {1} image is required.")
+            .Must(images => images != null && images.Length <= 5)
+            .WithMessage($"Number of images must not exceed {5}.")
+            .Must(images => images == null || images.Length == 0 || images.All(image => image != null && image.ContentType.StartsWith("image/"))) // Content type check (handle empty array case)
+            .WithMessage("All uploaded files must be images (e.g., JPEG, PNG).");
+        
         RuleForEach(x => x.ProductAttributes)
             .ChildRules(attr =>
             {

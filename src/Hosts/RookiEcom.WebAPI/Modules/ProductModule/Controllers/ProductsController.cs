@@ -7,9 +7,8 @@ using RookiEcom.Application.Pagination;
 using RookiEcom.Modules.Product.Application.Commands.Product.Create;
 using RookiEcom.Modules.Product.Application.Commands.Product.Delete;
 using RookiEcom.Modules.Product.Application.Commands.Product.Update;
+using RookiEcom.Modules.Product.Application.Dtos;
 using RookiEcom.Modules.Product.Application.Queries;
-
-using ProductDto = RookiEcom.WebAPI.Modules.ProductModule.Dtos.ProductDto;
 
 namespace RookiEcom.WebAPI.Modules.ProductModule.Controllers;
 
@@ -103,7 +102,7 @@ public class ProductsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateProduct(
-        [FromForm] ProductDto body, CancellationToken cancellationToken = default)
+        [FromForm] ProductCreateDto body, CancellationToken cancellationToken = default)
     {
         var command = new CreateProductCommand(
             body.SKU,
@@ -142,6 +141,7 @@ public class ProductsController : ControllerBase
             body.Price,
             body.StockQuantity,
             body.IsFeature,
+            body.Status,
             body.OldImages,
             body.NewImages,
             body.ProductAttributes,
