@@ -4,20 +4,31 @@ interface ICategoryModel {
     description: string;
     parentId?: number;
     isPrimary: boolean;
-    image?: string;
+    image: string;
     hasChild: boolean;
 }
 
-interface ICategoryUpdateModel {
+
+interface ICategoryCreateForm {
+    name: string;
+    description: string;
+    parentId?: number;
+    isPrimary: boolean;
+    imageFile: FileList;
+}
+
+interface ICategoryUpdateForm {
     id: number;
     name: string;
     description: string;
     parentId?: number;
     isPrimary: boolean;
-    image: string;
+    imageFile?: FileList;
 }
 
 export type {
     ICategoryModel,
-    ICategoryUpdateModel
-}
+    ICategoryCreateForm,
+    ICategoryUpdateForm
+};
+

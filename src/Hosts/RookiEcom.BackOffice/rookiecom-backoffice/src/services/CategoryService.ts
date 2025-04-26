@@ -1,5 +1,6 @@
 import ApiWebClient from "../apis/apiClient";
 import { IApiResponse, ICategoryModel } from "../interfaces";
+import { ICategoryCreateForm, ICategoryUpdateForm } from "../interfaces/categoryModel";
 import { PagedResult } from "../interfaces/pagedResult";
 
 export class CategoryService {
@@ -27,37 +28,38 @@ export class CategoryService {
         return response.result as ICategoryModel[];
     }
 
-    public async createCategory(category: Omit<ICategoryModel, 'id' | 'hasChild'> & { imageFile?: File; }): Promise<void> {
+    public async createCategory(category: ICategoryCreateForm): Promise<void> {
         const formData = new FormData();
         formData.append('Name', category.name);
         formData.append('Description', category.description || '');
         formData.append('ParentId', category.parentId!.toString());
         formData.append('IsPrimary', category.isPrimary.toString());
-        if (category.imageFile) formData.append('Image', category.imageFile);
+        if (category.imageFile && category.imageFile.length > 0) {
+            formData.append('Image', category.imageFile[0]);
+        }
 
         await this.client.post(
-            '/api/v1/categories', formData, {
-            headers: {
-                "Content-Type": "multipart/form-data"
-            }
-        });
+            '/api/v1/categories',
+            formData,
+            { headers: { "Content-Type": "multipart/form-data"}}
+        );
     };
 
-    public async updateCategory(categoryId: number, category: Omit<ICategoryModel, 'id' | 'hasChild'> & { imageFile?: File }): Promise<void> {
+    public async updateCategory(categoryId: number, category: ICategoryUpdateForm): Promise<void> {
         const formData = new FormData();
         formData.append('Name', category.name);
         formData.append('Description', category.description || '');
         formData.append('ParentId', category.parentId!.toString());
         formData.append('IsPrimary', category.isPrimary.toString());
-        if (category.imageFile) formData.append('Image', category.imageFile);
+        if (category.imageFile && category.imageFile.length > 0) {
+            formData.append('Image', category.imageFile[0]);
+        }
 
         await this.client.put(
             `/api/v1/categories/${categoryId}`,
-            { data: formData }, {
-            headers: {
-            "Content-Type": "multipart/form-data"
-            }
-        });
+            formData,
+            { headers: { "Content-Type": "multipart/form-data" } }
+        );
     }
 
     public async deleteCategory(categoryId: number): Promise<void> {

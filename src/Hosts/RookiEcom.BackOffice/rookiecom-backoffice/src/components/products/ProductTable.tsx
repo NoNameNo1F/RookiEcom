@@ -1,128 +1,120 @@
-import { Alert, Box, Button, CircularProgress, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography } from "@mui/material";
+import { Alert, Avatar, Box, Chip, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Tooltip,  } from "@mui/material";
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import ImageIcon from '@mui/icons-material/Image';
 import { IProductModel } from "../../interfaces";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGetProductsPaging } from "../../hooks";
-import { useDeleteProduct, useGetProductsByCategory } from "../../hooks/useProductService";
+
 import { MiniLoaderPage } from "../common";
+import { getProductStatusColor, getProductStatusText } from "../../utils/helper";
 
 interface ProductTableProps {
-  categoryId?: number | '';
+   categoryId: number;
+   searchTerm: string;
+   onDeleteProduct: (productId: number, productName: string) => void;
+   isDeleting?: boolean;
 }
 
-const ProductTable: React.FC<ProductTableProps> = ({ categoryId }) => {
+const ProductTable: React.FC<ProductTableProps> = ({ categoryId, searchTerm, onDeleteProduct, isDeleting }) => {
     const navigate = useNavigate();
     const [pageNumber, setPageNumber] = useState(1);
-    const [rowsPerPage, setRowsPerPage] = useState(25);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
     
-    const { data: pagedResult, isLoading, error } = categoryId
-    ? useGetProductsByCategory(categoryId as number, pageNumber, rowsPerPage)
-        : useGetProductsPaging(pageNumber, rowsPerPage);
-    const deleteProductMutation = useDeleteProduct();
+   const { data: pagedResult, isLoading, error } = useGetProductsPaging(pageNumber, rowsPerPage);
 
-    const handleDeleteProduct = (productId: number) => {
-        if (window.confirm('Are you sure you want to delete this category?')) {
-            deleteProductMutation.mutate(productId);
-        }
-    }
-    
     const products = pagedResult?.items ?? [];
-    const pageData = pagedResult?.pageData ?? {
-        totalCount: 0,
-        pageNumber: 1,
-        pageSize: 25,
-        totalPages: 0,
-        hasPrevious: false,
-        hasNext: false
-    };
+    const totalCount = pagedResult?.pageData?.totalCount ?? 0;
 
-    useEffect(() => {
-        console.error(error);
-    }, [error]);
+    // --- Client-side Filtering/Searching Example (Adapt if done server-side) ---
+    const filteredProducts = products.filter(p => {
+        const matchesCategory = categoryId === 0 || p.categoryId === categoryId;
+        const matchesSearch = !searchTerm ||
+                              p.sku.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                              p.name.toLowerCase().includes(searchTerm.toLowerCase());
+        return matchesCategory && matchesSearch;
+    });
 
-    if (error) {
-        
-        return (
-            <Alert severity="error">{(error as Error).message}</Alert>
-        );
-    }
-    
-     const handleChangePage = (_event: unknown, newPage: number) => {
-        setPageNumber(newPage + 1);
+    const handleChangePage = (_event: unknown, newPage: number) => {
+       setPageNumber(newPage + 1);
     };
 
     const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        setPageNumber(1);
+       setRowsPerPage(parseInt(event.target.value, 10));
+       setPageNumber(1);
     };
+
+    const columns = [
+        { id: 'image', label: 'Image', width: 80 },
+        { id: 'sku', label: 'SKU', minWidth: 100 },
+        { id: 'name', label: 'Name', minWidth: 170 },
+        { id: 'category', label: 'Category', minWidth: 120, hideOnMobile: true },
+        { id: 'price', label: 'Price', align: 'right', width: 100 },
+        { id: 'stock', label: 'Stock', align: 'right', width: 80 },
+        { id: 'status', label: 'Status', align: 'center', width: 120 },
+        { id: 'actions', label: 'Actions', align: 'right', width: 120 },
+    ];
+
     
     return (
-        <Box>
-            <TableContainer component={Paper}>
-                <Table>
+        <Box sx={{ width: '100%', overflowX: 'auto' }}>
+            <TableContainer component={Paper} variant="outlined" sx={{ boxShadow: 'none' }}>
+                <Table stickyHeader aria-label="products table">
                     <TableHead>
                         <TableRow>
-                            <TableCell>Image</TableCell>
-                            <TableCell>Name</TableCell>
-                            <TableCell>SKU</TableCell>
-                            <TableCell>Price</TableCell>
-                            <TableCell>Stock</TableCell>
-                            <TableCell>IsFeature</TableCell>
-                            <TableCell>Category</TableCell>
-                            <TableCell>Actions</TableCell>
+                            {columns.map((column) => (
+                                <TableCell
+                                    key={column.id}
+                                    align={column.align as any}
+                                    style={{ minWidth: column.minWidth, width: column.width, fontWeight: 'bold' }}
+                                    sx={{ ...(column.hideOnMobile && { display: { xs: 'none', md: 'table-cell' } }) }}
+                                >
+                                    {column.label}
+                                </TableCell>
+                            ))}
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {isLoading ? (
-                            <TableRow>
-                                <TableCell colSpan={8} sx={{ textAlign: 'center' }}>
-                                    <CircularProgress size={24} />
-                                    <Typography variant="body2" sx={{ ml: 1, display: 'inline' }}>
-                                        Loading...
-                                    </Typography>
-                                </TableCell>
-                            </TableRow>
-                        ) : !pagedResult ? (
-                            <TableRow>
-                                <TableCell colSpan={8}>Failed to load products</TableCell>
-                            </TableRow>
-                        ): products.length === 0 ? (
-                            <TableRow>
-                                <TableCell colSpan={8}>No products found</TableCell>
-                            </TableRow>
+                             <TableRow> <TableCell colSpan={columns.length} sx={{ textAlign: 'center', p: 5 }}> <MiniLoaderPage text="Loading Products..." /> </TableCell> </TableRow>
+                        ) : error ? (
+                            <TableRow> <TableCell colSpan={columns.length} sx={{ p: 3 }}> <Alert severity="error">{(error as Error).message || "Failed to load products."}</Alert> </TableCell> </TableRow>
+                        ) : filteredProducts.length === 0 ? (
+                             <TableRow> <TableCell colSpan={columns.length} sx={{ textAlign: 'center', p: 5 }}> No products found. </TableCell> </TableRow>
                         ) : (
-                            products.map((product: IProductModel) => (
-                                <TableRow key={product.id}>
+                            filteredProducts.map((product: IProductModel) => (
+                                <TableRow hover key={product.id}>
                                     <TableCell>
-                                        {(product.images && product.images.length > 0) ? (
-                                            <img
-                                            srcSet={`${product.images[0]}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-                                            src={`${product.images[0]}?w=164&h=164&fit=crop&auto=format`}
-                                            alt={product.name}
-                                            loading="lazy"
-                                            />
-                                        ) : (
-                                                <img
-                                            srcSet={`https://th.bing.com/th/id/OIP.EL451xjWSajIv6TdPO323wHaHa?rs=1&pid=ImgDetMain?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-                                            src={`https://th.bing.com/th/id/OIP.EL451xjWSajIv6TdPO323wHaHa?rs=1&pid=ImgDetMain?w=164&h=164&fit=crop&auto=format`}
-                                            alt={product.name}
-                                            loading="lazy"
-                                            />
-                                        )}
+                                         <Avatar variant="rounded" src={product.images?.[0] || undefined} alt={product.name} sx={{ width: 56, height: 56, bgcolor: 'grey.100' }} >
+                                            {!product.images?.[0] && <ImageIcon color="disabled" />}
+                                         </Avatar>
                                     </TableCell>
+                                    <TableCell sx={{ whiteSpace: 'nowrap' }}>{product.sku}</TableCell>
                                     <TableCell>{product.name}</TableCell>
-                                    <TableCell>{product.sku}</TableCell>
-                                    <TableCell>{product.price}</TableCell>
-                                    <TableCell>{product.stock}</TableCell>
-                                    <TableCell>{product.isFeature ? 'Yes' : 'No'}</TableCell>
-                                     <TableCell>{product.categoryId || 'N/A'}</TableCell>
-                                    <TableCell>
-                                        <Button onClick={() => navigate(`/products/edit/${product.sku}`)} color="primary">
-                                            Edit
-                                        </Button>
-                                        <Button onClick={() => handleDeleteProduct(product.id)} color="error">
-                                            Delete
-                                        </Button>
+                                    <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }}>{product.categoryId || 'N/A'}</TableCell>
+                                    <TableCell align="right">${product.price.toFixed(2)}</TableCell>
+                                    <TableCell align="right">{product.stock}</TableCell>
+                                    {/* Status Cell */}
+                                    <TableCell align="center">
+                                        <Chip
+                                            label={getProductStatusText(product.status)}
+                                            color={getProductStatusColor(product.status)}
+                                            size="small"
+                                            variant="outlined"
+                                        />
+                                    </TableCell>
+                                    <TableCell align="right" sx={{ whiteSpace: 'nowrap' }}>
+                                        <Tooltip title="Edit Product">
+                                            <IconButton size="small" onClick={() => navigate(`/products/edit/${product.sku}`)} color="primary" disabled={isDeleting}>
+                                                <EditIcon fontSize="small" />
+                                            </IconButton>
+                                        </Tooltip>
+                                        <Tooltip title="Delete Product">
+                                            <IconButton size="small" onClick={() => onDeleteProduct(product.id, product.name)} color="error" disabled={isDeleting}>
+                                                <DeleteIcon fontSize="small" />
+                                            </IconButton>
+                                        </Tooltip>
                                     </TableCell>
                                 </TableRow>
                             ))
@@ -130,15 +122,14 @@ const ProductTable: React.FC<ProductTableProps> = ({ categoryId }) => {
                     </TableBody>
                 </Table>
             </TableContainer>
-            <TablePagination
-                    rowsPerPageOptions={[5, 10, 25]}
-                    component="div"
-                    count={pageData.totalCount}
-                    rowsPerPage={rowsPerPage}
-                    page={pageNumber - 1}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
+             {totalCount > 0 && (
+                <TablePagination
+                    rowsPerPageOptions={[5, 10, 25]} component="div"
+                    count={totalCount}
+                    rowsPerPage={rowsPerPage} page={pageNumber - 1} 
+                    onPageChange={handleChangePage} onRowsPerPageChange={handleChangeRowsPerPage}
                 />
+            )}
         </Box>
     )
 };

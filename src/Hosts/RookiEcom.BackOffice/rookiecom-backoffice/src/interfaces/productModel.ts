@@ -1,3 +1,4 @@
+import { ProductStatus } from "../enums";
 import { IProductAttribute, IVariationOption } from "./index";
 
 interface IProductModel {
@@ -7,35 +8,49 @@ interface IProductModel {
     description: string;
     price: number;
     marketPrice: number;
-    status: number;
+    status: ProductStatus;
     sold: number;
     stock: number;
     categoryId: number;
     isFeature: boolean;
     images: string[];
     productAttributes: IProductAttribute[];
+    productOption: IVariationOption;
+};
+
+interface IProductCreateForm {
+    sku: string;
+    name: string;
+    description: string;
+    price: number;
+    marketPrice: number;
+    stock: number;
+    categoryId: number;
+    isFeature: boolean;
+    imageFiles: FileList;
+    productAttributes: IProductAttribute[];
     variationOption: IVariationOption;
 };
 
-
-interface IProductUpdateModel {
+interface IProductUpdateForm {
   id: number;
   sku: string;
   name: string;
   description: string;
   price: number;
   marketPrice: number;
-  status: number;
+    status: ProductStatus;
   stock: number;
   categoryId: number;
+  isFeature: boolean;
   oldImages: string[];
-  newImages: File[];
+  newImageFiles?: FileList;
   productAttributes: IProductAttribute[];
   variationOption: IVariationOption;
-  isFeature: boolean;
 }
 
 export type {
     IProductModel,
-    IProductUpdateModel
+    IProductCreateForm,
+    IProductUpdateForm
 }

@@ -3,6 +3,7 @@ import { ICategoryModel } from '../interfaces';
 
 import { CategoryService } from '../services';
 import { apiWebClient } from '../apis/apiClient';
+import { ICategoryCreateForm, ICategoryUpdateForm } from '../interfaces/categoryModel';
 
 const categoryService = new CategoryService(apiWebClient);
 
@@ -16,23 +17,25 @@ export const useGetCategories = (pageNumber: number = 1, pageSize:number = 25) =
 };
 
 export const useGetCategoryTree = (categoryId: number) => {
-  return useQuery({
-    queryKey: ['categoryTree', categoryId],
-    queryFn: () => categoryService.getCategoryTree(categoryId),
-  });
+    return useQuery({
+        queryKey: ['categoryTree', categoryId],
+        queryFn: () => categoryService.getCategoryTree(categoryId),
+        enabled: !!categoryId
+    });
 };
 
 export const useGetCategoryById = (categoryId: number) => {
     return useQuery({
         queryKey: ['category', categoryId],
         queryFn: () => categoryService.getCategoryById(categoryId),
+        enabled: !!categoryId
     });
 };
 
 export const useCreateCategory = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (category: Omit<ICategoryModel, 'id' | 'hasChild'> & { imageFile?: File }) => categoryService.createCategory(category),
+        mutationFn: (category: ICategoryCreateForm) => categoryService.createCategory(category),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['categories'] });
         },
@@ -42,8 +45,8 @@ export const useCreateCategory = () => {
 export const useUpdateCategory = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: ({ categoryId, category }: { categoryId: number; category: Omit<ICategoryModel, 'id' | 'hasChild'> & { imageFile?: File; }; }) => 
-            categoryService.updateCategory(categoryId, category),
+        mutationFn: (category: ICategoryUpdateForm) => 
+            categoryService.updateCategory(category.id, category),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['categories'] });
         },

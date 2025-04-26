@@ -1,5 +1,4 @@
 import { AccessDeniedPage, NotFoundPage, DashboardPage } from '../pages';
-import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import SilentRenew from '../oidc/SilentRenew';
 import { CreateProductPage, EditProductPage, ProductListPage } from '../pages/Product';
@@ -18,7 +17,7 @@ const App: React.FC = () => {
                         <Route path="products">
                         <Route index element={<ProductListPage />} />
                         <Route path="create" element={<CreateProductPage />} />
-                        <Route path="edit/:id" element={<EditProductPage />} />
+                        <Route path="edit/:sku" element={<EditProductPage />} />
                         </Route>
                         <Route path="categories">
                         <Route index element={<CategoryListPage />} />

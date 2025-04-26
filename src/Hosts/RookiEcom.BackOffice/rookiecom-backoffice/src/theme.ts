@@ -22,14 +22,5 @@ export const getTheme = (mode: PaletteMode) => {
         paper: mode === 'light' ? '#ffffff' : '#1e1e1e',
       },
     },
-    // components: {
-    //   MuiCard: {
-    //     styleOverrides: {
-    //       root: {
-    //         borderRadius: 12,
-    //       },
-    //     },
-    //   },
-    // },
   });
 };
