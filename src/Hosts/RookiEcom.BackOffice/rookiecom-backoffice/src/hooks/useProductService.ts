@@ -1,9 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { IProductModel } from "../interfaces";
-
-import { IProductUpdateModel } from "../interfaces/productModel";
+import { IProductCreateForm, IProductUpdateForm } from "../interfaces/productModel";
 import { ProductService } from "../services";
-import { apiWebClient } from "../apis/apiClient";
+import { apiWebClient, ProblemDetailsError } from "../apis/apiClient";
+import { toast } from "react-toastify";
 
 const productService = new ProductService(apiWebClient);
 export const useGetProductsPaging = (pageNumber: number = 1, pageSize: number = 25) => {
@@ -19,6 +18,7 @@ export const useGetProductsByCategory = (categoryId: number, pageNumber: number 
         queryKey: ['products', 'category', categoryId, pageNumber, pageSize],
         queryFn: () =>
             productService.getProductsByCategory(categoryId, pageNumber, pageSize),
+        enabled: categoryId > 0,
     });
 };
 
@@ -27,17 +27,26 @@ export const useGetProductBySKU = (sku: string) => {
         queryKey: ['product', sku],
         queryFn: () =>
             productService.getProductBySKU(sku),
+        enabled: !!sku,
     });
 };
 
 export const useCreateProduct = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (product: Omit<IProductModel, 'id' | 'sold'> & { imageFiles?: File[]; }) => 
+        mutationFn: (product: IProductCreateForm) => 
             productService.createProduct(product),
         onSuccess: () => {
+            toast.success('Product created successfully!');
             queryClient.invalidateQueries({ queryKey: ['products'] });
         },
+        onError: (error) => {
+            if (error instanceof ProblemDetailsError) {
+                 toast.error(`Error: ${error.problemDetails.title || error.message}`);
+             } else {
+                 toast.error(`Failed to create product: ${(error as Error).message}`);
+             }
+        }
     });
 };
 
@@ -45,9 +54,20 @@ export const useCreateProduct = () => {
 export const useUpdateProduct = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: ({product }: {product: IProductUpdateModel }) => productService.updateProduct(product),
-        onSuccess: () => {
+        mutationFn: (product: IProductUpdateForm) =>
+            productService.updateProduct(product.id, product),
+        onSuccess: (data, variables) => {
+            toast.success(`Product "${variables.name}" updated successfully!`);
             queryClient.invalidateQueries({ queryKey: ['products'] });
+            queryClient.invalidateQueries({ queryKey: ['product', variables.id] });
+        },
+         onError: (error, variables) => {
+            const productName = variables?.name || `ID ${variables?.id}`;
+            if (error instanceof ProblemDetailsError) {
+                 toast.error(`Error updating ${productName}: ${error.problemDetails.title || error.message}`);
+             } else {
+                toast.error(`Failed to update ${productName}: ${(error as Error).message}`);
+             }
         },
     });
 };
@@ -57,8 +77,17 @@ export const useDeleteProduct = () => {
     return useMutation({
         mutationFn: (productId: number) =>
             productService.deleteProduct(productId),
-        onSuccess: () => {
+        onSuccess: (data, productId) => {
+            toast.success(`Product ID: ${productId} deleted successfully!`);
             queryClient.invalidateQueries({ queryKey: ['products'] });
+            queryClient.invalidateQueries({ queryKey: ['product', productId] });
+        },
+        onError: (error, productId) => {
+            if (error instanceof ProblemDetailsError) {
+                 toast.error(`Error deleting product ${productId}: ${error.problemDetails.title || error.message}`);
+             } else {
+                toast.error(`Failed to delete product ${productId}: ${(error as Error).message}`);
+            }
         },
     });
 };
