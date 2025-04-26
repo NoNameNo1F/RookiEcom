@@ -66,6 +66,7 @@ public class UpdateProductCommandHandler : ICommandHandler<UpdateProductCommand>
             product.Price = request.Price;
             product.StockQuantity = request.StockQuantity;
             product.IsFeature = request.IsFeature;
+            product.Status = request.Status;
             product.ProductAttributes = request.ProductAttributes;
             product.ProductOption = request.ProductOption;
             product.UpdatedDateTime = DateTime.UtcNow;

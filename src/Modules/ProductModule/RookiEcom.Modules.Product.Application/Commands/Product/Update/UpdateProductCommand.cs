@@ -14,6 +14,7 @@ public sealed class UpdateProductCommand(
     decimal price,
     int stockQuantity,
     bool isFeature,
+    ProductStatus status,
     List<string> oldImages,
     IFormFile[] newImages,
     List<ProductAttribute> productAttributes,
@@ -28,6 +29,7 @@ public sealed class UpdateProductCommand(
     public decimal Price { get; set; } = price;
     public int StockQuantity { get; set; } = stockQuantity;
     public bool IsFeature { get; set; } = isFeature;
+    public ProductStatus Status { get; set; } = status;
     public List<string> OldImages { get; set; } = oldImages;
     public IFormFile[] NewImages { get; set; } = newImages;
     public List<ProductAttribute> ProductAttributes { get; set; } = productAttributes;

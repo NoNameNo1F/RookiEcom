@@ -33,7 +33,7 @@ public class UpdateCategoryCommandHandler : ICommandHandler<UpdateCategoryComman
                 throw new CategoryNotFoundException(request.Id);
             }
 
-            if (request.Image != null && !string.IsNullOrEmpty(category.Image))
+            if (request.Image != null)
             {
                 oldImageUri = category.Image;
                 var blobName = new Uri(oldImageUri).Segments.Last();

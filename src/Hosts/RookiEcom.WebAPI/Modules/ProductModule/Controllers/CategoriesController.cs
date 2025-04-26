@@ -9,7 +9,6 @@ using RookiEcom.Modules.Product.Application.Commands.Category.Delete;
 using RookiEcom.Modules.Product.Application.Commands.Category.Update;
 using RookiEcom.Modules.Product.Application.Dtos;
 using RookiEcom.Modules.Product.Application.Queries;
-using CategoryDto = RookiEcom.WebAPI.Modules.ProductModule.Dtos.CategoryDto;
 
 namespace RookiEcom.WebAPI.Modules.ProductModule.Controllers;
 
@@ -78,8 +77,7 @@ public class CategoriesController : ControllerBase
     }
     
     [HttpPost]
-    // [Authorize(Policy = "AdminOnly")]
-    
+    [Authorize(Policy = "AdminOnly")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateCategory(

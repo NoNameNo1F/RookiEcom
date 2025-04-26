@@ -14,7 +14,7 @@ public sealed class UpdateCategoryCommand(
     public int Id { get; set; } = id;
     public string Name { get; set; } = name;
     public string Description { get; set; } = description;
-    public int? ParentId { get; set; } = parentId ?? 0;
+    public int? ParentId { get; set; } = parentId ?? 0; 
     public bool IsPrimary { get; set; } = isPrimary;
-    public IFormFile Image { get; set; } = image;
+    public IFormFile? Image { get; set; } = image;
 }

@@ -31,16 +31,34 @@ public class UpdateProductCommandValidator : AbstractValidator<UpdateProductComm
 
         RuleFor(x => x.StockQuantity)
             .GreaterThanOrEqualTo(0).WithMessage("Stock quantity must be 0 or greater.");
-
-        RuleFor(x => x.NewImages)
-            .NotNull().WithMessage("New images array must not be null.")
-            .Must(images => images.All(image => image == null || image.ContentType.StartsWith("image/")))
+        
+        RuleFor(x => x.Status)
+            .IsInEnum().WithMessage("Invalid product status provided.");
+        
+        RuleForEach(x => x.NewImages)
+            .Must(image => image == null || image.ContentType.StartsWith("image/"))
+            .When(x => x.NewImages != null && x.NewImages.Any())
             .WithMessage("All uploaded files must be images (e.g., JPEG, PNG).");
 
         RuleFor(x => x)
-            .Must(x => (x.OldImages?.Count ?? 0) + (x.NewImages?.Length ?? 0) <= 5)
-            .WithMessage("Total number of images (old + new) must not exceed 5.");
+            .Custom((command, context) => {
+                int oldImageCount = command.OldImages?.Count ?? 0;
+                int newImageCount = command.NewImages?.Length ?? 0;
+                int totalImages = oldImageCount + newImageCount;
 
+                if (totalImages < 1)
+                {
+                    context.AddFailure(nameof(command.OldImages), "Product must have at least one image (existing or new).");
+                    context.AddFailure(nameof(command.NewImages), "Product must have at least one image (existing or new).");
+                }
+
+                if (totalImages > 5)
+                {
+                    context.AddFailure(nameof(command.OldImages), "Total number of images (existing + new) must not exceed 5.");
+                    context.AddFailure(nameof(command.NewImages), "Total number of images (existing + new) must not exceed 5.");
+                }
+            });
+        
         RuleForEach(x => x.ProductAttributes)
             .ChildRules(attr =>
             {

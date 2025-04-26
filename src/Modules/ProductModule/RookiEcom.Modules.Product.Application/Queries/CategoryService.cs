@@ -18,8 +18,7 @@ public class CategoryService
     public async Task<PagedResult<Category>> GetAllCategories(int pageNumber, int pageSize,CancellationToken cancellationToken)
     {
         var query = _dbContext.Categories
-            .AsNoTracking()
-            .Where(c => c.IsPrimary == true);
+            .AsNoTracking();
 
         var categories = await query
             .OrderBy(c => c.UpdatedDateTime)
