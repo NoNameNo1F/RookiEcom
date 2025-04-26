@@ -12,21 +12,10 @@ var appSettings = new AppSettings();
 configuration.Bind(appSettings);
 
 builder.Services.AddInfrastructure(configuration);
-builder.Services.AddAuthentication(configuration);
-builder.Services.AddAuthorizationExtension();
 
 // Attach Modules Configurations
 builder.Services.AddProductModule(
     opt => configuration.GetSection("ConnectionString").Bind(opt));
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowClients", policy =>
-        policy.WithOrigins("https://localhost:5001", "https://localhost:3000")
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials());
-});
 
 builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<ApiExceptionHandler>();
@@ -35,6 +24,16 @@ builder.Services.AddControllers();
 builder.Services
     .AddSwaggerDocumentation()
     .AddVersioning();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowClients", policy =>
+        policy.WithOrigins("https://localhost:5001", "https://localhost:3000")
+            .AllowAnyHeader()
+            .AllowAnyMethod());
+});
+builder.Services.AddAuthentication(configuration);
+builder.Services.AddAuthorizationExtension();
 
 var app = builder.Build();
 
@@ -45,8 +44,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("AllowClients");
-app.UseExceptionHandler();
 app.UseHttpsRedirection();
+app.UseExceptionHandler();
 
 app.UseAuthentication();
 app.UseAuthorization();

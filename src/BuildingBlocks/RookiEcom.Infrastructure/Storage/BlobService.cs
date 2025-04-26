@@ -1,5 +1,6 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using Microsoft.AspNetCore.Http;
 using RookiEcom.Application.Common;
 using RookiEcom.Application.Storage;
 
@@ -47,7 +48,7 @@ public class BlobService : IBlobService
             throw new ArgumentException("Blob name and container name must not be empty.");
         }
         
-        if (file == null || file.Content == null)
+        if (file == null)
         {
             throw new ArgumentException("File must not be null or empty.");
         }
@@ -60,7 +61,7 @@ public class BlobService : IBlobService
             ContentType = file.ContentType
         };
         
-        var result = await blobClient.UploadAsync(file.Content,httpHeaders);
+        var result = await blobClient.UploadAsync(file.OpenReadStream(),httpHeaders);
         if (result != null)
         {
             return await GetBlob(blobName, containerName);

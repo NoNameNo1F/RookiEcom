@@ -1,4 +1,4 @@
-﻿using RookiEcom.Application.Common;
+﻿using Microsoft.AspNetCore.Http;
 using RookiEcom.Application.Contracts;
 using RookiEcom.Modules.Product.Domain.ProductAggregate;
 

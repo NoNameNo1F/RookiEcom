@@ -9,6 +9,7 @@ using RookiEcom.Modules.Product.Application.Commands.Category.Delete;
 using RookiEcom.Modules.Product.Application.Commands.Category.Update;
 using RookiEcom.Modules.Product.Application.Dtos;
 using RookiEcom.Modules.Product.Application.Queries;
+using CategoryDto = RookiEcom.WebAPI.Modules.ProductModule.Dtos.CategoryDto;
 
 namespace RookiEcom.WebAPI.Modules.ProductModule.Controllers;
 
@@ -29,7 +30,6 @@ public class CategoriesController : ControllerBase
     
     [HttpGet]
     [AllowAnonymous]
-    [Consumes("application/json")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetCategories(
         [FromQuery] PagingRequestDto pagingRequest,
@@ -46,7 +46,7 @@ public class CategoriesController : ControllerBase
     }
     
     [HttpGet("{categoryId:int}")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Policy = "AdminOnly")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetCategory([FromRoute] int categoryId, CancellationToken cancellationToken = default)
@@ -78,7 +78,8 @@ public class CategoriesController : ControllerBase
     }
     
     [HttpPost]
-    [Authorize(Roles = "Admin")]
+    // [Authorize(Policy = "AdminOnly")]
+    
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateCategory(
@@ -98,7 +99,7 @@ public class CategoriesController : ControllerBase
     }
 
     [HttpPut("{categoryId}")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Policy = "AdminOnly")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateCategory(
@@ -120,7 +121,7 @@ public class CategoriesController : ControllerBase
     }
     
     [HttpDelete("{categoryId}")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Policy = "AdminOnly")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteCategory([FromRoute] int categoryId, CancellationToken cancellationToken = default)

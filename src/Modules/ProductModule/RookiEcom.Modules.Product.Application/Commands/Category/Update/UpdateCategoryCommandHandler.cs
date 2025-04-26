@@ -6,7 +6,7 @@ using RookiEcom.Modules.Product.Application.Exceptions;
 
 namespace RookiEcom.Modules.Product.Application.Commands.Category.Update;
 
-public class UpdateCategoryCommandHandler : ICommandHandler<UpdateCategoryCommand, int>
+public class UpdateCategoryCommandHandler : ICommandHandler<UpdateCategoryCommand>
 {
     private readonly ProductContext _dbContext;
     private readonly IBlobService _blobService;
@@ -17,7 +17,7 @@ public class UpdateCategoryCommandHandler : ICommandHandler<UpdateCategoryComman
         _blobService = blobService;
     }
 
-    public async Task<int> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
+    public async Task Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
     {
         await using var transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
         (string BlobName, string ContainerName)? newUploadedBlob = null;
@@ -88,7 +88,6 @@ public class UpdateCategoryCommandHandler : ICommandHandler<UpdateCategoryComman
             }
 
             await transaction.CommitAsync(cancellationToken);
-            return category.Id;
         }
         catch (Exception ex)
         {

@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-
-namespace RookiEcom.Modules.Product.Application.Dtos;
+﻿namespace RookiEcom.WebAPI.Modules.ProductModule.Dtos;
 
 public class CategoryDto
 {

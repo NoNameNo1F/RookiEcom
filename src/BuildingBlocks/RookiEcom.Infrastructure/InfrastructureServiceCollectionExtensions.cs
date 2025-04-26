@@ -15,7 +15,7 @@ public static class InfrastructureServiceCollectionExtensions
 
         var settings = new DistributedCacheOptions();
         configuration.Bind(settings);
-
+        // services.Configure(settings);
         services.AddHybridCache(options =>
         {
             options.DefaultEntryOptions = new HybridCacheEntryOptions
