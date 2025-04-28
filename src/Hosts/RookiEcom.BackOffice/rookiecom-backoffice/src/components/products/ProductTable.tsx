@@ -27,7 +27,6 @@ const ProductTable: React.FC<ProductTableProps> = ({ categoryId, searchTerm, onD
     const products = pagedResult?.items ?? [];
     const totalCount = pagedResult?.pageData?.totalCount ?? 0;
 
-    // --- Client-side Filtering/Searching Example (Adapt if done server-side) ---
     const filteredProducts = products.filter(p => {
         const matchesCategory = categoryId === 0 || p.categoryId === categoryId;
         const matchesSearch = !searchTerm ||
@@ -94,7 +93,7 @@ const ProductTable: React.FC<ProductTableProps> = ({ categoryId, searchTerm, onD
                                     <TableCell>{product.name}</TableCell>
                                     <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }}>{product.categoryId || 'N/A'}</TableCell>
                                     <TableCell align="right">${product.price.toFixed(2)}</TableCell>
-                                    <TableCell align="right">{product.stock}</TableCell>
+                                    <TableCell align="right">{product.stockQuantity}</TableCell>
                                     {/* Status Cell */}
                                     <TableCell align="center">
                                         <Chip

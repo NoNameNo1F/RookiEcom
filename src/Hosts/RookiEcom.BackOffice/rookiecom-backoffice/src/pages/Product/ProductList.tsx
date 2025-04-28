@@ -18,7 +18,7 @@ const ProductListPage = () => {
     const { data: categoriesResult } = useGetCategories(1, 100);
     const categories = categoriesResult?.items ?? [];
 
-    const deleteProductMutation = useDeleteProduct(); // Use the hook
+    const deleteProductMutation = useDeleteProduct();
 
     const handleOpenDeleteConfirm = (productId: number, productName: string) => {
         setProductToDelete({ id: productId, name: productName });
@@ -62,11 +62,11 @@ const ProductListPage = () => {
                 </Box>
 
             <ProductTable
-                    categoryId={categoryId}
-                    searchTerm={searchTerm}
-                    onDeleteProduct={handleOpenDeleteConfirm} 
-                    isDeleting={deleteProductMutation.isPending}
-                />
+                categoryId={categoryId}
+                searchTerm={searchTerm}
+                onDeleteProduct={handleOpenDeleteConfirm} 
+                isDeleting={deleteProductMutation.isPending}
+            />
         </Paper>
 
         <Dialog

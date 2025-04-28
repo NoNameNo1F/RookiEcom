@@ -10,7 +10,7 @@ interface IProductModel {
     marketPrice: number;
     status: ProductStatus;
     sold: number;
-    stock: number;
+    stockQuantity: number;
     categoryId: number;
     isFeature: boolean;
     images: string[];

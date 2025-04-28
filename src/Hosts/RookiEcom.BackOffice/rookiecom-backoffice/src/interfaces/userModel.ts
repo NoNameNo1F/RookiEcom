@@ -1,6 +1,13 @@
+import IAddress from "./valueObjects/address";
+
 export default interface IUserModel {
-  fullname?: string;
-  id: string;
-  email?: string;
-  role?: number;
-}
+    id: string;
+    firstName: string;
+    lastName: string;
+    userName: string;
+    email: string;
+    phoneNumber?: string;
+    doB: string;
+    avatar?: string;
+    address?: IAddress
+};

@@ -1,5 +1,5 @@
-import ApiWebClient, { apiWebClient } from "../apis/apiClient";
-import { IApiResponse, IProductAttribute, IProductModel } from "../interfaces";
+import ApiWebClient from "../apis/apiClient";
+import { IApiResponse, IProductModel } from "../interfaces";
 import { PagedResult } from "../interfaces/pagedResult";
 import { IProductCreateForm, IProductUpdateForm } from "../interfaces/productModel";
 
@@ -109,7 +109,7 @@ export class ProductService {
         }
 
         return await this.client.put(
-            `/api/v1/products/${product.id}`,
+            `/api/v1/products/${productId}`,
             formData,
             { headers: { "Content-Type": "multipart/form-data" }
         });

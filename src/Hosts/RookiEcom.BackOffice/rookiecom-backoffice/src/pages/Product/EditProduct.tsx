@@ -34,7 +34,7 @@ const EditProductPage: React.FC = () => {
             description: product.description || '',
             price: product.price,
             marketPrice: product.marketPrice || 0,
-            stock: product.stock,
+            stock: product.stockQuantity,
             categoryId: product.categoryId || 0,
             status: product.status,
             isFeature: product.isFeature || false,
@@ -63,12 +63,8 @@ const EditProductPage: React.FC = () => {
     });
 
     const watchedNewImageFiles = useWatch({ control, name: "newImageFiles" });
-    const calculateCurrentTotalImages = () => {
-         const oldImg = getValues("oldImages");
-         const newImg = getValues("newImageFiles");
-         return (oldImg?.length ?? 0) + (newImg?.length ?? 0);
-    };
-    const watchedOldImages = watch("oldImages", product?.images || []);
+  
+    const watchedOldImages = watch("oldImages", initialFormValues?.oldImages || []);
 
     const currentTotalImages = (watchedOldImages?.length ?? 0) + (watchedNewImageFiles?.length ?? 0);
     const canAddMoreImages = currentTotalImages < MAX_IMAGES;
@@ -433,7 +429,6 @@ const EditProductPage: React.FC = () => {
                                     </Box>
                                 )}
 
-                                        
                                         <FormControl
                                             error={!!errors.newImageFiles}
                                             sx={{mt: watchedOldImages && watchedOldImages.length > 0 ? 2 : 0}}
