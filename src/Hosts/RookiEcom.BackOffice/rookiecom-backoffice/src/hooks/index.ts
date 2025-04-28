@@ -1,5 +1,6 @@
 import { useGetCategories, useGetCategoryTree, useCreateCategory, useGetCategoryById, useUpdateCategory, useDeleteCategory } from "./useCategoryService";
 import { useCreateProduct, useGetProductsPaging, useGetProductBySKU, useGetProductsByCategory, useUpdateProduct, useDeleteProduct } from "./useProductService";
+import { useGetCustomers, useGetProfile } from "./useUserService";
 
 export {
     useGetCategories,
@@ -13,5 +14,7 @@ export {
     useGetProductBySKU,
     useCreateProduct,
     useUpdateProduct,
-    useDeleteProduct
+    useDeleteProduct,
+    useGetCustomers,
+    useGetProfile
 };

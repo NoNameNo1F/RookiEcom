@@ -7,6 +7,7 @@ import IProductAttribute from "./valueObjects/productAttribute";
 import IVariationOption from "./valueObjects/variationOption";
 import IProductReview from "./productReviewModel";
 import IProblemDetails from "./problemDetails";
+import IAddress from "./valueObjects/address";
 
 export type {
     IApiResponse,
@@ -22,4 +23,5 @@ export type {
     IProductAttribute,
     IVariationOption,
     IProductReview,
+    IAddress,
 }
