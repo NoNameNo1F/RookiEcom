@@ -17,7 +17,7 @@ public class ProductDetailDto
     public bool IsFeature { get; set; }
     public List<string> Images { get; set; }
     public List<ProductAttribute> ProductAttributes { get; set; }
-    public ProductOption ProductOptions { get; set; }
+    public ProductOption ProductOption { get; set; }
     public DateTime CreatedDateTime { get; set; }
     public DateTime UpdatedDateTime { get; set; }
 }

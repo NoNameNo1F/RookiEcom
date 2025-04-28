@@ -23,4 +23,8 @@
       <Folder Include="Models\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\BuildingBlocks\RookiEcom.Domain\RookiEcom.Domain.csproj" />
+    </ItemGroup>
+
 </Project>

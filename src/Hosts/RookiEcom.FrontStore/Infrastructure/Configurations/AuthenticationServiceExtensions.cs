@@ -24,7 +24,7 @@ public static class AuthenticationServiceExtensions
         })
         .AddOpenIdConnect(options =>
         {
-            options.Authority = "https://localhost:8080";
+            options.Authority = "https://localhost:8080/";
             options.ClientId = "rookiecom-frontstore";
             options.ClientSecret = "Rookie";
             options.ResponseType = "code";

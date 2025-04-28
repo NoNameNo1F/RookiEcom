@@ -17,6 +17,22 @@ public class ProductService
         CancellationToken cancellationToken)
     {
         var query = _dbContext.Products
+            .AsNoTracking();
+        
+        var products = await query
+            .OrderBy(p => p.Name)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync(cancellationToken);
+        
+        var count = await query.CountAsync(cancellationToken);
+        return new PagedResult<Domain.ProductAggregate.Product>(products, pageNumber, pageSize, count);
+    }
+    
+    public async Task<PagedResult<Domain.ProductAggregate.Product>> GetProductsFeature(int pageNumber, int pageSize,
+        CancellationToken cancellationToken)
+    {
+        var query = _dbContext.Products
             .AsNoTracking()
             .Where(p => p.IsFeature == true);
         
@@ -29,7 +45,7 @@ public class ProductService
         var count = await query.CountAsync(cancellationToken);
         return new PagedResult<Domain.ProductAggregate.Product>(products, pageNumber, pageSize, count);
     }
-
+    
     public async Task<PagedResult<Domain.ProductAggregate.Product>> GetProductsByCategoryId(int pageNumber, int pageSize, int categoryId,
         CancellationToken cancellationToken)
     {

@@ -9,12 +9,17 @@ public static class InfrastructureServiceCollectionExtensions
             {
                 client.BaseAddress = new Uri("https://localhost:7670");
                 client.DefaultRequestHeaders.Add("Accept", "application/json");
-            })
-            
-                    .AddHttpMessageHandler<IdentityCookieHandler>();
+            }).AddHttpMessageHandler<IdentityCookieHandler>();
+        
+        services.AddHttpClient("RookiEcom.IdentityAPI", client =>
+        {
+            client.BaseAddress = new Uri("https://localhost:8080");
+            client.DefaultRequestHeaders.Add("Accept", "application/json");
+        }).AddHttpMessageHandler<IdentityCookieHandler>();
 
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<ICategoryService, CategoryService>();
+        services.AddScoped<IUserService, UserService>();
         services.AddScoped<IProductRatingService, ProductRatingService>();
 
         return services;

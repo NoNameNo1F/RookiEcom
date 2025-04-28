@@ -1,0 +1,32 @@
+﻿@model IEnumerable<RookiEcom.FrontStore.ViewModels.ProductDtos.CategoryDto>
+
+<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+     <li class="nav-item">
+        <a class="nav-link" asp-controller="Products" asp-action="Index">All Products</a>
+    </li>
+
+    @if (Model != null)
+    {
+        @foreach (var category in Model.Where(c => c.ParentId == null).OrderBy(c => c.Name).Take(8))
+        {
+            <li class="nav-item">
+                 <a class="nav-link" asp-controller="Products" asp-action="ByCategory" asp-route-categoryId="@category.Id">@category.Name</a>
+            </li>
+        }
+
+        @if (Model.Count(c => c.ParentId == null) > 8)
+        {
+             <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMoreCategories" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    More Categories
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMoreCategories">
+                    @foreach (var category in Model.Where(c => c.ParentId == null).OrderBy(c => c.Name).Skip(8))
+                    {
+                        <li><a class="dropdown-item" asp-controller="Products" asp-action="ByCategory" asp-route-categoryId="@category.Id">@category.Name</a></li>
+                    }
+                </ul>
+            </li>
+        }
+    }
+</ul>

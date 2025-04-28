@@ -45,7 +45,7 @@ public class CategoriesController : ControllerBase
     }
     
     [HttpGet("{categoryId:int}")]
-    [Authorize(Policy = "AdminOnly")]
+    [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetCategory([FromRoute] int categoryId, CancellationToken cancellationToken = default)
