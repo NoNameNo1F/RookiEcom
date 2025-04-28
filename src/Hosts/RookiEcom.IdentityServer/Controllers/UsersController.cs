@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using Asp.Versioning;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RookiEcom.Application.Pagination;
@@ -22,8 +23,8 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "AdminOnly")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetAllCustomers([FromQuery] PagingRequestDto pagingRequest,
         CancellationToken cancellationToken = default)
     {
@@ -39,11 +40,12 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet("{userId:Guid}")]
-    [Authorize]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "AuthenticatedUser")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetCustomer([FromRoute] Guid userId, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetUserProfile([FromRoute] Guid userId, CancellationToken cancellationToken = default)
     {
+        Console.WriteLine(userId);
         var user = await _userQueryService.GetUserByIdAsync(userId, cancellationToken);
         return Ok(new ApiResponse
         {

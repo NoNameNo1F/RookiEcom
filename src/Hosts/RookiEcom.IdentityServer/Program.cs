@@ -7,6 +7,7 @@ configuration.Bind(appSettings);
 builder.Services.AddInfrastructure(configuration);
 builder.Services.AddDuendeIdentityConfiguration(configuration);
 builder.Services.AddAuthentication(configuration);
+builder.Services.AddAuthorizationExtension();
 builder.Services.AddIdentityServiceCollection();
 
 builder.Services.AddCors(options =>
@@ -36,22 +37,18 @@ var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
 {
-    // app.UseExceptionHandler("/Home/Error");
-        
     app.UseHsts();
 }
 else
 {
-    // app.UseSwagger();
-// app.UseSwaggerUI();
     app.UseSwaggerDocumentation();   
 }
+
 app.UseExceptionHandler();
 
+app.UseCors("AllowClients");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
-app.UseCors("AllowClients");
 
 app.UseRouting();
 app.UseIdentityServer();

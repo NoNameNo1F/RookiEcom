@@ -31,6 +31,9 @@ public class UserRepository : IUserRepository
                 Id = u.User.Id,
                 FirstName = u.User.FirstName,
                 LastName = u.User.LastName,
+                UserName = u.User.UserName,
+                DoB = u.User.DoB,
+                PhoneNumber = u.User.PhoneNumber,
                 Avatar = u.User.Avatar,
                 Email = u.User.Email,
                 Address = u.User.Address
