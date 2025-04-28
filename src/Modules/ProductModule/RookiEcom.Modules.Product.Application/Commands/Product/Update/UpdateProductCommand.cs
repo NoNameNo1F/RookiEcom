@@ -31,7 +31,7 @@ public sealed class UpdateProductCommand(
     public bool IsFeature { get; set; } = isFeature;
     public ProductStatus Status { get; set; } = status;
     public List<string> OldImages { get; set; } = oldImages;
-    public IFormFile[] NewImages { get; set; } = newImages;
+    public IFormFile[]? NewImages { get; set; } = newImages;
     public List<ProductAttribute> ProductAttributes { get; set; } = productAttributes;
     public ProductOption ProductOption { get; set; } = productOptions;
 }

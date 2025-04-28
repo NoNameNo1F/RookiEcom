@@ -64,7 +64,24 @@ public class ProductsController : ControllerBase
             StatusCode = HttpStatusCode.OK
         });
     }
+    
+    [HttpGet("feature")]
+    [AllowAnonymous]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetProductsFeaturePagings(
+        [FromQuery] PagingRequestDto pagingRequest,
+        CancellationToken cancellationToken = default)
+    {
+        var pagedResult =
+            await _productService.GetProductsFeature(pagingRequest.PageNumber, pagingRequest.PageSize, cancellationToken);
 
+        return Ok(new ApiResponse
+        {
+            Result = pagedResult,
+            StatusCode = HttpStatusCode.OK
+        });
+    }
+    
     [HttpGet("{productId:int}")]
     [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -143,7 +160,7 @@ public class ProductsController : ControllerBase
             body.IsFeature,
             body.Status,
             body.OldImages,
-            body.NewImages,
+            body.NewImages ?? [],
             body.ProductAttributes,
             body.ProductOption);
 

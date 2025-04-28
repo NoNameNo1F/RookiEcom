@@ -10,11 +10,13 @@ internal static class AuthorizationExtension
         {
             options.DefaultPolicy = new AuthorizationPolicyBuilder()
                 .RequireAuthenticatedUser()
-                .RequireClaim("roles")
                 .Build();
             
             options.AddPolicy("AdminOnly", policy =>
                 policy.RequireRole("Admin"));
+            
+            options.AddPolicy("AuthenticatedUser", policy =>
+                policy.RequireAuthenticatedUser());
         });
 
         return services;
