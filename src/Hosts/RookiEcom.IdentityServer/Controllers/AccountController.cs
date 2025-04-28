@@ -159,7 +159,6 @@ public class AccountController : Controller
     public async Task<IActionResult> Logout(string logoutId)
     {
         await _signInManager.SignOutAsync();
-        // var clientId = (await _interactionService.GetLogoutContextAsync(logoutId))?.ClientId ?? "unknown";
         Response.Cookies.Append($"idsrv.session", "", new CookieOptions
         {
             Expires = DateTime.Now.AddDays(-1),

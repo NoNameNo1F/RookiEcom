@@ -30,15 +30,16 @@ public class CustomProfileService : IProfileService
         }
 
         var claims = new List<Claim>();
-        claims.Add(new Claim(ClaimTypes.Name, $"{user.FirstName} {user.LastName}"));
+        claims.Add(new Claim("name", $"{user.FirstName} {user.LastName}"));
         claims.Add(new Claim("sub", sub));
 
         var roles = await _userManager.GetRolesAsync(user);
+        // claims.Add(new Claim("roles", roles));
+        
         foreach (var role in roles)
         {
-            claims.Add(new Claim(ClaimTypes.Role, role));
+            claims.Add(new Claim("roles", role));
         }
-        
         context.IssuedClaims.AddRange(claims);
     }
 

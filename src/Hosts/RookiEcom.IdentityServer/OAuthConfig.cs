@@ -41,7 +41,8 @@ public class OAuthConfig
             AllowedScopes = { OpenIdConnectScope.OpenId, OpenIdConnectScope.Profile, "rookiecom-webapi", "role" },
             AllowOfflineAccess = true,
             AccessTokenType = AccessTokenType.Jwt,
-            CoordinateLifetimeWithUserSession = false
+            CoordinateLifetimeWithUserSession = false,
+            AlwaysIncludeUserClaimsInIdToken = false
         }
     };
 

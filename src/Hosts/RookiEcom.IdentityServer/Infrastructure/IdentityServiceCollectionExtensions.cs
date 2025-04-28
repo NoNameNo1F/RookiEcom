@@ -30,6 +30,7 @@ public static class IdentityServiceCollectionExtensions
                     options.Authentication.CookieAuthenticationScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                     options.Authentication.CookieLifetime = TimeSpan.FromMinutes(30);
                     options.Authentication.CookieSlidingExpiration = true;
+                    options.Events.RaiseInformationEvents = true;
                 }
             )
             .AddConfigurationStore(options =>

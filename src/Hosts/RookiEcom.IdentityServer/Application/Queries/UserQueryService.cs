@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using RookiEcom.Application.Common;
+using RookiEcom.IdentityServer.Application.Dtos;
 
 namespace RookiEcom.IdentityServer.Application.Queries;
 
@@ -12,16 +13,43 @@ public class UserQueryService
         _userRepository = userRepository;
     }
 
-    public async Task<PagedResult<User>> GetCustomersAsync(int pageNumber, int pageSize,
+    public async Task<PagedResult<UserDto>> GetCustomersAsync(int pageNumber, int pageSize,
         CancellationToken cancellationToken)
     {
         (IEnumerable<User> users,int count) result = await _userRepository.GetUsersAsync(pageNumber, pageSize, RoleNameConstraints.Customer,cancellationToken);
-        
-        return new PagedResult<User>(result.users, pageSize, pageNumber, result.count);
+        var users = new List<UserDto>();
+        foreach (var user in result.users)
+        {
+            users.Add(new UserDto
+            {
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                UserName = user.UserName,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                DoB = user.DoB,
+                Avatar = user.Avatar,
+                Address = user.Address 
+            });
+        }
+        return new PagedResult<UserDto>(users.AsEnumerable(), pageSize, pageNumber, result.count);
     }
 
-    public async Task<User> GetUserByIdAsync(Guid userId, CancellationToken cancellationToken)
+    public async Task<UserDto> GetUserByIdAsync(Guid userId, CancellationToken cancellationToken)
     {
-        return await _userRepository.GetUserByIdAsync(userId, cancellationToken);
+        var user = await _userRepository.GetUserByIdAsync(userId, cancellationToken);
+        return new UserDto
+        {
+            Id = user.Id,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            UserName = user.UserName,
+            Email = user.Email,
+            PhoneNumber = user.PhoneNumber,
+            DoB = user.DoB,
+            Avatar = user.Avatar,
+            Address = user.Address
+        };
     }
 }

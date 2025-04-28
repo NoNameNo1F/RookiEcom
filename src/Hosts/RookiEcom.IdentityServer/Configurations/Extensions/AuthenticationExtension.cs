@@ -45,28 +45,17 @@ public static class AuthenticationExtension
             })
             .AddJwtBearer(options =>
             {
-                options.SaveToken = true;
+                options.Authority = "https://localhost:8080/";
                 options.RequireHttpsMetadata = false;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
+                    ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidIssuer = configuration["Jwt:Issuer"],
-                    ClockSkew = TimeSpan.Zero
-                };
-
-                options.Events = new JwtBearerEvents
-                {
-                    OnMessageReceived = context =>
-                    {
-                        var accessToken = context.Request.Headers.Authorization;
-                        if (string.IsNullOrEmpty(accessToken) == false)
-                        {
-                            context.Token = accessToken;
-                        }
-
-                        return Task.CompletedTask;
-                    }
+                    ValidAudience = configuration["Jwt:Audience"],
+                    ValidateIssuerSigningKey = true,
+                    ClockSkew = TimeSpan.FromSeconds(5)
                 };
             });
         
