@@ -1,79 +1,54 @@
-﻿@model RookiEcom.FrontStore.ViewModels.ProductViewModel;
-<h2>Products</h2>
-@if (ViewData["Error"] != null)
+﻿@* File: Views/Products/Index.cshtml *@
+@model RookiEcom.FrontStore.Common.Pagination<RookiEcom.FrontStore.ViewModels.ProductDtos.ProductDto>
+@{
+    ViewData["Title"] = "All Products";
+    // Defaults for pagination calculation if Model is null
+    var currentPage = Model?.PageNumber ?? 1;
+    var pageSize = Model?.PageSize ?? 12;
+    var totalItems = Model?.Count ?? 0;
+    var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+}
+
+<h1 class="mb-4">@ViewData["Title"]</h1>
+
+@* TODO: Add Toolbar: Item Count & Sorting (Similar to ByCategory view) later *@
+<div class="d-flex justify-content-between align-items-center mb-3 bg-light p-2 rounded">
+    <span class="text-muted">@totalItems items found</span>
+    @* Add Sorting Dropdown Here later *@
+</div>
+
+@if (Model?.Items.Any() == true)
 {
-    <p style="color: red;">@ViewData["Error"]</p>
+    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-3"> @* Adjust columns as needed *@
+        @foreach (var product in Model.Items)
+        {
+            <div class="col">
+                @await Html.PartialAsync("_ProductCard", product)
+            </div>
+        }
+    </div>
+
+    @* Pagination *@
+    <nav aria-label="Page navigation" class="mt-4 d-flex justify-content-center">
+        @if (totalPages > 1)
+        {
+            <ul class="pagination">
+                <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                    <a class="page-link" asp-action="Index" asp-route-pageNumber="@(currentPage - 1)" asp-route-pageSize="@pageSize">Previous</a>
+                </li>
+                @* Consider generating only a subset of page numbers for large results *@
+                @for (int i = 1; i <= totalPages; i++)
+                {
+                    <li class="page-item @(i == currentPage ? "active" : "")"><a class="page-link" asp-action="Index" asp-route-pageNumber="@i" asp-route-pageSize="@pageSize">@i</a></li>
+                }
+                <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+                    <a class="page-link" asp-action="Index" asp-route-pageNumber="@(currentPage + 1)" asp-route-pageSize="@pageSize">Next</a>
+                </li>
+            </ul>
+        }
+    </nav>
 }
 else
 {
-    @if (Model.Product == null)
-    {
-        <p>No products available.</p>
-    }
-    else
-    {
-        <li><strong>ID:</strong> @Model.Product.Id</li>
-        <li><strong>SKU:</strong> @Model.Product.SKU</li>
-        <li><strong>Name:</strong> @Model.Product.Name</li>
-        <li><strong>Description:</strong> @Model.Product.Description</li>
-        <li><strong>Market Price:</strong> @Model.Product.MarketPrice.ToString("C") VND</li>
-        <li><strong>Price:</strong> @Model.Product.Price.ToString("C") VND</li>
-        <li><strong>Status:</strong> @Model.Product.Status</li>
-        <li><strong>Sold:</strong> @Model.Product.Sold</li>
-        <li><strong>Stock:</strong> @Model.Product.StockQuantity</li>
-        <li><strong>Category ID:</strong> @Model.Product.CategoryId</li>
-        <li>
-            <strong>MediaTypeNames.Image Gallery:</strong>
-            @if (Model.Product.Images == null || !Model.Product.Images.Any())
-            {
-                <span>No images available</span>
-            }
-            else
-            {
-                <ul>
-                    @foreach (var image in Model.Product.Images)
-                    {
-                        <li>@image</li>
-                    }
-                </ul>
-            }
-        </li>
-        <li>
-            <strong>Product Attributes:</strong>
-            @if (Model.Product == null || !Model.Product.ProductAttributes.Any())
-            {
-                <span>No attributes available</span>
-            }
-            else
-            {
-                <ul>
-                    @foreach (var attr in Model.Product.ProductAttributes)
-                    {
-                        <li>@attr.Code: @attr.Value</li>
-                    }
-                </ul>
-            }
-        </li>
-        <li>
-            <strong>Variation Options:</strong>
-            @if (Model.Product.ProductOptions == null)
-            {
-                <span>No variation options available</span>
-            }
-            else
-            {
-                <ul>
-                    <span>@Model.Product.ProductOptions.Code</span>
-                    @foreach (var option in Model.Product.ProductOptions.Values)
-                    {
-                        <li>
-                            @option
-                        </li>
-                    }
-                </ul>
-            }
-        </li>
-        <hr />
-    }
+    <div class="alert alert-info">No products found.</div>
 }
-<a asp-action="Index" asp-controller="Home">Back to Home</a>

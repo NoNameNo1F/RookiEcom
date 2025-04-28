@@ -1,48 +1,90 @@
 ﻿@model RookiEcom.FrontStore.ViewModels.HomeViewModel;
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Welcome to RookiEcom";
 }
 
-<h2>Products</h2>
-@if (ViewData["Error"] != null)
+@if (Model.ProductFeatures?.Items.Any() == true)
 {
-    <p style="color: red;">@ViewData["Error"]</p>
-}
-else
-{
-    @if (!Model.Products.Items.Any())
-    {
-        <p>No products available.</p>
-    }
-    else
-    {
-        <ul>
-            @foreach (var product in Model.Products.Items)
+    <div id="featuredProcuctCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            @for (int i = 0; i < Model.ProductFeatures.Items.Count(); i++)
             {
-                <li><strong>ID:</strong> @product.Id</li>
-                <li><strong>SKU:</strong> @product.SKU</li>
-                <li><strong>Name:</strong> @product.Name</li>
-                <li><strong>Description:</strong> @product.Description</li>
-                <li><strong>Market Price:</strong> @product.MarketPrice.ToString("C")</li>
-                <li><strong>CategoryId:</strong> @product.CategoryId</li>
-                <li><strong>Status:</strong> @product.Status</li>
-                <li><strong>Sold:</strong> @product.Sold</li>
-                <li><strong>Stock:</strong> @product.StockQuantity</li>
-                <li><strong>IsFeature:</strong> @product.IsFeature</li>
-                <li>
-                    <strong>Image Gallery:</strong>
-                    @if (!product.Images.Any())
-                    {
-                        <span>No images available</span>
-                    }
-                    else
-                    {
-                        <img src="@product.Images" alt="@product.Name"/>
-                    }
-                </li>
-                <hr />
+                <button type="button"
+                        data-bs-target="#featuredProductCarousel"
+                        data-bs-slide-to="@i"
+                        class="@(i == 0 ? "active" : "")"
+                        aria-current="@(i == 0 ? "true" : "false")"
+                        aria-label="Slide @(i + 1)">
+                </button>
             }
-        </ul>
-    }
+        </div>
+        <div class="carousel-inner rounded">
+            @{ var firstFeature = true; }
+            @foreach (var product in Model.ProductFeatures.Items)
+            {
+                <div class="carousel-item @(firstFeature ? "active" : "")" data-bs-interval="5000" style="background-color: #f1f1f1;">
+                    <a asp-controller="Products" asp-action="Detail" asp-route-productId="@product.Id">
+                        <img src="@(product.Images?.FirstOrDefault() ?? "https://thaka.bing.com/th/id/OIP.Hr0u82lNFTolS6JizM6LaAHaHa?rs=1&pid=ImgDetMain")"
+                             class="d-block w-100" alt="@product.Name" 
+                             style="aspect-ratio: 16/5; 
+                             object-fit: contain;
+                             height: 400px;"
+                             >
+                        <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 p-3 rounded">
+                            <h5>@product.Name</h5>
+                            <p>Check out this featured product!</p>
+                        </div>
+                        
+                    </a>
+                </div>
+            }
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#featuredProductCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#featuredProductCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+    </div>
 }
-<a asp-action="Index" asp-controller="Home">Back to Home</a>
+
+@if (Model.Categories.Any())
+{
+    <section class="category-section mb-4">
+        <h2 class="text-center mb-4">Shop By Category</h2>
+        <div class="row row-cols-4 row-cols-md-6 row-cols-lg-8 g-3 justify-content-center">
+            @foreach (var category in Model.Categories.Where(c => c.ParentId == null).Take(16))
+            {
+                <div class="col">
+                    <a asp-controller="Products" asp-action="ByCategory" asp-route-categoryId="@category.Id" class="category-item">
+                        <img src="@(category.Image ?? "https://thaka.bing.com/th/id/OIP.Hr0u82lNFTolS6JizM6LaAHaHa?rs=1&pid=ImgDetMain")" alt="@category.Name">
+                        <span>@category.Name</span>
+                    </a>
+                </div>
+            }
+        </div>
+    </section>
+}
+
+
+@if (Model.Products?.Items.Any() == true)
+{
+    <h2 class="mt-4 mb-3 text-center">New Arrivals</h2>
+    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-3">
+        @foreach (var product in Model.Products.Items)
+        {
+            <div class="col">
+                @await Html.PartialAsync("_ProductCard", product)
+            </div>
+        }
+    </div>
+    <div class="text-center mt-4">
+        <a asp-controller="Products" asp-action="Index" class="btn btn-outline-primary">View All Products</a>
+    </div>
+}
+else if (Model.ProductFeatures?.Items.Any() != true && Model.Categories.Any())
+{
+    <p class="text-center mt-5">No products found.</p>
+}

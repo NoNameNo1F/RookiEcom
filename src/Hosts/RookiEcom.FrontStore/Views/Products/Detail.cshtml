@@ -1,0 +1,208 @@
+﻿@model RookiEcom.FrontStore.ViewModels.ProductDetailViewModel
+@{
+    ViewData["Title"] = Model.Product?.Name ?? "Product Details";
+    var product = Model.Product;
+}
+
+@if(product != null)
+{
+    <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';" class="mb-4">
+        <ol class="breadcrumb bg-light px-3 py-2 rounded-pill">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+            @if(Model.CategoryTree != null) {
+                 @foreach (var cat in Model.CategoryTree.Reverse())
+                 {
+                     <li class="breadcrumb-item"><a asp-controller="Products" asp-action="ByCategory" asp-route-categoryId="@cat.Id">@cat.Name</a></li>
+                 }
+            }
+             <li class="breadcrumb-item active" aria-current="page">@Model.Product.Name</li>
+        </ol>
+    </nav>
+
+    <div class="row g-4">
+        <div class="col-lg-6 product-detail-gallery">
+            @if (product.Images != null && product.Images.Any())
+            {
+                <div class="main-image-container mb-3" id="mainProductImageContainer">
+                    <img src="@(product.Images.FirstOrDefault() ?? "https://cdn.vectorstock.com/i/1000v/58/48/blank-photo-icon-vector-3265848.jpg")"
+                         alt="@product.Name - Main Image" id="mainProductImage" class="img-fluid" />
+                </div>
+
+                @if (product.Images.Count > 1)
+                {
+                    <div class="thumbnail-container">
+                        @{ bool isFirstThumb = true; }
+                        @foreach (var imageUrl in product.Images)
+                        {
+                            <img src="@(imageUrl ?? "https://cdn.vectorstock.com/i/1000v/58/48/blank-photo-icon-vector-3265848.jpg")"
+                                 alt="Thumbnail @(product.Images.IndexOf(imageUrl) + 1)"
+                                 class="thumbnail @(isFirstThumb ? "active" : "")"
+                                 data-full-image="@(imageUrl ?? "/images/placeholder.png")"
+                                 onclick="changeMainImage(this)"
+                            />
+                            isFirstThumb = false;
+                        }
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="main-image-container mb-3 d-flex align-items-center justify-content-center bg-light">
+                    <i class="bi bi-image-fill text-muted" style="font-size: 5rem;"></i>
+                </div>
+            }
+        </div>
+
+        <div class="col-lg-6 product-detail-info">
+            <h1>@product.Name</h1>
+
+            <div class="price-section">
+                @if(product.MarketPrice > product.Price) {
+                    <span class="text-muted fs-5 me-2"><del>@product.MarketPrice.ToString("C")</del></span>
+                        var discount = (int)Math.Round(((product.MarketPrice - product.Price) / product.MarketPrice) * 100);
+                        if(discount > 0) {
+                             <span class="badge bg-danger">@discount% OFF</span>
+                        }
+                }
+                <span class="text-primary fw-bold fs-3">@product.Price.ToString("C")</span>
+            </div>
+
+            @if (!string.IsNullOrWhiteSpace(product.Description))
+            {
+                <p class="text-muted mb-3">
+                    @{
+                        var shortDesc = product.Description;
+                        var maxLength = 120;
+                        if (shortDesc.Length > maxLength) {
+                            var firstPeriod = shortDesc.IndexOf('.');
+                            shortDesc = firstPeriod > 0 && firstPeriod < maxLength ? shortDesc.Substring(0, firstPeriod + 1) : shortDesc.Substring(0, maxLength) + "...";
+                        }
+                    }
+                    @Html.Raw(shortDesc)
+                </p>
+            }
+
+            @if (product.ProductOption != null && product.ProductOption.Values?.Any() == true)
+            {
+                <div class="product-options mb-4">
+                    <div class="mb-2">
+                        <label for="option_@product.ProductOption.Code" class="form-label fw-bold">@product.ProductOption.Code:</label>
+                        <select class="form-select w-auto d-inline-block" id="option_@product.ProductOption.Code">
+                            @foreach (var value in product.ProductOption.Values)
+                            {
+                                <option value="@value">@value</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            }
+             else {
+                 <div class="mb-4"></div>
+             }
+            
+            <div class="d-flex align-items-center actions-section">
+                <div class="me-3">
+                    <label for="quantity" class="form-label small mb-1 d-block">Quantity:</label>
+                    <input type="number" class="form-control" id="quantity" value="1" min="1" max="10" style="width: 70px;">
+                </div>
+                <button class="btn btn-add-to-cart btn-lg flex-grow-1 bg-success text-white">
+                    <i class="bi bi-cart-plus me-2"></i>Add to Cart
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5 product-tabs">
+        <div class="col-12">
+            <ul class="nav nav-tabs mb-0" id="productTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button
+                        class="nav-link active"
+                        id="description-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#description-tab-pane"
+                        type="button"
+                        role="tab"
+                        aria-controls="description-tab-pane"
+                        aria-selected="true">
+                        Description
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="specs-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#specs-tab-pane"
+                            type="button"
+                            role="tab"
+                            aria-controls="specs-tab-pane"
+                            aria-selected="false">
+                        Specifications
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button
+                        class="nav-link"
+                        id="reviews-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#reviews-tab-pane"
+                        type="button"
+                        role="tab"
+                        aria-controls="reviews-tab-pane"
+                        aria-selected="false">
+                        Reviews (0)
+                    </button>
+                </li>
+            </ul>
+            <div class="tab-content" id="productTabContent">
+                <div class="tab-pane fade show active" id="description-tab-pane" role="tabpanel" aria-labelledby="description-tab" tabindex="0">
+                    @Html.Raw(product.Description ?? "No description available.")
+                </div>
+                
+                @* Specifications Pane *@
+                <div class="tab-pane fade" id="specs-tab-pane" role="tabpanel" aria-labelledby="specs-tab" tabindex="0">
+                    @if (product.ProductAttributes != null && product.ProductAttributes.Any())
+                    {
+                        <table class="table table-sm table-striped product-attributes-table mb-0">
+                            <tbody>
+                            @foreach (var attr in product.ProductAttributes)
+                            {
+                                <tr>
+                                    <td>@attr.Code</td>
+                                    <td>@attr.Value</td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <p class="text-muted mb-0">No specifications available.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+     <div class="alert alert-warning" role="alert">
+        Product not found.
+    </div>
+}
+
+@section Scripts {
+    <script>
+        function changeMainImage(thumbnailElement) {
+            const fullImageUrl = thumbnailElement.getAttribute('data-full-image');
+            const mainImage = document.getElementById('mainProductImage');
+            if (mainImage && fullImageUrl) {
+                mainImage.src = fullImageUrl;
+
+                document.querySelectorAll('.product-detail-gallery .thumbnail').forEach(thumb => {
+                    thumb.classList.remove('active');
+                });
+                thumbnailElement.classList.add('active');
+            }
+        }
+    </script>
+}

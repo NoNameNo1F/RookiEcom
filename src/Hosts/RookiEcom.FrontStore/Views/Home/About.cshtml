@@ -1,0 +1,58 @@
+﻿@{
+    ViewData["Title"] = "About";
+}
+
+@{
+    ViewData["Title"] = "About RookiEcom";
+    // Replace "[Your Full Name]" with your actual name
+    var developerName = "Vu Nguyen"; // <<<--- CHANGE THIS TO YOUR NAME
+}
+
+<div class="container mt-4 mb-5">
+    <div class="card shadow-sm">
+        <div class="card-header bg-light py-3">
+             <h1 class="h4 text-center mb-0">@ViewData["Title"]</h1>
+        </div>
+        <div class="card-body p-4 p-lg-5">
+
+            <h2 class="h5 mb-3">About the Project</h2>
+            <p>
+                Welcome to RookiEcom! This application is a demonstration e-commerce platform
+                built as part of the Nashtech Rookie program. It showcases the implementation of a modern,
+                full-stack web application using a modulith architecture.
+            </p>
+            <p>
+                The goal was to create a functional B2C e-commerce site featuring product browsing by category,
+                product details, user authentication, and profile management, separating concerns between the
+                frontend, backend API, and identity provider.
+            </p>
+
+            <hr class="my-4">
+
+            <h2 class="h5 mb-3">Technology Stack</h2>
+            <p>This project integrates several key technologies:</p>
+            <ul>
+                <li><strong>Backend API:</strong> ASP.NET Core Web API (.NET 8)</li>
+                <li><strong>Frontend Store:</strong> ASP.NET Core MVC with Razor Views</li>
+                <li><strong>Backoffice Admin:</strong> React (Vite + TypeScript)</li>
+                <li><strong>Authentication:</strong> Duende IdentityServer (OpenID Connect & OAuth 2.0)</li>
+                <li><strong>Database ORM:</strong> Entity Framework Core (Implied)</li>
+                <li><strong>Database:</strong> (SQL Server)</li>
+                <li><strong>Other Libraries:</strong> MediatR (CQRS pattern likely), etc.</li>
+            </ul>
+
+             <hr class="my-4">
+
+             <h2 class="h5 mb-3">About the Developer</h2>
+             <p>
+                My name is <strong>@developerName</strong>, and I developed this RookiEcom application.
+                I am passionate about software development and enjoy building scalable and user-friendly web solutions.
+             </p>
+             <p>
+                Working on this project provided valuable experience in designing and implementing different components
+                of an e-commerce system, handling authentication flows, interacting with APIs, and applying modern
+                web development practices.
+             </p>
+        </div>
+    </div>
+</div>

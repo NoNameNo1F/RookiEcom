@@ -1,0 +1,102 @@
+﻿@using RookiEcom.FrontStore.ViewModels.UserDtos
+@model RookiEcom.FrontStore.ViewModels.UserProfileViewModel
+@{
+    ViewData["Title"] = "My Profile";
+    
+    Func<UserDto?, string> FormatAddress = (profile) => {
+        if (profile?.Address == null) return "No address provided.";
+        var parts = new[] { profile.Address.Street, profile.Address.Ward, profile.Address.District, profile.Address.City }
+            .Where(s => !string.IsNullOrWhiteSpace(s))
+            .ToArray();
+        return parts.Length > 0 ? string.Join(", ", parts) : "No address provided.";
+    };
+
+    Func<DateTime?, string> FormatDate = (date) => {
+        return date?.ToString("MMMM d, yyyy") ?? "N/A";
+    };
+}
+
+<div class="card profile-card mx-auto my-4 shadow-sm">
+    <div class="card-header bg-light py-3">
+        <h1 class="h4 mb-0 text-center">Profile</h1>
+    </div>
+    <div class="card-body p-4 p-lg-5">
+
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="alert alert-danger" role="alert">
+                @ViewBag.ErrorMessage
+            </div>
+        }
+
+        @if (Model.UserProfile != null)
+        {
+            var profile = Model.UserProfile;
+
+            <div class="row g-4 g-lg-5">
+                <div class="col-12 col-md-4 text-center border-end-md">
+                    <div class="profile-avatar-container rounded-circle mx-auto mb-3 @(string.IsNullOrEmpty(profile.Avatar) ? "profile-avatar-placeholder" : "")">
+                        @if (!string.IsNullOrEmpty(profile.Avatar))
+                        {
+                            <img src="@profile.Avatar" alt="User Avatar" class="rounded-circle" />
+                        }
+                        else
+                        {
+                            <i class="bi bi-person-fill display-1"></i>
+                        }
+                    </div>
+                    <h2 class="h5 mb-1">@($"{profile.FirstName} {profile.LastName}")</h2>
+                    @if (!string.IsNullOrEmpty(profile.UserName))
+                    {
+                         <p class="text-muted small">@@@profile.UserName</p>
+                    }
+                    <hr class="d-md-none my-4">
+                </div>
+
+                <div class="col-12 col-md-8">
+                    <h3 class="h6 text-muted text-uppercase small mb-3">Account Details</h3>
+                    
+                    <div class="d-flex align-items-center gap-3 mb-4">
+                        <i class="bi bi-envelope-fill text-primary fs-4"></i>
+                        <div class="flex-grow-1">
+                            <strong class="d-block text-secondary small">Email</strong>
+                            <span class="fs-6">@profile.Email</span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-center gap-3 mb-4">
+                        <i class="bi bi-telephone-fill text-primary fs-4"></i>
+                        <div class="flex-grow-1">
+                            <strong class="d-block text-secondary small">Phone</strong>
+                            <span class="fs-6">@(profile.PhoneNumber ?? "N/A")</span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-center gap-3 mb-4">
+                        <i class="bi bi-cake2-fill text-primary fs-4"></i>
+                        <div class="flex-grow-1">
+                            <strong class="d-block text-secondary small">Date of Birth</strong>
+                            <span class="fs-6">@FormatDate(profile.DoB)</span>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+                    
+                    <h3 class="h6 text-muted text-uppercase small mb-3">Address</h3>
+                    <div class="d-flex align-items-start gap-3 mb-4">
+                        <i class="bi bi-geo-alt-fill text-primary fs-4 mt-1"></i>
+                        <div class="flex-grow-1">
+                            <span class="fs-6">@FormatAddress(profile)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        else if (ViewBag.ErrorMessage == null)
+        {
+            <div class="alert alert-warning" role="alert">
+                 Could not load profile data.
+            </div>
+        }
+    </div>
+</div>
