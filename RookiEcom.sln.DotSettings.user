@@ -1,0 +1,10 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=566d4d88_002Dd34a_002D485e_002Db89a_002De9c4ebca519a/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="GetCategories_ValidPage_ReturnsPagedResult" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::6595CDFF-2A66-4BB7-875B-ED1E30EEB8AB::net8.0::RookiEcom.Modules.Product.Application.UnitTests.Products.CategoryServiceTests.GetCategories_ValidPage_ReturnsPagedResult&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::6595CDFF-2A66-4BB7-875B-ED1E30EEB8AB::net8.0::RookiEcom.Modules.Product.Application.UnitTests.Products.ProductQueryServiceTests&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::6595CDFF-2A66-4BB7-875B-ED1E30EEB8AB::net8.0::RookiEcom.Modules.Product.Application.UnitTests.Products.ProductCommandTests.CreateProduct_ValidCreateProductCommand_ReturnsCreatedProductAndImages&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::6595CDFF-2A66-4BB7-875B-ED1E30EEB8AB::net8.0::RookiEcom.Modules.Product.Application.UnitTests.Products.ProductCommandTests&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::6595CDFF-2A66-4BB7-875B-ED1E30EEB8AB::net8.0::RookiEcom.Modules.Product.Application.UnitTests.Categories.CategoryServiceTests&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
