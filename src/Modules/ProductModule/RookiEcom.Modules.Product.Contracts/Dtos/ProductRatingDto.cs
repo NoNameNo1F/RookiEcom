@@ -1,8 +1,6 @@
-﻿using RookiEcom.Domain.SeedWork;
+﻿namespace RookiEcom.Modules.Product.Contracts.Dtos;
 
-namespace RookiEcom.Modules.Product.Domain.ProductRatingAggregate;
-
-public class ProductRating : IEntity<int>, IAggregateRoot
+public class ProductRatingDto
 {
     public int Id { get; set; }
     public int ProductId { get; set; }
@@ -11,6 +9,4 @@ public class ProductRating : IEntity<int>, IAggregateRoot
     public uint Score { get; set; }
     public string Content { get; set; }
     public string Image { get; set; }
-    public DateTime CreatedDateTime { get; set; }
-    public DateTime UpdatedDateTime { get; set; }
 }

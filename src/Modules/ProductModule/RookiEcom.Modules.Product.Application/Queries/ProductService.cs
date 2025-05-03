@@ -1,6 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Collections.Immutable;
+using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using RookiEcom.Application.Common;
 using RookiEcom.Modules.Product.Application.Exceptions;
+using RookiEcom.Modules.Product.Contracts.Dtos;
+using RookiEcom.Modules.Product.Domain.Shared;
 
 namespace RookiEcom.Modules.Product.Application.Queries;
 
@@ -13,7 +17,43 @@ public class ProductService
         _dbContext = dbContext;
     }
 
-    public async Task<PagedResult<Domain.ProductAggregate.Product>> GetProducts(int pageNumber, int pageSize,
+    private static Expression<Func<Domain.ProductAggregate.Product, ProductDto>> ToProductDto()
+    {
+        return product => new ProductDto
+        {
+            Id = product.Id,
+            SKU = product.SKU,
+            CategoryId = product.CategoryId,
+            Name = product.Name,
+            Description = product.Description,
+            MarketPrice = product.MarketPrice,
+            Price = product.Price,
+            Status = product.Status,
+            Sold = product.Sold,
+            StockQuantity = product.StockQuantity,
+            IsFeature = product.IsFeature,
+            // Images = new List<string>(), // Default empty list
+            // ProductAttributes = null, // Default null
+            // ProductOption = null,
+            Images = product.Images.ToList(),
+            ProductAttributes = product.ProductAttributes
+                .Select(pa => new ProductAttribute
+                {
+                    Code = pa.Code,
+                    Value = pa.Value
+                }).ToList(),
+            ProductOption = product.ProductOption == null ? 
+                null : new ProductOption
+                {
+                    Code = product.ProductOption.Code,
+                    Values = product.ProductOption.Values.ToList()
+                },
+            CreatedDateTime = product.CreatedDateTime,
+            UpdatedDateTime = product.UpdatedDateTime
+        };
+    }
+    
+    public async Task<PagedResult<ProductDto>> GetProducts(int pageNumber, int pageSize,
         CancellationToken cancellationToken)
     {
         var query = _dbContext.Products
@@ -23,13 +63,14 @@ public class ProductService
             .OrderBy(p => p.Name)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
+            .Select(ToProductDto())
             .ToListAsync(cancellationToken);
         
         var count = await query.CountAsync(cancellationToken);
-        return new PagedResult<Domain.ProductAggregate.Product>(products, pageNumber, pageSize, count);
+        return new PagedResult<ProductDto>(products, pageNumber, pageSize, count);
     }
     
-    public async Task<PagedResult<Domain.ProductAggregate.Product>> GetProductsFeature(int pageNumber, int pageSize,
+    public async Task<PagedResult<ProductDto>> GetProductsFeature(int pageNumber, int pageSize,
         CancellationToken cancellationToken)
     {
         var query = _dbContext.Products
@@ -40,13 +81,14 @@ public class ProductService
             .OrderBy(p => p.Name)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
+            .Select(ToProductDto())
             .ToListAsync(cancellationToken);
         
         var count = await query.CountAsync(cancellationToken);
-        return new PagedResult<Domain.ProductAggregate.Product>(products, pageNumber, pageSize, count);
+        return new PagedResult<ProductDto>(products, pageNumber, pageSize, count);
     }
     
-    public async Task<PagedResult<Domain.ProductAggregate.Product>> GetProductsByCategoryId(int pageNumber, int pageSize, int categoryId,
+    public async Task<PagedResult<ProductDto>> GetProductsByCategoryId(int pageNumber, int pageSize, int categoryId,
         CancellationToken cancellationToken)
     {
         var query = _dbContext.Products
@@ -57,20 +99,23 @@ public class ProductService
             .OrderBy(p => p.UpdatedDateTime)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
+            .Select(ToProductDto())
             .ToListAsync(cancellationToken);
         
         var count = await query.CountAsync(cancellationToken);
 
-        return new PagedResult<Domain.ProductAggregate.Product>(products, pageNumber, pageSize, count);
+        return new PagedResult<ProductDto>(products, pageNumber, pageSize, count);
     }
     
-    public async Task<Domain.ProductAggregate.Product> GetProductById(int productId,
+    public async Task<ProductDto> GetProductById(int productId,
         CancellationToken cancellationToken)
     {
         var product = await _dbContext.Products
             .AsNoTracking()
-            .FirstOrDefaultAsync(p => p.Id == productId, cancellationToken);
-
+            .Where(p => p.Id == productId)
+            .Select(ToProductDto())
+            .FirstOrDefaultAsync(cancellationToken);
+        
         if (product == null)
         {
             throw new ProductNotFoundException(productId);
@@ -79,12 +124,14 @@ public class ProductService
         return product;
     }
     
-    public async Task<Domain.ProductAggregate.Product> GetProductBySKU(string productSKU,
+    public async Task<ProductDto> GetProductBySKU(string productSKU,
         CancellationToken cancellationToken)
     {
         var product = await _dbContext.Products
             .AsNoTracking()
-            .FirstOrDefaultAsync(p => p.SKU == productSKU, cancellationToken);
+            .Where(p => p.SKU == productSKU)
+            .Select(ToProductDto())
+            .FirstOrDefaultAsync(cancellationToken);
 
         if (product == null)
         {

@@ -1,7 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using RookiEcom.Application.Common;
 using RookiEcom.Application.Storage;
 using RookiEcom.Modules.Product.Application.Exceptions;
+using RookiEcom.Modules.Product.Contracts.Dtos;
 using RookiEcom.Modules.Product.Domain.CategoryAggregate;
 
 namespace RookiEcom.Modules.Product.Application.Queries;
@@ -14,8 +16,23 @@ public class CategoryService
     {
         _dbContext = dbContext;
     }
-    
-    public async Task<PagedResult<Category>> GetAllCategories(int pageNumber, int pageSize,CancellationToken cancellationToken)
+
+    private static Expression<Func<Category, CategoryDto>> ToCategoryDto()
+    {
+        return category => new CategoryDto
+        {
+            Id = category.Id,
+            Name = category.Name,
+            Description = category.Description,
+            ParentId = category.ParentId,
+            IsPrimary = category.IsPrimary,
+            Image = category.Image,
+            HasChild = category.HasChild,
+            CreatedDateTime = category.CreatedDateTime,
+            UpdatedDateTime = category.UpdatedDateTime
+        };
+    }
+    public async Task<PagedResult<CategoryDto>> GetAllCategories(int pageNumber, int pageSize,CancellationToken cancellationToken)
     {
         var query = _dbContext.Categories
             .AsNoTracking();
@@ -24,14 +41,15 @@ public class CategoryService
             .OrderBy(c => c.UpdatedDateTime)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
+            .Select(ToCategoryDto())
             .ToListAsync(cancellationToken);
 
         var count = await query.CountAsync(cancellationToken);
 
-        return new PagedResult<Category>(categories, pageNumber, pageSize, count);
+        return new PagedResult<CategoryDto>(categories, pageNumber, pageSize, count);
     }
 
-    public async Task<IEnumerable<Category>> GetCategoryTree(int categoryId, CancellationToken cancellationToken)
+    public async Task<IEnumerable<CategoryDto>> GetCategoryTree(int categoryId, CancellationToken cancellationToken)
     {
         var query = @"
                     WITH CategoryTree AS (
@@ -48,14 +66,17 @@ public class CategoryService
 
         return await _dbContext.Categories
             .FromSqlRaw(query, new Microsoft.Data.SqlClient.SqlParameter("@categoryId", categoryId))
+            .Select(ToCategoryDto())
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<Category> GetCategoryById(int categoryId, CancellationToken cancellationToken)
+    public async Task<CategoryDto> GetCategoryById(int categoryId, CancellationToken cancellationToken)
     {
         var category = await _dbContext.Categories
             .AsNoTracking()
-            .FirstOrDefaultAsync(c => c.Id == categoryId, cancellationToken);
+            .Where(c => c.Id == categoryId)
+            .Select(ToCategoryDto())
+            .FirstOrDefaultAsync(cancellationToken);
         
         if (category == null)
         {

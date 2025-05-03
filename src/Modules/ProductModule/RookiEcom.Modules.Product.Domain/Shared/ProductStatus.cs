@@ -1,4 +1,4 @@
-﻿namespace RookiEcom.Modules.Product.Domain.ProductAggregate;
+﻿namespace RookiEcom.Modules.Product.Domain.Shared;
 
 public enum ProductStatus
 {

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using RookiEcom.Modules.Product.Domain.CategoryAggregate;
 using RookiEcom.Modules.Product.Domain.ProductAggregate;
+using RookiEcom.Modules.Product.Domain.Shared;
 
 namespace RookiEcom.Modules.Product.Infrastructure.Domain;
 
@@ -61,7 +62,8 @@ public class ProductEntityTypeConfiguration : IEntityTypeConfiguration<Product.D
         builder.Property<DateTime>(p => p.UpdatedDateTime)
             .HasColumnName("UpdatedDateTime");
         
-        builder.PrimitiveCollection(p => p.Images);
+        builder.PrimitiveCollection<List<string>>(p => p.Images)
+            .HasColumnName("Images");
         
         builder.OwnsMany(p => p.ProductAttributes, b =>
         {

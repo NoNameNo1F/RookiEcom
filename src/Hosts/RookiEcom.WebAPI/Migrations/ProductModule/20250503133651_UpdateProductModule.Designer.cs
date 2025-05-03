@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RookiEcom.Modules.Product.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using RookiEcom.Modules.Product.Infrastructure.Persistence;
 namespace RookiEcom.WebAPI.Migrations.ProductModule
 {
     [DbContext(typeof(ProductContextImpl))]
-    partial class ProductContextImplModelSnapshot : ModelSnapshot
+    [Migration("20250503133651_UpdateProductModule")]
+    partial class UpdateProductModule
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -230,7 +233,7 @@ namespace RookiEcom.WebAPI.Migrations.ProductModule
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.OwnsMany("RookiEcom.Modules.Product.Domain.ProductAggregate.Product.ProductAttributes#RookiEcom.Modules.Product.Domain.Shared.ProductAttribute", "ProductAttributes", b1 =>
+                    b.OwnsMany("RookiEcom.Modules.Product.Domain.Shared.ProductAttribute", "ProductAttributes", b1 =>
                         {
                             b1.Property<int>("ProductId")
                                 .HasColumnType("int");
@@ -259,7 +262,7 @@ namespace RookiEcom.WebAPI.Migrations.ProductModule
                                 .HasForeignKey("ProductId");
                         });
 
-                    b.OwnsOne("RookiEcom.Modules.Product.Domain.ProductAggregate.Product.ProductOption#RookiEcom.Modules.Product.Domain.Shared.ProductOption", "ProductOption", b1 =>
+                    b.OwnsOne("RookiEcom.Modules.Product.Domain.Shared.ProductOption", "ProductOption", b1 =>
                         {
                             b1.Property<int>("ProductId")
                                 .HasColumnType("int");
