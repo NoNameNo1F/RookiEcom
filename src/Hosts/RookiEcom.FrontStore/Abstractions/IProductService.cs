@@ -1,5 +1,4 @@
-﻿using RookiEcom.FrontStore.ViewModels.Dtos;
-using RookiEcom.FrontStore.ViewModels.ProductDtos;
+﻿using RookiEcom.Modules.Product.Contracts.Dtos;
 
 namespace RookiEcom.FrontStore.Abstractions;
 
@@ -10,7 +9,7 @@ public interface IProductService
         int pageNumber, 
         int pageSize, 
         CancellationToken cancellationToken = default);
-    Task<ProductDetailDto?> GetProductById(int productId, CancellationToken cancellationToken = default);
+    Task<ProductDto?> GetProductById(int productId, CancellationToken cancellationToken = default);
     Task<Pagination<ProductDto>?> GetFeaturedProducts(
         int pageNumber,
         int pageSize, 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using RookiEcom.Modules.Product.Contracts.Dtos;
 
 namespace RookiEcom.FrontStore.ViewComponents;
 
@@ -19,7 +20,7 @@ public class CategoryMenuViewComponent : ViewComponent
         if (categories == null)
         {
             _logger.LogWarning("Failed to retrieve categories for the menu.");
-            return View(Enumerable.Empty<ViewModels.ProductDtos.CategoryDto>());
+            return View(Enumerable.Empty<CategoryDto>());
         }
 
         return View(categories.Items);

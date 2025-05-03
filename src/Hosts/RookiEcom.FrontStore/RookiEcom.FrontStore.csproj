@@ -25,6 +25,8 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\BuildingBlocks\RookiEcom.Domain\RookiEcom.Domain.csproj" />
+      <ProjectReference Include="..\..\Modules\ProductModule\RookiEcom.Modules.Product.Contracts\RookiEcom.Modules.Product.Contracts.csproj" />
+      <ProjectReference Include="..\..\Modules\ProductModule\RookiEcom.Modules.Product.Domain\RookiEcom.Modules.Product.Domain.csproj" />
     </ItemGroup>
 
 </Project>

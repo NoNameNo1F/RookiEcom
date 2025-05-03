@@ -1,7 +1,5 @@
 ﻿using System.Text.Json;
-using RookiEcom.FrontStore.Abstractions;
-using RookiEcom.FrontStore.ViewModels.Dtos;
-using RookiEcom.FrontStore.ViewModels.ProductDtos;
+using RookiEcom.Modules.Product.Contracts.Dtos;
 
 namespace RookiEcom.FrontStore.Infrastructure.Services;
 
@@ -78,13 +76,13 @@ public class ProductService : IProductService
         }
     }
 
-    public async Task<ProductDetailDto?> GetProductById(int productId, CancellationToken cancellationToken = default)
+    public async Task<ProductDto?> GetProductById(int productId, CancellationToken cancellationToken = default)
     {
         var request = $"/api/v1/products/{productId}";
         try
         {
             var response = await _httpClient.GetAsync(request, cancellationToken);
-            return await ReadApiResponse<ProductDetailDto>(response, cancellationToken);
+            return await ReadApiResponse<ProductDto>(response, cancellationToken);
         }
         catch (HttpRequestException ex)
         {
