@@ -1,5 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+# 
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{833E7101-260E-42EF-AD4F-5A868B8DA9AA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildingBlocks", "BuildingBlocks", "{0B2DF2DB-18A9-47BA-AC58-E21ABC8DAEA3}"
@@ -28,6 +29,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RookiEcom.IdentityServer", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RookiEcom.FrontStore", "src\Hosts\RookiEcom.FrontStore\RookiEcom.FrontStore.csproj", "{A14AFBAA-6B52-4106-9AFA-A11E51A5BCB5}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{9B568626-FF93-4031-8EC4-7229FA38BE55}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RookiEcom.Modules.Product.Application.UnitTests", "src\Modules\ProductModule\RookiEcom.Modules.Product.Application.UnitTests\RookiEcom.Modules.Product.Application.UnitTests.csproj", "{6595CDFF-2A66-4BB7-875B-ED1E30EEB8AB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RookiEcom.Modules.Product.Contracts", "src\Modules\ProductModule\RookiEcom.Modules.Product.Contracts\RookiEcom.Modules.Product.Contracts.csproj", "{8495ACBA-A65F-4DE6-B19B-E396D0F98E63}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +54,9 @@ Global
 		{A19D83F8-F3CD-463E-8F6C-C3B6D85CEDD6} = {01F286FA-E020-4699-AE85-9CC065BA935A}
 		{24709A12-7333-4110-BC12-959F47C00441} = {64F33469-7617-406A-905C-4B82AED601A6}
 		{A14AFBAA-6B52-4106-9AFA-A11E51A5BCB5} = {64F33469-7617-406A-905C-4B82AED601A6}
+		{9B568626-FF93-4031-8EC4-7229FA38BE55} = {01F286FA-E020-4699-AE85-9CC065BA935A}
+		{6595CDFF-2A66-4BB7-875B-ED1E30EEB8AB} = {9B568626-FF93-4031-8EC4-7229FA38BE55}
+		{8495ACBA-A65F-4DE6-B19B-E396D0F98E63} = {01F286FA-E020-4699-AE85-9CC065BA935A}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{EBB6E6A4-C20D-4243-826C-498483C4BF89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -85,5 +95,13 @@ Global
 		{A14AFBAA-6B52-4106-9AFA-A11E51A5BCB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A14AFBAA-6B52-4106-9AFA-A11E51A5BCB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A14AFBAA-6B52-4106-9AFA-A11E51A5BCB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6595CDFF-2A66-4BB7-875B-ED1E30EEB8AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6595CDFF-2A66-4BB7-875B-ED1E30EEB8AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6595CDFF-2A66-4BB7-875B-ED1E30EEB8AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6595CDFF-2A66-4BB7-875B-ED1E30EEB8AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8495ACBA-A65F-4DE6-B19B-E396D0F98E63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8495ACBA-A65F-4DE6-B19B-E396D0F98E63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8495ACBA-A65F-4DE6-B19B-E396D0F98E63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8495ACBA-A65F-4DE6-B19B-E396D0F98E63}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

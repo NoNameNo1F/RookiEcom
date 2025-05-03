@@ -1,11 +1,8 @@
 using System.Diagnostics;
-using System.Net;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using RookiEcom.FrontStore.ViewModels;
-using RookiEcom.FrontStore.ViewModels.ProductDtos;
+using RookiEcom.Modules.Product.Contracts.Dtos;
 
 namespace RookiEcom.FrontStore.Controllers;
 

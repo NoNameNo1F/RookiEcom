@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RookiEcom.FrontStore.ViewModels;
-using RookiEcom.FrontStore.ViewModels.ProductDtos;
+using RookiEcom.Modules.Product.Contracts.Dtos;
 
 namespace RookiEcom.FrontStore.Controllers;
 

@@ -1,4 +1,4 @@
-﻿using RookiEcom.FrontStore.ViewModels.Dtos;
+﻿using RookiEcom.Modules.Product.Contracts.Dtos;
 
 namespace RookiEcom.FrontStore.ViewModels;
 
