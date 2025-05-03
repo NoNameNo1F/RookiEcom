@@ -7,7 +7,7 @@ using RookiEcom.Application.Pagination;
 using RookiEcom.Modules.Product.Application.Commands.Category.Create;
 using RookiEcom.Modules.Product.Application.Commands.Category.Delete;
 using RookiEcom.Modules.Product.Application.Commands.Category.Update;
-using RookiEcom.Modules.Product.Application.Dtos;
+using RookiEcom.Modules.Product.Contracts.Dtos;
 using RookiEcom.Modules.Product.Application.Queries;
 
 namespace RookiEcom.WebAPI.Modules.ProductModule.Controllers;
@@ -81,7 +81,7 @@ public class CategoriesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateCategory(
-        [FromForm] CategoryDto body,
+        [FromForm] CategoryBodyDto body,
         CancellationToken cancellationToken = default)
     {
         var command = new CreateCategoryCommand(
@@ -102,7 +102,7 @@ public class CategoriesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateCategory(
         [FromRoute] int categoryId,
-        [FromForm] CategoryDto body,
+        [FromForm] CategoryBodyDto body,
         CancellationToken cancellationToken = default)
     {
         var command = new UpdateCategoryCommand(

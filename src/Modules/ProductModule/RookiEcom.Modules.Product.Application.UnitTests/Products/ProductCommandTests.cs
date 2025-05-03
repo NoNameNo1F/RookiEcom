@@ -7,6 +7,7 @@ using RookiEcom.Application.Storage;
 using RookiEcom.Modules.Product.Application.Commands.Product.Create;
 using RookiEcom.Modules.Product.Application.UnitTests.Utils;
 using RookiEcom.Modules.Product.Domain.ProductAggregate;
+using RookiEcom.Modules.Product.Domain.Shared;
 
 namespace RookiEcom.Modules.Product.Application.UnitTests.Products;
 

@@ -1,4 +1,5 @@
 ﻿using RookiEcom.Domain.SeedWork;
+using RookiEcom.Modules.Product.Domain.Shared;
 
 namespace RookiEcom.Modules.Product.Domain.ProductAggregate;
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using RookiEcom.Modules.Product.Domain.CategoryAggregate;
 using RookiEcom.Modules.Product.Domain.ProductAggregate;
+using RookiEcom.Modules.Product.Domain.Shared;
 using RookiEcom.Modules.Product.Infrastructure.Persistence;
 
 namespace RookiEcom.Modules.Product.Application.UnitTests.SeedData;

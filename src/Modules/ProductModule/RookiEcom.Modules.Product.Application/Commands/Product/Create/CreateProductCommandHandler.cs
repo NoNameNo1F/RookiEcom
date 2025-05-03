@@ -1,7 +1,7 @@
 ﻿using RookiEcom.Application.Contracts;
 using RookiEcom.Application.Exceptions;
 using RookiEcom.Application.Storage;
-using RookiEcom.Modules.Product.Domain.ProductAggregate;
+using RookiEcom.Modules.Product.Domain.Shared;
 
 namespace RookiEcom.Modules.Product.Application.Commands.Product.Create;
 

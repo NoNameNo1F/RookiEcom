@@ -7,7 +7,7 @@ using RookiEcom.Application.Pagination;
 using RookiEcom.Modules.Product.Application.Commands.Product.Create;
 using RookiEcom.Modules.Product.Application.Commands.Product.Delete;
 using RookiEcom.Modules.Product.Application.Commands.Product.Update;
-using RookiEcom.Modules.Product.Application.Dtos;
+using RookiEcom.Modules.Product.Contracts.Dtos;
 using RookiEcom.Modules.Product.Application.Queries;
 
 namespace RookiEcom.WebAPI.Modules.ProductModule.Controllers;

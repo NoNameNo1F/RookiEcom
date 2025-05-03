@@ -30,6 +30,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\BuildingBlocks\RookiEcom.Infrastructure\RookiEcom.Infrastructure.csproj" />
       <ProjectReference Include="..\..\Modules\ProductModule\RookiEcom.Modules.Product.Application\RookiEcom.Modules.Product.Application.csproj" />
+      <ProjectReference Include="..\..\Modules\ProductModule\RookiEcom.Modules.Product.Contracts\RookiEcom.Modules.Product.Contracts.csproj" />
       <ProjectReference Include="..\..\Modules\ProductModule\RookiEcom.Modules.Product.Infrastructure\RookiEcom.Modules.Product.Infrastructure.csproj" />
     </ItemGroup>
 

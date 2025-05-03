@@ -23,6 +23,10 @@ public class ProductRatingEntityTypeConfiguration : IEntityTypeConfiguration<Pro
         builder.Property(pr => pr.CustomerId)
             .HasColumnName("CustomerId")
             .IsRequired();
+        
+        builder.Property(pr => pr.CustomerName)
+            .HasColumnName("CustomerName")
+            .IsRequired();
 
         builder.Property(pr => pr.Score)
             .HasColumnName("Score")
@@ -35,6 +39,12 @@ public class ProductRatingEntityTypeConfiguration : IEntityTypeConfiguration<Pro
             .HasColumnName("Content")
             .HasMaxLength(512);
 
+        builder.Property<DateTime>(p => p.CreatedDateTime)
+            .HasColumnName("CreatedDateTime");
+
+        builder.Property<DateTime>(p => p.UpdatedDateTime)
+            .HasColumnName("UpdatedDateTime");
+        
         builder.HasOne<Product.Domain.ProductAggregate.Product>()
             .WithMany()
             .HasForeignKey(pr => pr.ProductId)
