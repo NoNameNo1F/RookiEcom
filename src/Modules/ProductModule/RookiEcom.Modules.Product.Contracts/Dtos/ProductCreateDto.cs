@@ -14,6 +14,6 @@ public class ProductCreateDto
     public int StockQuantity { get; set; }
     public bool IsFeature { get; set; }
     public IFormFile[] Images { get; set; }
-    public List<ProductAttribute> ProductAttributes { get; set; }
-    public ProductOption ProductOption { get; set; }
+    public List<ProductAttribute>? ProductAttributes { get; set; }
+    public ProductOption? ProductOption { get; set; }
 }

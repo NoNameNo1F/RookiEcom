@@ -32,22 +32,9 @@ public class ProductService
             Sold = product.Sold,
             StockQuantity = product.StockQuantity,
             IsFeature = product.IsFeature,
-            // Images = new List<string>(), // Default empty list
-            // ProductAttributes = null, // Default null
-            // ProductOption = null,
-            Images = product.Images.ToList(),
-            ProductAttributes = product.ProductAttributes
-                .Select(pa => new ProductAttribute
-                {
-                    Code = pa.Code,
-                    Value = pa.Value
-                }).ToList(),
-            ProductOption = product.ProductOption == null ? 
-                null : new ProductOption
-                {
-                    Code = product.ProductOption.Code,
-                    Values = product.ProductOption.Values.ToList()
-                },
+            Images = product.Images,
+            ProductAttributes = product.ProductAttributes,
+            ProductOption = product.ProductOption,
             CreatedDateTime = product.CreatedDateTime,
             UpdatedDateTime = product.UpdatedDateTime
         };

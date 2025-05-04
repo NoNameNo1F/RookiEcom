@@ -65,7 +65,7 @@ public class UpdateCategoryCommandHandler : ICommandHandler<UpdateCategoryComman
                 if (oldParentId.HasValue)
                 {
                     var oldParent = await _dbContext.Categories
-                        .FirstOrDefaultAsync(c => c.ParentId == oldParentId.Value , cancellationToken);
+                        .FirstOrDefaultAsync(c => c.Id == oldParentId.Value , cancellationToken);
                     
                     if (oldParent != null)
                     {
@@ -77,7 +77,7 @@ public class UpdateCategoryCommandHandler : ICommandHandler<UpdateCategoryComman
                 if (request.ParentId.HasValue)
                 {
                     var newParent = await _dbContext.Categories
-                        .FirstOrDefaultAsync(c => c.ParentId == request.ParentId.Value , cancellationToken);
+                        .FirstOrDefaultAsync(c => c.Id == request.ParentId.Value , cancellationToken);
                    
                     if (newParent != null)
                     {

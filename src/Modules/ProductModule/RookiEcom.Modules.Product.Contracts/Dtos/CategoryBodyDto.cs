@@ -8,5 +8,5 @@ public class CategoryBodyDto
     public string Description { get; set; } 
     public int? ParentId { get; set; }
     public bool IsPrimary { get; set; }
-    public IFormFile Image { get; set; }
+    public IFormFile? Image { get; set; }
 }

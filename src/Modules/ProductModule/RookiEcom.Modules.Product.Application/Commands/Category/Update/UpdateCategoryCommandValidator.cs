@@ -22,6 +22,7 @@ public class UpdateCategoryCommandValidator : AbstractValidator<UpdateCategoryCo
 
         RuleFor(x => x.Image)
             .Must(image => image == null || image.ContentType.StartsWith("image/"))
-            .WithMessage("Uploaded file must be an image (e.g., JPEG, PNG).");
+            .WithMessage("Uploaded file must be an image (e.g., JPEG, PNG).")
+            .When(x => x.Image != null);
     }
 }

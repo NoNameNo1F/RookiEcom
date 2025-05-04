@@ -9,12 +9,12 @@ public sealed class UpdateCategoryCommand(
     string description, 
     int? parentId,
     bool isPrimary,
-    IFormFile image) : CommandBase
+    IFormFile? image) : CommandBase
 {
     public int Id { get; set; } = id;
     public string Name { get; set; } = name;
     public string Description { get; set; } = description;
-    public int? ParentId { get; set; } = parentId ?? 0; 
+    public int? ParentId { get; set; } = parentId.HasValue && parentId.Value == 0 ? null : parentId; 
     public bool IsPrimary { get; set; } = isPrimary;
     public IFormFile? Image { get; set; } = image;
 }
