@@ -16,7 +16,7 @@ public sealed class UpdateProductCommand(
     bool isFeature,
     ProductStatus status,
     List<string> oldImages,
-    IFormFile[] newImages,
+    IFormFile[]? newImages,
     List<ProductAttribute> productAttributes,
     ProductOption productOptions) : CommandBase
 {

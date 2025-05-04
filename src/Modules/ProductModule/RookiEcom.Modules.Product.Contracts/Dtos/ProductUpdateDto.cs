@@ -16,7 +16,7 @@ public class ProductUpdateDto
     public bool IsFeature { get; set; }
     public ProductStatus Status { get; set; }
     public List<string> OldImages { get; set; }
-    public IFormFile[] NewImages { get; set; }
-    public List<ProductAttribute> ProductAttributes { get; set; }
-    public ProductOption ProductOption { get; set; }
+    public IFormFile[]? NewImages { get; set; }
+    public List<ProductAttribute>? ProductAttributes { get; set; }
+    public ProductOption? ProductOption { get; set; }
 }

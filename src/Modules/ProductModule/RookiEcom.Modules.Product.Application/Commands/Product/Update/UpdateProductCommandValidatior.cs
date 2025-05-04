@@ -34,7 +34,7 @@ public class UpdateProductCommandValidator : AbstractValidator<UpdateProductComm
         
         RuleFor(x => x.Status)
             .IsInEnum().WithMessage("Invalid product status provided.");
-        
+
         RuleForEach(x => x.NewImages)
             .Must(image => image == null || image.ContentType.StartsWith("image/"))
             .When(x => x.NewImages != null && x.NewImages.Any())
