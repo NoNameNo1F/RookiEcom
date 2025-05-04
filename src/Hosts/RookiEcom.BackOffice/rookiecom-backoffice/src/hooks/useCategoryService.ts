@@ -47,8 +47,9 @@ export const useUpdateCategory = () => {
     return useMutation({
         mutationFn: (category: ICategoryUpdateForm) => 
             categoryService.updateCategory(category.id, category),
-        onSuccess: () => {
+        onSuccess: (data, variables) => {
             queryClient.invalidateQueries({ queryKey: ['categories'] });
+            queryClient.invalidateQueries({ queryKey: ['category', variables.id] });
         },
     });
 };

@@ -16,7 +16,7 @@ const SilentRenew: React.FC  = () => {
                 navigate("/", { replace: true });
             }
         }
-        if (window.location.pathname === "/silent-renew") {
+        if (window.location.pathname === "/silent-renew" && auth.isAuthenticated) {
             auth.signinSilent().catch((error) => {
                 console.error("Silent renew error:", error);
             });

@@ -9,7 +9,8 @@ const oidcConfig: UserManagerSettings = {
     scope: "openid profile rookiecom-webapi role",
     automaticSilentRenew: false,
     silent_redirect_uri: 'https://localhost:3000/silent-renew',
-    userStore: new WebStorageStateStore({ store: window.sessionStorage })
+    userStore: new WebStorageStateStore({ store: window.sessionStorage }),
+    stateStore: new WebStorageStateStore({ store: window.sessionStorage }),
 };
 
 const userManager = new UserManager(oidcConfig);
