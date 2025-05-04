@@ -3,6 +3,7 @@ import { jwtDecode } from "jwt-decode";
 import React, { useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { IJwtPayloadModel } from "../interfaces";
+import { MiniLoaderPage } from "../components/common";
 
 const withAuth = <P extends object>(
     WrappedComponent: React.FC<P>
@@ -15,16 +16,21 @@ const withAuth = <P extends object>(
             const decodedToken = jwtDecode<IJwtPayloadModel>(auth.user?.access_token!);
             const roles = decodedToken?.roles!;
             useEffect(() => {
-                if (!roles.includes("Admin")) {
+                if (!auth.isAuthenticated){
+                    navigate("/login", { replace: true});
+                } else if (!roles.includes("Admin")) {
                     navigate("access-denied", { replace: true });
                 }
-            }, []);
+            }, [auth.isAuthenticated, roles, navigate]);
 
             if (auth.isLoading || !auth.isAuthenticated) {
                 return null;
             }
 
             return <WrappedComponent {...props} />;
+        },
+        {
+            OnRedirecting: () => <MiniLoaderPage text="Redirecting to login..." />,
         }
     );
     return AuthComponent;

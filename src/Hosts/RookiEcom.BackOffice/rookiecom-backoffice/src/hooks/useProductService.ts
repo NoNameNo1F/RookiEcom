@@ -59,7 +59,7 @@ export const useUpdateProduct = () => {
         onSuccess: (data, variables) => {
             toast.success(`Product "${variables.name}" updated successfully!`);
             queryClient.invalidateQueries({ queryKey: ['products'] });
-            queryClient.invalidateQueries({ queryKey: ['product', variables.id] });
+            queryClient.invalidateQueries({ queryKey: ['product', variables.sku] });
         },
          onError: (error, variables) => {
             const productName = variables?.name || `ID ${variables?.id}`;

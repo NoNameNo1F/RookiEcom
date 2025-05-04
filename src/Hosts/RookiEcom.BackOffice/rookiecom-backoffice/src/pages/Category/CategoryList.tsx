@@ -9,32 +9,44 @@ import { ICategoryModel } from "../../interfaces";
 import { useNavigate } from "react-router-dom";
 import { useDeleteCategory } from "../../hooks/useCategoryService";
 import withAuth from "../../oidc/withAuth";
-import { MiniLoaderPage } from "../../components/common";
+import { ConfirmationDialog, MiniLoaderPage } from "../../components/common";
 
 const CategoryListPage = () => {
     const navigate = useNavigate();
     const theme = useTheme();
     const [pageNumber, setPageNumber] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+    const [categoryToDelete, setCategoryToDelete] = useState<{ id: number; name: string; } | null>(null);
     
     const { data: pagedResult, isLoading, error } = useGetCategories(pageNumber, rowsPerPage);
     const categories = pagedResult?.items ?? [];
     const totalCount = pagedResult?.pageData?.totalCount ?? 0;
-    // const pageData = pagedResult?.pageData ?? {
-    //     totalCount: 0,
-    //     pageNumber: 1,
-    //     pageSize: 25,
-    //     totalPages: 0,
-    //     hasPrevious: false,
-    //     hasNext: false
-    // };
 
     const deleteCategoryMutation = useDeleteCategory();
     const handleDelete = (categoryId: number, categoryName: string) => {
-        if (window.confirm(`Are you sure you want to delete the category "${categoryName}"? This might affect associated products.`)) {
-            deleteCategoryMutation.mutate(categoryId);
+        setCategoryToDelete({ id: categoryId, name: categoryName });
+        setDeleteConfirmOpen(true);
+    };
+
+    const handleCloseDeleteConfirm = () => {
+        setCategoryToDelete(null);
+        setDeleteConfirmOpen(false);
+    };
+
+    const handleConfirmDelete = () => {
+        if (categoryToDelete) {
+            deleteCategoryMutation.mutate(categoryToDelete.id, {
+                onSuccess: () => {
+                    handleCloseDeleteConfirm();
+                },
+                onError: () => {
+                    handleCloseDeleteConfirm();
+                },
+            });
         }
     };
+
 
     const handleChangePage = (_event: unknown, newPage: number) => {
         setPageNumber(newPage + 1);
@@ -207,6 +219,16 @@ const CategoryListPage = () => {
             )}
                 </Box>
             </Box>
+            <ConfirmationDialog
+                open={deleteConfirmOpen}
+                onClose={handleCloseDeleteConfirm}
+                onConfirm={handleConfirmDelete}
+                title="Confirm Deletion"
+                message="Are you sure you want to delete the category {name} (ID: {id})? This might affect associated products."
+                isLoading={deleteCategoryMutation.isPending}
+                entityName={categoryToDelete?.name}
+                entityId={categoryToDelete?.id}
+            />
         </Paper>
     );
 };

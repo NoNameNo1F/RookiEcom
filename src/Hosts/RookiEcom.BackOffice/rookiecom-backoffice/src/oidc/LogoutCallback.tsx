@@ -6,7 +6,7 @@ export const LogoutCallback: React.FC = () => {
   const auth = useAuth();
 
   useEffect(() => {
-    auth.removeUser().then(() => {
+      auth.removeUser().then(() => {
       window.location.replace("/");
     });
   }, [auth]);
