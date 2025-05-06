@@ -1,12 +1,16 @@
-﻿namespace RookiEcom.Modules.Product.Contracts.Dtos;
+﻿using System;
 
-public class ProductRatingDto
+namespace RookiEcom.Modules.Product.Contracts.Dtos
 {
-    public int Id { get; set; }
-    public int ProductId { get; set; }
-    public Guid CustomerId { get; set; }
-    public string CustomerName { get; set; }
-    public uint Score { get; set; }
-    public string Content { get; set; }
-    public string Image { get; set; }
+    public class ProductRatingDto
+    {
+        public int Id { get; set; }
+        public int ProductId { get; set; }
+        public Guid CustomerId { get; set; }
+        public string CustomerName { get; set; }
+        public uint Score { get; set; }
+        public string Content { get; set; }
+        public string Image { get; set; }
+        public DateTime CreatedDateTime { get; set; }
+    }
 }
