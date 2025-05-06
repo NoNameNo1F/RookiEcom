@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using RookiEcom.Application.Contracts;
 using RookiEcom.Application.Exceptions;
 using RookiEcom.Application.Storage;
@@ -10,15 +11,21 @@ public class UpdateProductCommandHandler : ICommandHandler<UpdateProductCommand>
 {
     private readonly ProductContext _productContext;
     private readonly IBlobService _blobService;
-    
-    public UpdateProductCommandHandler(ProductContext productContext, IBlobService blobService)
+    private readonly IValidator<UpdateProductCommand> _validator;
+    public UpdateProductCommandHandler(
+        ProductContext productContext,
+        IBlobService blobService,
+        IValidator<UpdateProductCommand> validator)
     {
         _productContext = productContext;
         _blobService = blobService;
+        _validator = validator;
     }
     
     public async Task Handle(UpdateProductCommand request, CancellationToken cancellationToken)
     {
+        await _validator.ValidateAndThrowAsync(request, cancellationToken);
+        
         await using var transaction = await _productContext.Database.BeginTransactionAsync(cancellationToken);
         var uploadedBlobs = new List<(string BlobName, string ContainerName)>();
         var oldImageUris = new List<string>();
@@ -32,7 +39,7 @@ public class UpdateProductCommandHandler : ICommandHandler<UpdateProductCommand>
             {
                 throw new ProductNotFoundException(request.Id);
             }
-
+            
             oldImageUris.AddRange(product.Images);
             product.Images.Clear();
 
@@ -58,6 +65,11 @@ public class UpdateProductCommandHandler : ICommandHandler<UpdateProductCommand>
                 }
             }
 
+            if (product.SKU != request.SKU && await _productContext.Products.AnyAsync(p => p.SKU == request.SKU, cancellationToken))
+            {
+                throw new ProductSKUExistedException(request.SKU);
+            }
+            
             product.SKU = request.SKU;
             product.CategoryId = request.CategoryId;
             product.Name = request.Name;

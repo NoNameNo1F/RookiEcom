@@ -11,7 +11,7 @@ public class UpdateProductCommandValidator : AbstractValidator<UpdateProductComm
 
         RuleFor(x => x.SKU)
             .NotEmpty().WithMessage("SKU is required.")
-            .MaximumLength(50).WithMessage("SKU must not exceed 50 characters.");
+            .MaximumLength(100).WithMessage("SKU must not exceed 100 characters.");
 
         RuleFor(x => x.CategoryId)
             .GreaterThan(0).WithMessage("Category ID must be greater than 0.");
@@ -21,7 +21,7 @@ public class UpdateProductCommandValidator : AbstractValidator<UpdateProductComm
             .MaximumLength(100).WithMessage("Name must not exceed 100 characters.");
 
         RuleFor(x => x.Description)
-            .MaximumLength(1000).WithMessage("Description must not exceed 1000 characters.");
+            .MaximumLength(512).WithMessage("Description must not exceed 512 characters.");
 
         RuleFor(x => x.MarketPrice)
             .GreaterThanOrEqualTo(0).WithMessage("Market price must be 0 or greater.");
@@ -35,11 +35,19 @@ public class UpdateProductCommandValidator : AbstractValidator<UpdateProductComm
         RuleFor(x => x.Status)
             .IsInEnum().WithMessage("Invalid product status provided.");
 
+        RuleFor(x => x.OldImages)
+            .Must(images => images != null && images.Count >= 1)
+            .WithMessage("Old images must contain at least one image.");
+        
+        RuleForEach(x => x.OldImages)
+            .Must(url => !string.IsNullOrEmpty(url))
+            .WithMessage("Old image URL must not be empty.");
+        
         RuleForEach(x => x.NewImages)
             .Must(image => image == null || image.ContentType.StartsWith("image/"))
             .When(x => x.NewImages != null && x.NewImages.Any())
             .WithMessage("All uploaded files must be images (e.g., JPEG, PNG).");
-
+        
         RuleFor(x => x)
             .Custom((command, context) => {
                 int oldImageCount = command.OldImages?.Count ?? 0;
@@ -58,6 +66,10 @@ public class UpdateProductCommandValidator : AbstractValidator<UpdateProductComm
                     context.AddFailure(nameof(command.NewImages), "Total number of images (existing + new) must not exceed 5.");
                 }
             });
+        
+        RuleFor(x => x.ProductAttributes)
+            .Must(attrs => attrs != null && attrs.Count >= 1)
+            .WithMessage("Product must have at least 1 attribute.");
         
         RuleForEach(x => x.ProductAttributes)
             .ChildRules(attr =>

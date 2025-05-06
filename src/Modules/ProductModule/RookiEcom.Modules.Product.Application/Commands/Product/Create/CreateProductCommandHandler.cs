@@ -1,6 +1,9 @@
-﻿using RookiEcom.Application.Contracts;
+﻿using FluentValidation;
+using Microsoft.EntityFrameworkCore;
+using RookiEcom.Application.Contracts;
 using RookiEcom.Application.Exceptions;
 using RookiEcom.Application.Storage;
+using RookiEcom.Modules.Product.Application.Exceptions;
 using RookiEcom.Modules.Product.Domain.Shared;
 
 namespace RookiEcom.Modules.Product.Application.Commands.Product.Create;
@@ -9,19 +12,31 @@ public class CreateProductCommandHandler : ICommandHandler<CreateProductCommand>
 {
     private readonly ProductContext _dbContext;
     private readonly IBlobService _blobService;
-
-    public CreateProductCommandHandler(ProductContext dbContext, IBlobService blobService)
+    private readonly IValidator<CreateProductCommand> _validator;
+    
+    public CreateProductCommandHandler(
+        ProductContext dbContext,
+        IBlobService blobService,
+        IValidator<CreateProductCommand> validator)
     {
         _dbContext = dbContext;
         _blobService = blobService;
+        _validator = validator;
     }
 
     public async Task Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
+        await _validator.ValidateAndThrowAsync(request, cancellationToken);
+
         await using var transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
         
         var uploadedBlobs = new List<(string BlobName, string ContainerName)>();
 
+        if (await _dbContext.Products.AnyAsync(p => p.SKU == request.SKU, cancellationToken))
+        {
+            throw new ProductSKUExistedException(request.SKU);
+        }
+        
         try
         {
             var product = new Domain.ProductAggregate.Product

@@ -1,9 +1,10 @@
 ﻿using FluentValidation;
+using RookiEcom.Modules.Product.Application.Commands.Category.Delete;
 using RookiEcom.Modules.Product.Application.Commands.Product.Delete;
 
 namespace RookiEcom.Modules.Product.Application.Commands.Category.Create;
 
-public class DeleteCategoryCommandValidator : AbstractValidator<DeleteProductCommand>
+public class DeleteCategoryCommandValidator : AbstractValidator<DeleteCategoryCommand>
 {
     public DeleteCategoryCommandValidator()
     {

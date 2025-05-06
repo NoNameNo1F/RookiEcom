@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using RookiEcom.Modules.Product.Domain.CategoryAggregate;
 using RookiEcom.Modules.Product.Domain.ProductAggregate;
+using RookiEcom.Modules.Product.Domain.ProductRatingAggregate;
 using RookiEcom.Modules.Product.Domain.Shared;
 using RookiEcom.Modules.Product.Infrastructure.Persistence;
 
@@ -18,7 +19,6 @@ public class SeedProductData
     public async Task SeedProductModuleData(CancellationToken cancellationToken = default)
     {
         using var scope = _serviceProvider.CreateScope();
-
         var context = scope.ServiceProvider.GetRequiredService<ProductContextImpl>();
         
         int laptopCategoryId = 4;
@@ -95,11 +95,11 @@ public class SeedProductData
                 Images = new List<string> { "/images/laptops/acer-nitro5-1.jpg", "/images/laptops/acer-nitro5-2.jpg" },
                 ProductAttributes = new List<ProductAttribute>
                 {
-                    new ProductAttribute { Code = "CPU", Value = "Intel Core i5-12500H" },
-                    new ProductAttribute { Code = "RAM", Value = "16GB DDR4" },
-                    new ProductAttribute { Code = "Storage", Value = "512GB NVMe SSD" },
-                    new ProductAttribute { Code = "GPU", Value = "NVIDIA GeForce RTX 3050 Ti" },
-                    new ProductAttribute { Code = "Display", Value = "15.6\" FHD 144Hz" }
+                    new ProductAttribute( "CPU", "Intel Core i5-12500H"),
+                    new ProductAttribute("RAM", "16GB DDR4"),
+                    new ProductAttribute("Storage", "512GB NVMe SSD"),
+                    new ProductAttribute("GPU", "NVIDIA GeForce RTX 3050 Ti"),
+                    new ProductAttribute("Display", "15.6\" FHD 144Hz")
                 },
                 ProductOption = null,
                 CreatedDateTime = DateTime.UtcNow.AddDays(-60),
@@ -121,10 +121,10 @@ public class SeedProductData
                 Images = new List<string> { "/images/laptops/acer-nitro7-1.jpg" },
                 ProductAttributes = new List<ProductAttribute>
                 {
-                    new ProductAttribute { Code = "CPU", Value = "Intel Core i7-10750H" },
-                    new ProductAttribute { Code = "RAM", Value = "16GB DDR4" },
-                    new ProductAttribute { Code = "Storage", Value = "1TB NVMe SSD" },
-                    new ProductAttribute { Code = "GPU", Value = "NVIDIA GeForce RTX 2060" }
+                    new ProductAttribute("CPU", "Intel Core i7-10750H"),
+                    new ProductAttribute("RAM", "16GB DDR4"),
+                    new ProductAttribute("Storage", "1TB NVMe SSD"),
+                    new ProductAttribute("GPU", "NVIDIA GeForce RTX 2060")
                 },
                 ProductOption = null,
                 CreatedDateTime = DateTime.UtcNow.AddDays(-90),
@@ -148,10 +148,10 @@ public class SeedProductData
                 Images = new List<string> { "/images/laptops/dell-xps13-1.jpg", "/images/laptops/dell-xps13-2.jpg" },
                 ProductAttributes = new List<ProductAttribute>
                 {
-                    new ProductAttribute { Code = "CPU", Value = "Intel Core i7-1185G7" },
-                    new ProductAttribute { Code = "RAM", Value = "16GB LPDDR4x" },
-                    new ProductAttribute { Code = "Storage", Value = "512GB SSD" },
-                    new ProductAttribute { Code = "Display", Value = "13.4\" FHD+" }
+                    new ProductAttribute("CPU", "Intel Core i7-1185G7"),
+                    new ProductAttribute("RAM", "16GB LPDDR4x"),
+                    new ProductAttribute("Storage", "512GB SSD"),
+                    new ProductAttribute("Display", "13.4\" FHD+")
                 },
                 ProductOption = null,
                 CreatedDateTime = DateTime.UtcNow.AddDays(-50),
@@ -173,9 +173,9 @@ public class SeedProductData
                 Images = new List<string> { "/images/laptops/dell-inspiron15-1.jpg" },
                 ProductAttributes = new List<ProductAttribute>
                 {
-                    new ProductAttribute { Code = "CPU", Value = "Intel Celeron N4020" },
-                    new ProductAttribute { Code = "RAM", Value = "8GB DDR4" },
-                    new ProductAttribute { Code = "Storage", Value = "256GB SSD" }
+                    new ProductAttribute("CPU", "Intel Celeron N4020"),
+                    new ProductAttribute("RAM", "8GB DDR4"),
+                    new ProductAttribute("Storage", "256GB SSD")
                 },
                 ProductOption = null,
                 CreatedDateTime = DateTime.UtcNow.AddDays(-40),
@@ -197,10 +197,10 @@ public class SeedProductData
                 Images = new List<string> { "/images/laptops/alienware-x17-1.jpg" },
                 ProductAttributes = new List<ProductAttribute>
                 {
-                    new ProductAttribute { Code = "CPU", Value = "Intel Core i9-12900H" },
-                    new ProductAttribute { Code = "RAM", Value = "32GB DDR5" },
-                    new ProductAttribute { Code = "Storage", Value = "1TB NVMe SSD" },
-                    new ProductAttribute { Code = "GPU", Value = "NVIDIA GeForce RTX 3080 Ti" }
+                    new ProductAttribute("CPU", "Intel Core i9-12900H"),
+                    new ProductAttribute("RAM", "32GB DDR5"),
+                    new ProductAttribute("Storage", "1TB NVMe SSD"),
+                    new ProductAttribute("GPU", "NVIDIA GeForce RTX 3080 Ti")
                 },
                 ProductOption = null,
                 CreatedDateTime = DateTime.UtcNow.AddDays(-30),
@@ -224,10 +224,10 @@ public class SeedProductData
                 Images = new List<string> { "/images/laptops/thinkpad-x1-1.jpg", "/images/laptops/thinkpad-x1-2.jpg" },
                 ProductAttributes = new List<ProductAttribute>
                 {
-                    new ProductAttribute { Code = "CPU", Value = "Intel Core i7-1260P" },
-                    new ProductAttribute { Code = "RAM", Value = "16GB LPDDR5" },
-                    new ProductAttribute { Code = "Storage", Value = "1TB PCIe SSD" },
-                    new ProductAttribute { Code = "Weight", Value = "2.49 lbs" }
+                    new ProductAttribute("CPU", "Intel Core i7-1260P"),
+                    new ProductAttribute("RAM", "16GB LPDDR5"),
+                    new ProductAttribute("Storage", "1TB PCIe SSD"),
+                    new ProductAttribute("Weight", "2.49 lbs")
                 },
                 ProductOption = null,
                 CreatedDateTime = DateTime.UtcNow.AddDays(-75),
@@ -249,9 +249,9 @@ public class SeedProductData
                 Images = new List<string> { "/images/laptops/thinkpad-t14-1.jpg" },
                 ProductAttributes = new List<ProductAttribute>
                 {
-                    new ProductAttribute { Code = "CPU", Value = "AMD Ryzen 7 PRO 6850U" },
-                    new ProductAttribute { Code = "RAM", Value = "16GB LPDDR5" },
-                    new ProductAttribute { Code = "Storage", Value = "512GB PCIe SSD" }
+                    new ProductAttribute("CPU", "AMD Ryzen 7 PRO 6850U"),
+                    new ProductAttribute("RAM", "16GB LPDDR5"),
+                    new ProductAttribute("Storage", "512GB PCIe SSD")
                 },
                 ProductOption = null,
                 CreatedDateTime = DateTime.UtcNow.AddDays(-80),
@@ -273,9 +273,9 @@ public class SeedProductData
                 Images = new List<string> { "/images/laptops/thinkpad-e15-1.jpg" },
                 ProductAttributes = new List<ProductAttribute>
                 {
-                    new ProductAttribute { Code = "CPU", Value = "Intel Core i5-1235U" },
-                    new ProductAttribute { Code = "RAM", Value = "8GB DDR4" },
-                    new ProductAttribute { Code = "Storage", Value = "256GB PCIe SSD" }
+                    new ProductAttribute("CPU", "Intel Core i5-1235U"),
+                    new ProductAttribute("RAM", "8GB DDR4"),
+                    new ProductAttribute("Storage", "256GB PCIe SSD")
                 },
                 ProductOption = null,
                 CreatedDateTime = DateTime.UtcNow.AddDays(-45),
@@ -297,9 +297,9 @@ public class SeedProductData
                 Images = new List<string> { "/images/laptops/acer-aspire5-1.jpg" },
                 ProductAttributes = new List<ProductAttribute>
                 {
-                    new ProductAttribute { Code = "CPU", Value = "Intel Core i5-1135G7" },
-                    new ProductAttribute { Code = "RAM", Value = "8GB DDR4" },
-                    new ProductAttribute { Code = "Storage", Value = "512GB NVMe SSD" }
+                    new ProductAttribute("CPU", "Intel Core i5-1135G7"),
+                    new ProductAttribute("RAM", "8GB DDR4"),
+                    new ProductAttribute("Storage", "512GB NVMe SSD")
                 },
                 ProductOption = null,
                 CreatedDateTime = DateTime.UtcNow.AddDays(-55),
@@ -321,10 +321,10 @@ public class SeedProductData
                 Images = new List<string> { "/images/laptops/acer-nitro-old-1.jpg" },
                 ProductAttributes = new List<ProductAttribute>
                 {
-                    new ProductAttribute { Code = "CPU", Value = "Intel Core i5-11400H" },
-                    new ProductAttribute { Code = "RAM", Value = "8GB DDR4" },
-                    new ProductAttribute { Code = "Storage", Value = "256GB NVMe SSD" },
-                    new ProductAttribute { Code = "GPU", Value = "NVIDIA GeForce GTX 1650" }
+                    new ProductAttribute("CPU", "Intel Core i5-11400H"),
+                    new ProductAttribute("RAM", "8GB DDR4"),
+                    new ProductAttribute("Storage", "256GB NVMe SSD"),
+                    new ProductAttribute("GPU", "NVIDIA GeForce GTX 1650")
                 },
                 ProductOption = null,
                 CreatedDateTime = DateTime.UtcNow.AddDays(-300),
@@ -333,6 +333,73 @@ public class SeedProductData
         };
 
         await context.AddRangeAsync(products, cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
+        
+        var ratings = new List<ProductRating>
+        {
+            new ProductRating
+            {
+                Id = 1,
+                ProductId = 1,
+                CustomerId = Guid.NewGuid(),
+                CustomerName = "John Doe",
+                Score = 4,
+                Content = "Great product!",
+                Image = "http://example.com/review1.jpg",
+                CreatedDateTime = DateTime.UtcNow,
+                UpdatedDateTime = DateTime.UtcNow
+            },
+            new ProductRating
+            {
+                Id = 2,
+                ProductId = 1,
+                CustomerId = Guid.NewGuid(),
+                CustomerName = "Jane Smith",
+                Score = 5,
+                Content = "Amazing quality!",
+                Image = "http://example.com/review2.jpg",
+                CreatedDateTime = DateTime.UtcNow,
+                UpdatedDateTime = DateTime.UtcNow
+            },
+            new ProductRating
+            {
+                Id = 3,
+                ProductId = 1,
+                CustomerId = Guid.NewGuid(),
+                CustomerName = "Alice Johnson",
+                Score = 3,
+                Content = "Good but could be better.",
+                Image = "http://example.com/review3.jpg",
+                CreatedDateTime = DateTime.UtcNow,
+                UpdatedDateTime = DateTime.UtcNow
+            },
+            new ProductRating
+            {
+                Id = 4,
+                ProductId = 2,
+                CustomerId = Guid.NewGuid(),
+                CustomerName = "Bob Brown",
+                Score = 4,
+                Content = "Very nice!",
+                Image = "http://example.com/review4.jpg",
+                CreatedDateTime = DateTime.UtcNow,
+                UpdatedDateTime = DateTime.UtcNow
+            },
+            new ProductRating
+            {
+                Id = 5,
+                ProductId = 2,
+                CustomerId = Guid.NewGuid(),
+                CustomerName = "Carol White",
+                Score = 5,
+                Content = "Perfect fit!",
+                Image = "http://example.com/review5.jpg",
+                CreatedDateTime = DateTime.UtcNow,
+                UpdatedDateTime = DateTime.UtcNow
+            }
+        };
+        
+        await context.ProductRatings.AddRangeAsync(ratings, cancellationToken);
         await context.SaveChangesAsync(cancellationToken);
     }
 }

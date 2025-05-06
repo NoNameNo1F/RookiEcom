@@ -18,7 +18,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\BuildingBlocks\RookiEcom.Application\RookiEcom.Application.csproj" />
-      <ProjectReference Include="..\..\..\Hosts\RookiEcom.FrontStore\RookiEcom.FrontStore.csproj" />
       <ProjectReference Include="..\RookiEcom.Modules.Product.Contracts\RookiEcom.Modules.Product.Contracts.csproj" />
       <ProjectReference Include="..\RookiEcom.Modules.Product.Domain\RookiEcom.Modules.Product.Domain.csproj" />
     </ItemGroup>

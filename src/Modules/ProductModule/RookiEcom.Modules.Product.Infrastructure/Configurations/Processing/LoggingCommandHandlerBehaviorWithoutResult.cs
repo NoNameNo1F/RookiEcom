@@ -1,13 +1,14 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
+using RookiEcom.Application.Contracts;
 
 namespace RookiEcom.Modules.Product.Infrastructure.Configurations.Processing;
-public class LoggingCommandHandlerBehaviorWithResult<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
-    where TRequest : IRequest<TResponse>
+public class LoggingCommandHandlerBehaviorWithoutResult<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+    where TRequest : ICommand
 {
-    private readonly ILogger<LoggingCommandHandlerBehaviorWithResult<TRequest, TResponse>> _logger;
+    private readonly ILogger<LoggingCommandHandlerBehaviorWithoutResult<TRequest, TResponse>> _logger;
 
-    public LoggingCommandHandlerBehaviorWithResult(ILogger<LoggingCommandHandlerBehaviorWithResult<TRequest, TResponse>> logger)
+    public LoggingCommandHandlerBehaviorWithoutResult(ILogger<LoggingCommandHandlerBehaviorWithoutResult<TRequest, TResponse>> logger)
     {
         _logger = logger;
     }

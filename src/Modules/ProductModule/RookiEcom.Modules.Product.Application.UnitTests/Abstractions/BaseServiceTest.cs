@@ -16,11 +16,15 @@ public class BaseServiceTest : IAsyncLifetime
         await seeder.SeedProductModuleData();
     }
 
-    public virtual Task DisposeAsync()
+    public virtual async Task DisposeAsync()
     {
-        ServiceProvider?.Dispose();
-
-        return Task.CompletedTask;
+        if (ServiceProvider != null)
+        {
+            using var scope = ServiceProvider.CreateScope();
+            var context = scope.ServiceProvider.GetRequiredService<ProductContext>();
+            await context.Database.EnsureDeletedAsync();
+            ServiceProvider.Dispose();
+        }
     }
 
     protected (IServiceScope Scope, T Service) GetScopedService<T>() where T : notnull

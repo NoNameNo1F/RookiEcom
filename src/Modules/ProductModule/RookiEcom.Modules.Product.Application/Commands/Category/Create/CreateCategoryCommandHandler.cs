@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using RookiEcom.Application.Contracts;
 using RookiEcom.Application.Exceptions;
 using RookiEcom.Application.Storage;
@@ -9,15 +10,22 @@ public class CreateCategoryCommandHandler : ICommandHandler<CreateCategoryComman
 {
     private readonly ProductContext _dbContext;
     private readonly IBlobService _blobService;
+    private readonly IValidator<CreateCategoryCommand> _validator;
 
-    public CreateCategoryCommandHandler(ProductContext dbContext, IBlobService blobService)
+    public CreateCategoryCommandHandler(
+        ProductContext dbContext, 
+        IBlobService blobService,
+        IValidator<CreateCategoryCommand> validator)
     {
         _dbContext = dbContext;
         _blobService = blobService;
+        _validator = validator;
     }
 
     public async Task Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
     {
+        await _validator.ValidateAndThrowAsync(request, cancellationToken);
+        
         await using var transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
         (string BlobName, string ContainerName)? uploadedBlob = null;
 

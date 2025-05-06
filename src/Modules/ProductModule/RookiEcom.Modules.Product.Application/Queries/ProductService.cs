@@ -1,10 +1,8 @@
-﻿using System.Collections.Immutable;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using RookiEcom.Application.Common;
 using RookiEcom.Modules.Product.Application.Exceptions;
 using RookiEcom.Modules.Product.Contracts.Dtos;
-using RookiEcom.Modules.Product.Domain.Shared;
 
 namespace RookiEcom.Modules.Product.Application.Queries;
 

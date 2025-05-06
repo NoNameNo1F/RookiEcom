@@ -1,4 +1,5 @@
-﻿using RookiEcom.Application.Contracts;
+﻿using FluentValidation;
+using RookiEcom.Application.Contracts;
 using RookiEcom.Application.Storage;
 using RookiEcom.Modules.Product.Application.Exceptions;
 
@@ -8,15 +9,23 @@ public class DeleteProductCommandHandler : ICommandHandler<DeleteProductCommand>
 {
     private readonly ProductContext _productContext;
     private readonly IBlobService _blobService;
+    private readonly IValidator<DeleteProductCommand> _validator;
 
-    public DeleteProductCommandHandler(ProductContext productContext, IBlobService blobService)
+
+    public DeleteProductCommandHandler(
+        ProductContext productContext,
+        IBlobService blobService,
+        IValidator<DeleteProductCommand> validator)
     {
         _productContext = productContext;
         _blobService = blobService;
+        _validator = validator;
     }
 
     public async Task Handle(DeleteProductCommand request, CancellationToken cancellationToken)
     {
+        await _validator.ValidateAndThrowAsync(request, cancellationToken);
+        
         await using var transaction = await _productContext.Database.BeginTransactionAsync(cancellationToken);
 
         try

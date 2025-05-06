@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using RookiEcom.Application.Contracts;
 using RookiEcom.Application.Exceptions;
 using RookiEcom.Application.Storage;
@@ -10,15 +11,22 @@ public class UpdateCategoryCommandHandler : ICommandHandler<UpdateCategoryComman
 {
     private readonly ProductContext _dbContext;
     private readonly IBlobService _blobService;
+    private readonly IValidator<UpdateCategoryCommand> _validator;
 
-    public UpdateCategoryCommandHandler(ProductContext dbContext, IBlobService blobService)
+    public UpdateCategoryCommandHandler(
+        ProductContext dbContext,
+        IBlobService blobService,
+        IValidator<UpdateCategoryCommand> validator)
     {
         _dbContext = dbContext;
         _blobService = blobService;
+        _validator = validator;
     }
 
     public async Task Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
     {
+        await _validator.ValidateAndThrowAsync(request, cancellationToken);
+        
         await using var transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
         (string BlobName, string ContainerName)? newUploadedBlob = null;
         string oldImageUri = "";
@@ -32,7 +40,7 @@ public class UpdateCategoryCommandHandler : ICommandHandler<UpdateCategoryComman
             {
                 throw new CategoryNotFoundException(request.Id);
             }
-
+            
             if (request.Image != null)
             {
                 oldImageUri = category.Image;

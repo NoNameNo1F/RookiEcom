@@ -1,23 +1,32 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using RookiEcom.Application.Contracts;
 using RookiEcom.Application.Storage;
+using RookiEcom.Modules.Product.Application.Commands.Product.Delete;
 using RookiEcom.Modules.Product.Application.Exceptions;
 
 namespace RookiEcom.Modules.Product.Application.Commands.Category.Delete;
 
-public class DeleteCategoryCommandHandler : ICommandHandler<DeleteCategoryCommand, int>
+public class DeleteCategoryCommandHandler : ICommandHandler<DeleteCategoryCommand>
 {
     private readonly ProductContext _dbContext;
     private readonly IBlobService _blobService;
+    private readonly IValidator<DeleteCategoryCommand> _validator;
 
-    public DeleteCategoryCommandHandler(ProductContext dbContext, IBlobService blobService)
+    public DeleteCategoryCommandHandler(
+        ProductContext dbContext,
+        IBlobService blobService,
+        IValidator<DeleteCategoryCommand> validator)
     {
         _dbContext = dbContext;
         _blobService = blobService;
+        _validator = validator;
     }
 
-    public async Task<int> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
+    public async Task Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
     {
+        await _validator.ValidateAndThrowAsync(request, cancellationToken);
+        
         await using var transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
 
         try
@@ -58,7 +67,6 @@ public class DeleteCategoryCommandHandler : ICommandHandler<DeleteCategoryComman
             }
 
             await transaction.CommitAsync(cancellationToken);
-            return category.Id;
         }
         catch (Exception ex)
         {
