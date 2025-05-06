@@ -14,9 +14,9 @@ public static class ProcessingExtensions
 
         services.AddScoped<ProductService>();
         services.AddScoped<CategoryService>();
-        // services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UnitOfWorkCommandHandlerBehavior<,>));
-        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationCommandHandlerBehavior<,>));
-        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingCommandHandlerBehaviorWithResult<,>));
+        services.AddScoped<ProductRatingService>();
+        
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingCommandHandlerBehaviorWithoutResult<,>));
         return services;
     }
 }
