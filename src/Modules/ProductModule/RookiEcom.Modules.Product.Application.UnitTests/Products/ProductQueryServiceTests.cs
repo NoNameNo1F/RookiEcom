@@ -1,10 +1,6 @@
-﻿using System.Runtime.CompilerServices;
-using Microsoft.Extensions.DependencyInjection;
-using Moq;
-using RookiEcom.Modules.Product.Application.Exceptions;
+﻿using RookiEcom.Modules.Product.Application.Exceptions;
 using RookiEcom.Modules.Product.Application.Queries;
 using RookiEcom.Modules.Product.Application.UnitTests.Abstractions;
-using RookiEcom.Modules.Product.Application.UnitTests.SeedData;
 
 namespace RookiEcom.Modules.Product.Application.UnitTests.Products;
 
@@ -16,8 +12,7 @@ public class ProductQueryServiceTests : BaseServiceTest
     public async Task GetProducts_ValidPage_ReturnsPagedResult(int pageNumber, int pageSize, int expectedTotalCount)
     {
         // Arrange
-        using var scope = ServiceProvider.CreateScope();
-        var productService = scope.ServiceProvider.GetRequiredService<ProductService>();
+        var (scope, productService) = GetScopedService<ProductService>();
         
         // Act
         var productResult = await productService.GetProducts(pageNumber, pageSize,default);
@@ -32,8 +27,7 @@ public class ProductQueryServiceTests : BaseServiceTest
     public async Task GetProductsFeature_ValidPage_ReturnsFeaturedProducts(int pageNumber, int pageSize, int expectedTotalCount)
     {
         // Arrange
-        using var scope = ServiceProvider.CreateScope();
-        var productService = scope.ServiceProvider.GetRequiredService<ProductService>();
+        var (scope, productService) = GetScopedService<ProductService>();
         
         // Act
         var productFeaturedResult = await productService.GetProductsFeature(pageNumber, pageSize, default);
@@ -50,8 +44,7 @@ public class ProductQueryServiceTests : BaseServiceTest
     public async Task GetProductById_ProductFound_ReturnsProduct(int productId, string expectedProductSKU)
     {
         // Arrange
-        using var scope = ServiceProvider.CreateScope();
-        var productService = scope.ServiceProvider.GetRequiredService<ProductService>();
+        var (scope, productService) = GetScopedService<ProductService>();
         
         // Act
         var product = await productService.GetProductById(productId, default);
@@ -68,8 +61,7 @@ public class ProductQueryServiceTests : BaseServiceTest
     public async Task GetProductById_ProductNotFound_ThrowsProductNotFoundException(int productId)
     {
         // Arrange
-        using var scope = ServiceProvider.CreateScope();
-        var productService = scope.ServiceProvider.GetRequiredService<ProductService>();
+        var (scope, productService) = GetScopedService<ProductService>();
         
         // Act
         Func<Task> action = async () => await productService.GetProductById(productId, default);
@@ -86,8 +78,7 @@ public class ProductQueryServiceTests : BaseServiceTest
     public async Task GetProductBySKU_ProductFound_ReturnsProduct(string productSKU, string expectedProductName)
     {
         // Arrange
-        using var scope = ServiceProvider.CreateScope();
-        var productService = scope.ServiceProvider.GetRequiredService<ProductService>();
+        var (scope, productService) = GetScopedService<ProductService>();
         
         // Act
         var product = await productService.GetProductBySKU(productSKU, default);
@@ -104,8 +95,7 @@ public class ProductQueryServiceTests : BaseServiceTest
     public async Task GetProductBySKU_ProductNotFound_ThrowsProductNotFoundException(string productSKU)
     {
         // Arrange
-        using var scope = ServiceProvider.CreateScope();
-        var productService = scope.ServiceProvider.GetRequiredService<ProductService>();
+        var (scope, productService) = GetScopedService<ProductService>();
         
         // Act
         Func<Task> action = async () => await productService.GetProductBySKU(productSKU, default);
@@ -124,8 +114,7 @@ public class ProductQueryServiceTests : BaseServiceTest
         int expectedCurrentCount)
     {
         // Arrange
-        using var scope = ServiceProvider.CreateScope();
-        var productService = scope.ServiceProvider.GetRequiredService<ProductService>();
+        var (scope, productService) = GetScopedService<ProductService>();
         
         // Act
         var productResult = await productService.GetProductsByCategoryId(pageNumber, pageSize, categoryId, default);
@@ -141,8 +130,7 @@ public class ProductQueryServiceTests : BaseServiceTest
     public async Task GetProductsByCategoryId_InvalidCategory_ReturnsEmptyResult(int categoryId)
     {
         // Arrange
-        using var scope = ServiceProvider.CreateScope();
-        var productService = scope.ServiceProvider.GetRequiredService<ProductService>();
+        var (scope, productService) = GetScopedService<ProductService>();
         
         // Act
         var productResult = await productService.GetProductsByCategoryId(1, 5, categoryId, default);

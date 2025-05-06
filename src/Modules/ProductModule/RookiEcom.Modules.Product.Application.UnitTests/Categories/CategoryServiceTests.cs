@@ -2,7 +2,6 @@
 using RookiEcom.Modules.Product.Application.Exceptions;
 using RookiEcom.Modules.Product.Application.Queries;
 using RookiEcom.Modules.Product.Application.UnitTests.Abstractions;
-using RookiEcom.Modules.Product.Application.UnitTests.SeedData;
 
 namespace RookiEcom.Modules.Product.Application.UnitTests.Categories;
 
