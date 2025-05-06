@@ -1,7 +1,19 @@
-﻿namespace RookiEcom.Modules.Product.Domain.Shared;
+﻿using System.Collections.Generic;
 
-public record ProductOption
+namespace RookiEcom.Modules.Product.Domain.Shared
 {
-    public string Code { get; set; }
-    public List<string> Values { get; set; }
+    public class ProductOption
+    {
+        public string Code { get; set; }
+        public List<string> Values { get; set; }
+
+        public ProductOption()
+        {
+        }
+        public ProductOption(string code, List<string> values)
+        {
+            Code = code;
+            Values = values;
+        }
+    }
 }

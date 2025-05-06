@@ -1,13 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
+        <TargetFrameworks>netstandard2.1;net8.0</TargetFrameworks>
+<!--        <TargetFramework>netstandard2.1</TargetFramework>-->
         <Nullable>enable</Nullable>
         <AssemblyName>RookiEcom.Modules.Product.Domain</AssemblyName>
-
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(TargetFramework)' == 'net8.0'">
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+    
     <ItemGroup>
       <ProjectReference Include="..\..\..\BuildingBlocks\RookiEcom.Domain\RookiEcom.Domain.csproj" />
     </ItemGroup>

@@ -1,5 +1,6 @@
-﻿namespace RookiEcom.Domain.SeedWork;
-
-public interface IAggregateRoot
+﻿namespace RookiEcom.Domain.SeedWork
 {
+    public interface IAggregateRoot
+    {
+    }   
 }
