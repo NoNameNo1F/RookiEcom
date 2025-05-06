@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using FluentValidation;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using RookiEcom.Application.Exceptions;
@@ -17,7 +18,7 @@ public class ApiExceptionHandler : IExceptionHandler
     
     public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
     {
-        ProblemDetails problemDetails;
+        ProblemDetails problemDetails = new ProblemDetails();
         
         switch (exception)
         {
@@ -25,6 +26,16 @@ public class ApiExceptionHandler : IExceptionHandler
                 problemDetails = new ProblemDetails
                 {
                     Title = "Product was Not Found",
+                    Detail = exception.Message,
+                    Status = StatusCodes.Status404NotFound,
+                    Type = nameof(ProductNotFoundException)
+                };
+                break;
+            
+            case ProductSKUExistedException:
+                problemDetails = new ProblemDetails
+                {
+                    Title = "Product SKU exists",
                     Detail = exception.Message,
                     Status = StatusCodes.Status404NotFound,
                     Type = nameof(ProductNotFoundException)
@@ -46,21 +57,22 @@ public class ApiExceptionHandler : IExceptionHandler
                 {
                     Title = "Blob Service Fail To Upload Image",
                     Detail = exception.Message,
-                    Status = StatusCodes.Status404NotFound,
+                    Status = StatusCodes.Status400BadRequest,
                     Type = nameof(FailToUploadException)
                 };
                 break;
-            
-            case InvalidCommandException:
+                
+            case ValidationException validationException:
                 problemDetails = new ProblemDetails
                 {
-                    Title = "Invalid Command Exception",
-                    Detail = exception.Message,
+                    Title = "Validation Error",
+                    Detail = string.Join(", ", validationException.Errors.Select(e => e.ErrorMessage)),
                     Status = StatusCodes.Status400BadRequest,
-                    Type = nameof(InvalidCommandException)
+                    Type = nameof(ValidationException),
+                    Extensions = { { "errors", validationException.Errors.Select(e => new { e.PropertyName, e.ErrorMessage }) } }
                 };
                 break;
-                
+            
             default:
                 problemDetails = new ProblemDetails
                 {
@@ -69,22 +81,10 @@ public class ApiExceptionHandler : IExceptionHandler
                     Status = StatusCodes.Status500InternalServerError,
                     Type = exception.GetType().Name
                 };
-                return false;
+                break;
         }
-        
+
         httpContext.Response.StatusCode = problemDetails.Status ?? StatusCodes.Status500InternalServerError;
-
-        if (exception is InvalidCommandException invalidCommandException)
-        {
-            await httpContext.Response.WriteAsJsonAsync(new ApiResponse
-            {
-                StatusCode = HttpStatusCode.BadRequest,
-                Errors = invalidCommandException.Errors,
-                IsSuccess = false,
-            }, cancellationToken: cancellationToken);
-
-            return true;
-        }
     
         return await _problemDetailsService.TryWriteAsync(new ProblemDetailsContext
         {

@@ -98,7 +98,7 @@ public class ProductsController : ControllerBase
         });
     }
 
-    [HttpGet("{sku}")]
+    [HttpGet("sku/{sku}")]
     [Authorize(Policy = "AdminOnly")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
