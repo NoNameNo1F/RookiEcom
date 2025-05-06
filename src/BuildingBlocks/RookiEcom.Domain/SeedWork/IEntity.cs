@@ -1,6 +1,7 @@
-﻿namespace RookiEcom.Domain.SeedWork;
-
-public interface IEntity<TKey>
+﻿namespace RookiEcom.Domain.SeedWork
 {
-    public TKey Id { get; set; }
+    public interface IEntity<TKey>
+    {
+        public TKey Id { get; set; }
+    }
 }
