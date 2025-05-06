@@ -23,7 +23,7 @@ export class ProductService {
     }
 
     public async getProductBySKU(sku: string): Promise<IProductModel> {
-        const response = await this.client.get(`/api/v1/products/${sku}`) as IApiResponse;
+        const response = await this.client.get(`/api/v1/products/sku/${sku}`) as IApiResponse;
 
         return response.result as IProductModel;
     }

@@ -9,6 +9,7 @@ import { Controller, SubmitHandler, useFieldArray, useForm } from 'react-hook-fo
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import ImageIcon from '@mui/icons-material/Image';
+import { toast } from 'react-toastify';
 
 const MIN_IMAGES = 1;
 const MAX_IMAGES = 5;
@@ -63,7 +64,7 @@ const CreateProductPage: React.FC = () => {
         const newUrls: string[] = [];
         if (imageFiles && imageFiles.length > 0) {
              if (imageFiles.length > MAX_IMAGES) {
-                 alert(`You can only select up to ${MAX_IMAGES} images.`);
+                 toast.warn(`Cannot exceed ${MAX_IMAGES} images.`);
                  return;
              }
             for (let i = 0; i < imageFiles.length; i++) {
@@ -87,6 +88,15 @@ const CreateProductPage: React.FC = () => {
         createProductMutation.mutate(data, {
             onSuccess: () => {
                 navigate('/products');
+            },
+            onError: (error) => {
+                const problemDetails = (error as any)?.response?.data;
+                if (problemDetails?.status === 400) {
+                    toast.error(problemDetails.detail || 'Validation failed');
+                    if (problemDetails.extensions?.errors) {
+                        problemDetails.extensions.errors.forEach((err: any) => toast.error(`${err.propertyName}: ${err.errorMessage}`));
+                    }
+                }
             },
         });
     };
@@ -123,7 +133,7 @@ const CreateProductPage: React.FC = () => {
                             <TextField
                                 label="Product Name"
                                 required fullWidth
-                                {...register("name", { required: "Product name is required" })}
+                                {...register('name', { required: 'Product name is required', maxLength: { value: 100, message: 'Name must not exceed 100 characters' } })}
                                 error={!!errors.name}
                                 helperText={errors.name?.message}
                                 disabled={isLoading}
@@ -131,7 +141,7 @@ const CreateProductPage: React.FC = () => {
                              <TextField
                                 label="SKU (Stock Keeping Unit)"
                                 required fullWidth
-                                {...register("sku", { required: "SKU is required" })}
+                                {...register('sku', { required: 'SKU is required', maxLength: { value: 100, message: 'SKU must not exceed 100 characters' } })}
                                 error={!!errors.sku}
                                 helperText={errors.sku?.message}
                                 disabled={isLoading}
@@ -139,7 +149,9 @@ const CreateProductPage: React.FC = () => {
                             <TextField
                                 label="Description"
                                 fullWidth multiline rows={4}
-                                {...register("description")}
+                                {...register('description', { maxLength: { value: 512, message: 'Description must not exceed 512 characters' } })}
+                                error={!!errors.description}
+                                helperText={errors.description?.message}
                                 disabled={isLoading}
                             />
 
@@ -149,12 +161,13 @@ const CreateProductPage: React.FC = () => {
                                 <TextField
                                     label="Price" type="number" required fullWidth
                                     InputProps={{ inputProps: { min: 0.01, step: "any" } }}
-                                    {...register("price", {
-                                        required: "Price is required",
+                                    {...register('price', {
+                                        required: 'Price is required',
                                         valueAsNumber: true,
-                                        min: { value: 0.01, message: "Price must be positive" }
+                                        min: { value: 0.01, message: 'Price must be greater than 0' },
                                     })}
-                                    error={!!errors.price} helperText={errors.price?.message}
+                                    error={!!errors.price}
+                                    helperText={errors.price?.message}
                                     disabled={isLoading}
                                 />
                                 <TextField
@@ -175,7 +188,8 @@ const CreateProductPage: React.FC = () => {
                                         valueAsNumber: true,
                                         min: { value: 0, message: "Stock cannot be negative" }
                                     })}
-                                    error={!!errors.stock} helperText={errors.stock?.message}
+                                    error={!!errors.stock}
+                                    helperText={errors.stock?.message}
                                     disabled={isLoading}
                                 />
                             </Stack>
@@ -267,7 +281,7 @@ const CreateProductPage: React.FC = () => {
                                                 label="Category"
                                                 {...field}
                                                 value={field.value || ''}
-                                                onChange={(e) => field.onChange(Number(e.target.value) || 0)} 
+                                                onChange={(e) => field.onChange(Number(e.target.value) || 0)}
                                                 disabled={isLoading || categoriesLoading}
                                             >
                                                 <MenuItem value={0} disabled><em>Select Category...</em></MenuItem>
@@ -304,8 +318,13 @@ const CreateProductPage: React.FC = () => {
                                             {...register("imageFiles", {
                                                  required: `At least ${MIN_IMAGES} image is required`,
                                                  validate: {
-                                                      min: files => (files?.length ?? 0) >= MIN_IMAGES || `Requires minimum ${MIN_IMAGES} images`,
-                                                      max: files => (files?.length ?? 0) <= MAX_IMAGES || `Cannot exceed ${MAX_IMAGES} images`,
+                                                    min: files => (files?.length ?? 0) >= MIN_IMAGES || `Requires minimum ${MIN_IMAGES} images`,
+                                                    max: files => (files?.length ?? 0) <= MAX_IMAGES || `Cannot exceed ${MAX_IMAGES} images`,
+                                                    type: (files) =>
+                                                    !files ||
+                                                    files.length === 0 ||
+                                                    Array.from(files).every((file) => file.type.startsWith('image/')) ||
+                                                    'All files must be images (e.g., JPEG, PNG)',
                                                  }
                                              })}
                                         />
@@ -333,7 +352,7 @@ const CreateProductPage: React.FC = () => {
                             </Stack>
                         </Paper>
                     </Grid>
-                </Grid>       
+                </Grid>
             
             </Box>
         </Paper>
