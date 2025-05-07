@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RookiEcom.Application.Common;
 using RookiEcom.FrontStore.ViewModels;
 using RookiEcom.Modules.Product.Contracts.Dtos;
 
@@ -31,34 +32,22 @@ public class HomeController : Controller
         CancellationToken cancellationToken = default)
     {
         var productsTask =  _productService.GetProducts(pageNumber, pageSize, cancellationToken);
+        var productsFeatureTask =  _productService.GetFeaturedProducts(pageNumber, pageSize, cancellationToken);
         var categoriesTask = _categoryService.GetAllCategories(1, 50, cancellationToken);
         
-        await Task.WhenAll(productsTask, categoriesTask);
+        await Task.WhenAll(productsTask, productsFeatureTask, categoriesTask);
         
-        var categories = await categoriesTask;
-        var products = await productsTask;
-        var productsFeature = products?.Items.Where(p => p.IsFeature).Take(5);
-        var latest = products?.Items.OrderByDescending(p => p.Id).Take(10);
-    
+        var categoriesPaged = await categoriesTask;
+        var productsFeaturePaged = await productsFeatureTask;
+        var productsPaged = await productsTask;
         
         var viewModel = new HomeViewModel
         {
-            Products = latest != null
-                ? new Pagination<ProductDto>
-                {
-                    Items = latest,
-                    Count = latest.Count()
-                }
-                : null,
-            ProductFeatures = productsFeature != null
-                ? new Pagination<ProductDto>
-                {
-                    Count = productsFeature.Count(),
-                    Items = productsFeature
-                }
-                : null,
-            Categories = categories?.Items ?? Enumerable.Empty<CategoryDto>()
+            ProductFeatures = productsFeaturePaged,
+            Products = productsPaged,
+            Categories = categoriesPaged?.Items 
         };
+        
         return View(viewModel);
     }
     

@@ -7,26 +7,18 @@
 
     @if (Model != null)
     {
-        @foreach (var category in Model.Where(c => c.ParentId == null).OrderBy(c => c.Name).Take(8))
-        {
-            <li class="nav-item">
-                 <a class="nav-link" asp-controller="Products" asp-action="ByCategory" asp-route-categoryId="@category.Id">@category.Name</a>
-            </li>
-        }
-
-        @if (Model.Count(c => c.ParentId == null) > 8)
-        {
-             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMoreCategories" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    More Categories
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMoreCategories">
-                    @foreach (var category in Model.Where(c => c.ParentId == null).OrderBy(c => c.Name).Skip(8))
-                    {
-                        <li><a class="dropdown-item" asp-controller="Products" asp-action="ByCategory" asp-route-categoryId="@category.Id">@category.Name</a></li>
-                    }
-                </ul>
-            </li>
-        }
+        <section class="category-links-section mb-5 text-center">
+            <h2 class="mb-4">Shop By Category</h2>
+            <div class="d-flex flex-wrap gap-3 justify-content-center">
+                @foreach (var category in Model.OrderBy(c => c.Name))
+                {
+                    <a asp-controller="Products" asp-action="ByCategory" asp-route-categoryId="@category.Id" class="category-item">
+                        <img src="@(category.Image ?? "https://thaka.bing.com/th/id/OIP.Hr0u82lNFTolS6JizM6LaAHaHa?rs=1&pid=ImgDetMain")" alt="@category.Name">
+                        <i class="bi bi-tag me-1"></i>
+                        <span class="category-name-text">@category.Name</span>
+                    </a>
+                }
+            </div>
+        </section>
     }
 </ul>

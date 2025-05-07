@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using RookiEcom.Application.Common;
 using RookiEcom.Modules.Product.Contracts.Dtos;
 
 namespace RookiEcom.FrontStore.Infrastructure.Services;
@@ -41,14 +42,14 @@ public class CategoryService : ICategoryService
         }
     }
     
-    public async Task<Pagination<CategoryDto>?> GetAllCategories(int pageNumber = 1, int pageSize = 100, CancellationToken cancellationToken = default)
+    public async Task<PagedResult<CategoryDto>?> GetAllCategories(int pageNumber = 1, int pageSize = 100, CancellationToken cancellationToken = default)
     {
         var request = $"/api/v1/categories?pageNumber={pageNumber}&pageSize={pageSize}";
         
         try
         {
             var response = await _httpClient.GetAsync(request, cancellationToken);
-            return await ReadApiResponse<Pagination<CategoryDto>>(response, cancellationToken);
+            return await ReadApiResponse<PagedResult<CategoryDto>>(response, cancellationToken);
         }
         catch (HttpRequestException ex)
         {

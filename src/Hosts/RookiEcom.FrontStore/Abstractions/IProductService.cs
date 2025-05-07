@@ -1,16 +1,17 @@
-﻿using RookiEcom.Modules.Product.Contracts.Dtos;
+﻿using RookiEcom.Application.Common;
+using RookiEcom.Modules.Product.Contracts.Dtos;
 
 namespace RookiEcom.FrontStore.Abstractions;
 
 public interface IProductService
 {
-    Task<Pagination<ProductDto>?> GetProducts(int pageNumber, int pageSize, CancellationToken cancellationToken);
-    Task<Pagination<ProductDto>?> GetProductsByCategoryId(int categoryId, 
+    Task<PagedResult<ProductDto>?> GetProducts(int pageNumber, int pageSize, CancellationToken cancellationToken);
+    Task<PagedResult<ProductDto>?> GetProductsByCategoryId(int categoryId, 
         int pageNumber, 
         int pageSize, 
         CancellationToken cancellationToken = default);
     Task<ProductDto?> GetProductById(int productId, CancellationToken cancellationToken = default);
-    Task<Pagination<ProductDto>?> GetFeaturedProducts(
+    Task<PagedResult<ProductDto>?> GetFeaturedProducts(
         int pageNumber,
         int pageSize, 
         CancellationToken cancellationToken = default);
