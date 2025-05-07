@@ -7,8 +7,8 @@ public class PageData
     public int TotalPages { get; }
     public int TotalCount { get; }
 
-    public bool HasPrevious => PageNumber > 0;
-    public bool HasNext => PageNumber < TotalPages - 1;
+    public bool HasPrevious => PageNumber > 1;
+    public bool HasNext => PageNumber < TotalPages;
 
     public PageData(int pageNumber, int pageSize, int totalCount)
     {

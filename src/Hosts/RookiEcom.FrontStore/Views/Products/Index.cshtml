@@ -1,10 +1,9 @@
-﻿@model RookiEcom.FrontStore.Common.Pagination<RookiEcom.Modules.Product.Contracts.Dtos.ProductDto>
+﻿@model RookiEcom.Application.Common.PagedResult<RookiEcom.Modules.Product.Contracts.Dtos.ProductDto>
 @{
     ViewData["Title"] = "All Products";
-    // Defaults for pagination calculation if Model is null
-    var currentPage = Model?.PageNumber ?? 1;
-    var pageSize = Model?.PageSize ?? 12;
-    var totalItems = Model?.Count ?? 0;
+    var currentPage = Model?.PageData?.PageNumber ?? 1;
+    var pageSize = Model?.PageData?.PageSize ?? 12;
+    var totalItems = Model?.PageData?.TotalCount ?? 0;
     var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
 }
 
@@ -18,7 +17,7 @@
 
 @if (Model?.Items.Any() == true)
 {
-    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-3"> @* Adjust columns as needed *@
+    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-3">
         @foreach (var product in Model.Items)
         {
             <div class="col">
@@ -27,25 +26,23 @@
         }
     </div>
 
-    @* Pagination *@
-    <nav aria-label="Page navigation" class="mt-4 d-flex justify-content-center">
-        @if (totalPages > 1)
-        {
+    @if (totalPages > 1)
+    {
+        <nav aria-label="Page navigation" class="mt-4 d-flex justify-content-center">
             <ul class="pagination">
-                <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                <li class="page-item @(Model.PageData?.HasPrevious == false ? "disabled" : "")">
                     <a class="page-link" asp-action="Index" asp-route-pageNumber="@(currentPage - 1)" asp-route-pageSize="@pageSize">Previous</a>
                 </li>
-                @* Consider generating only a subset of page numbers for large results *@
                 @for (int i = 1; i <= totalPages; i++)
                 {
                     <li class="page-item @(i == currentPage ? "active" : "")"><a class="page-link" asp-action="Index" asp-route-pageNumber="@i" asp-route-pageSize="@pageSize">@i</a></li>
                 }
-                <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+                <li class="page-item @(Model.PageData?.HasNext == false ? "disabled" : "")">
                     <a class="page-link" asp-action="Index" asp-route-pageNumber="@(currentPage + 1)" asp-route-pageSize="@pageSize">Next</a>
                 </li>
             </ul>
-        }
-    </nav>
+        </nav>
+    }
 }
 else
 {

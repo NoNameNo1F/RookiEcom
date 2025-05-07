@@ -5,7 +5,7 @@
 
 @if (Model.ProductFeatures?.Items.Any() == true)
 {
-    <div id="featuredProcuctCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
+    <div id="featuredProcuctCarousel" class="carousel slide mb-5 shadow-sm" data-bs-ride="carousel">
         <div class="carousel-indicators">
             @for (int i = 0; i < Model.ProductFeatures.Items.Count(); i++)
             {
@@ -22,69 +22,83 @@
             @{ var firstFeature = true; }
             @foreach (var product in Model.ProductFeatures.Items)
             {
-                <div class="carousel-item @(firstFeature ? "active" : "")" data-bs-interval="5000" style="background-color: #f1f1f1;">
+                <div class="carousel-item @(firstFeature ? "active" : "")" 
+                     data-bs-interval="2500" 
+                     style="background-color: #f8f9fa;">
                     <a asp-controller="Products" asp-action="Detail" asp-route-productId="@product.Id">
-                        <img src="@(product.Images?.FirstOrDefault() ?? "https://thaka.bing.com/th/id/OIP.Hr0u82lNFTolS6JizM6LaAHaHa?rs=1&pid=ImgDetMain")"
+                        <img src="@(product.Images?.FirstOrDefault() ?? 
+                                    "https://thaka.bing.com/th/id/OIP.Hr0u82lNFTolS6JizM6LaAHaHa?rs=1&pid=ImgDetMain")"
                              class="d-block w-100" alt="@product.Name" 
                              style="aspect-ratio: 16/5; 
                              object-fit: contain;
                              height: 400px;"
-                             >
-                        <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 p-3 rounded">
+                        >
+                        <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-75 p-3 rounded">
                             <h5>@product.Name</h5>
                             <p>Check out this featured product!</p>
                         </div>
-                        
                     </a>
                 </div>
+                firstFeature = false;
             }
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#featuredProductCarousel" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#featuredProductCarousel" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
+        <button 
+            class="carousel-control-prev" 
+            type="button" 
+            data-bs-target="#featuredProductCarousel" 
+            data-bs-slide="prev"
+            >
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+        </button>
+        <button 
+            class="carousel-control-next" 
+            type="button" 
+            data-bs-target="#featuredProductCarousel" 
+            data-bs-slide="next"
+            >
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+        </button>
     </div>
 }
 
-@if (Model.Categories.Any())
-{
-    <section class="category-section mb-4">
-        <h2 class="text-center mb-4">Shop By Category</h2>
-        <div class="row row-cols-4 row-cols-md-6 row-cols-lg-8 g-3 justify-content-center">
-            @foreach (var category in Model.Categories.Where(c => c.ParentId == null).Take(16))
-            {
-                <div class="col">
-                    <a asp-controller="Products" asp-action="ByCategory" asp-route-categoryId="@category.Id" class="category-item">
-                        <img src="@(category.Image ?? "https://thaka.bing.com/th/id/OIP.Hr0u82lNFTolS6JizM6LaAHaHa?rs=1&pid=ImgDetMain")" alt="@category.Name">
-                        <span>@category.Name</span>
-                    </a>
-                </div>
-            }
-        </div>
-    </section>
-}
+@await Component.InvokeAsync("CategoryMenu")
 
-
-@if (Model.Products?.Items.Any() == true)
+@if (Model.Categories?.Any() == true)
 {
-    <h2 class="mt-4 mb-3 text-center">New Arrivals</h2>
-    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-3">
-        @foreach (var product in Model.Products.Items)
+    <div class="products-by-category">
+        @foreach (var category in Model.Categories
+                      .OrderBy(c => c.Name))
         {
-            <div class="col">
-                @await Html.PartialAsync("_ProductCard", product)
-            </div>
+            var featuredProductsForCategory = Model.Products?.Items
+                .Where(p => p.CategoryId == category.Id && p.IsFeature)
+                .Take(5);
+            
+            @if (featuredProductsForCategory?.Any() == true)
+            {
+                <section class="category-product-row mb-5">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h2 class="h4 mb-0">Featured in @category.Name</h2>
+                        <a asp-controller="Products" asp-action="ByCategory" asp-route-categoryId="@category.Id" class="btn btn-sm btn-outline-primary">
+                            View All in @category.Name <i class="bi bi-arrow-right-short"></i>
+                        </a>
+                    </div>
+                    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-4">
+                        @foreach (var product in featuredProductsForCategory)
+                        {
+                            <div class="col">
+                                @await Html.PartialAsync("_ProductCard", product)
+                            </div>
+                        }
+                    </div>
+                </section>
+                 <hr class="my-5">
+            }
         }
     </div>
-    <div class="text-center mt-4">
-        <a asp-controller="Products" asp-action="Index" class="btn btn-outline-primary">View All Products</a>
-    </div>
 }
-else if (Model.ProductFeatures?.Items.Any() != true && Model.Categories.Any())
+else
 {
     <p class="text-center mt-5">No products found.</p>
 }

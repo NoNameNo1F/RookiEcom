@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using RookiEcom.Application.Common;
 using RookiEcom.Modules.Product.Contracts.Dtos;
 
 namespace RookiEcom.FrontStore.Infrastructure.Services;
@@ -41,7 +42,7 @@ public class ProductService : IProductService
         }
     }
     
-    public async Task<Pagination<ProductDto>?> GetProducts(
+    public async Task<PagedResult<ProductDto>?> GetProducts(
         int pageNumber,
         int pageSize,
         CancellationToken cancellationToken)
@@ -51,7 +52,7 @@ public class ProductService : IProductService
         try
         {
             var response = await _httpClient.GetAsync(request, cancellationToken);
-            return await ReadApiResponse<Pagination<ProductDto>>(response, cancellationToken);
+            return await ReadApiResponse<PagedResult<ProductDto>>(response, cancellationToken);
         }
         catch (HttpRequestException ex)
         {
@@ -60,14 +61,14 @@ public class ProductService : IProductService
         }
     }
 
-    public async Task<Pagination<ProductDto>?> GetProductsByCategoryId(int categoryId, int pageNumber, int pageSize,
+    public async Task<PagedResult<ProductDto>?> GetProductsByCategoryId(int categoryId, int pageNumber, int pageSize,
         CancellationToken cancellationToken = default)
     {
         var request = $"/api/v1/products/c{categoryId}?pageNumber={pageNumber}&pageSize={pageSize}";
         try
         {
             var response = await _httpClient.GetAsync(request, cancellationToken);
-            return await ReadApiResponse<Pagination<ProductDto>>(response, cancellationToken);
+            return await ReadApiResponse<PagedResult<ProductDto>>(response, cancellationToken);
         }
         catch (HttpRequestException ex)
         {
@@ -91,13 +92,13 @@ public class ProductService : IProductService
         }
     }
 
-    public async Task<Pagination<ProductDto>?> GetFeaturedProducts(int pageNumber, int pageSize, CancellationToken cancellationToken = default)
+    public async Task<PagedResult<ProductDto>?> GetFeaturedProducts(int pageNumber, int pageSize, CancellationToken cancellationToken = default)
     {
         var request = $"/api/v1/products/feature";
         try
         {
             var response = await _httpClient.GetAsync(request, cancellationToken);
-            return await ReadApiResponse<Pagination<ProductDto>>(response, cancellationToken);
+            return await ReadApiResponse<PagedResult<ProductDto>>(response, cancellationToken);
         }
         catch (HttpRequestException ex)
         {
