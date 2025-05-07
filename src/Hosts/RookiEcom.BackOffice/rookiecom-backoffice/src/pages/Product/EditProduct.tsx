@@ -114,6 +114,15 @@ const EditProductPage: React.FC = () => {
         
         updateProductMutation.mutate(data, {
             onSuccess: () => navigate('/products'),
+            onError: (error) => {
+                const problemDetails = (error as any)?.response?.data;
+                if (problemDetails?.status === 400) {
+                    toast.error(problemDetails.detail || 'Validation failed');
+                    if (problemDetails.extensions?.errors) {
+                        problemDetails.extensions.errors.forEach((err: any) => toast.error(`${err.propertyName}: ${err.errorMessage}`));
+                    }
+                }
+            },
         });
     };
     
@@ -164,7 +173,7 @@ const EditProductPage: React.FC = () => {
                                <TextField
                                 label="Product Name"
                                 required fullWidth
-                                {...register("name", { required: "Product name is required" })}
+                                {...register('name', { required: 'Product name is required', maxLength: { value: 100, message: 'Name must not exceed 100 characters' } })}
                                 error={!!errors.name}
                                 helperText={errors.name?.message}
                                 disabled={isLoading}
@@ -172,15 +181,19 @@ const EditProductPage: React.FC = () => {
                              <TextField
                                 label="SKU (Stock Keeping Unit)"
                                 required fullWidth
-                                {...register("sku", { required: "SKU is required" })}
+                                {...register('sku', { required: 'SKU is required', maxLength: { value: 100, message: 'SKU must not exceed 100 characters' } })}
                                 error={!!errors.sku}
                                 helperText={errors.sku?.message}
                                 disabled={isLoading}
                             />
                             <TextField
                                 label="Description"
-                                fullWidth multiline rows={4}
-                                {...register("description")}
+                                fullWidth
+                                multiline
+                                rows={4}
+                                {...register('description', { maxLength: { value: 512, message: 'Description must not exceed 512 characters' } })}
+                                error={!!errors.description}
+                                helperText={errors.description?.message}
                                 disabled={isLoading}
                             />
 
@@ -191,13 +204,13 @@ const EditProductPage: React.FC = () => {
                             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                                 <TextField
                                     label="Price" type="number" required fullWidth
-                                    InputProps={{ inputProps: { min: 0.01, step: "any" } }}
+                                    InputProps={{ inputProps: { min: 0.01, step: 'any' } }}
                                     {...register("price", {
                                         required: "Price is required",
                                         valueAsNumber: true,
-                                        min: { value: 0.01, message: "Price must be positive" }
+                                        min: { value: 0.01, message: 'Price must be greater than 0' }
                                     })}
-                                    error={!!errors.price} helperText={errors.price?.message}
+                                    error={!!errors.price} helperText={errors.price?.message || "Original price before discount"}
                                     disabled={isLoading}
                                 />
                                 <TextField
@@ -232,14 +245,20 @@ const EditProductPage: React.FC = () => {
                                         <Stack direction="row" spacing={1} key={field.id} alignItems="center">
                                             <TextField
                                                 label={`Attribute ${index + 1} Code`} size="small" sx={{flexGrow: 1}}
-                                                {...register(`productAttributes.${index}.code`, { required: 'Attribute code required' })}
+                                                {...register(`productAttributes.${index}.code`, {
+                                                required: 'Attribute code is required',
+                                                maxLength: { value: 50, message: 'Code must not exceed 50 characters' },
+                                                })}
                                                 error={!!errors.productAttributes?.[index]?.code}
                                                 helperText={errors.productAttributes?.[index]?.code?.message}
                                                 disabled={isLoading}
                                             />
                                             <TextField
                                                 label={`Attribute ${index + 1} Value`} size="small" sx={{flexGrow: 2}}
-                                                {...register(`productAttributes.${index}.value`, { required: 'Attribute value required' })}
+                                                {...register(`productAttributes.${index}.value`, {
+                                                required: 'Attribute value is required',
+                                                maxLength: { value: 200, message: 'Value must not exceed 200 characters' },
+                                                })}
                                                 error={!!errors.productAttributes?.[index]?.value}
                                                 helperText={errors.productAttributes?.[index]?.value?.message}
                                                 disabled={isLoading}
@@ -263,7 +282,10 @@ const EditProductPage: React.FC = () => {
                                 <Stack spacing={2}>
                                     <TextField
                                         label="Option Type Code" placeholder="e.g., SIZE or COLOR" fullWidth size="small"
-                                        {...register("variationOption.code", { required: 'Option type code is required' })}
+                                        {...register('variationOption.code', {
+                                        required: 'Option type code is required',
+                                        maxLength: { value: 50, message: 'Code must not exceed 50 characters' },
+                                        })}
                                         error={!!errors.variationOption?.code}
                                         helperText={errors.variationOption?.code?.message}
                                         disabled={isLoading}
@@ -274,7 +296,10 @@ const EditProductPage: React.FC = () => {
                                             <Controller
                                                 name={`variationOption.values.${index}`}
                                                 control={control}
-                                                rules={{ required: 'Option value required' }}
+                                                rules={{
+                                                    required: 'Option value is required',
+                                                    maxLength: { value: 100, message: 'Value must not exceed 100 characters' },
+                                                }}
                                                 render={({ field: controllerField, fieldState }) => (
                                                     <TextField
                                                         label={`Value ${index + 1}`}
@@ -449,12 +474,15 @@ const EditProductPage: React.FC = () => {
                                                     {...register("newImageFiles", {
                                                         validate: (files) => {
                                                             const newCount = files?.length ?? 0;
-                                                            
                                                             const oldCount = getValues("oldImages")?.length ?? 0;
                                                             const total = oldCount + newCount;
+
                                                             if (total > MAX_IMAGES) return `Cannot exceed ${MAX_IMAGES} total images.`;
                                                     
-                                                            return true;
+                                                            if (!files || files.length === 0 || Array.from(files).every((file) => file.type.startsWith('image/')))
+                                                                return true;
+
+                                                            return 'All files must be images (e.g., JPEG, PNG)';
                                                         }
                                                     })}
                                                     onClick={(event: React.MouseEvent<HTMLInputElement>) => {

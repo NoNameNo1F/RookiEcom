@@ -8,8 +8,6 @@ const drawerWidth = 240;
 const DashboardLayout: React.FC = () => {
     const theme = useTheme();
 
-    const isMdUp = useMediaQuery(theme.breakpoints.up('md'));
-
     const [tabletOpen, setTabletOpen] = useState(false);
 
     const handleDrawerToggle = () => {
@@ -32,15 +30,14 @@ const DashboardLayout: React.FC = () => {
             sx={{
                 flexGrow: 1,
                 p: 3,
-                mt: {
-              // Estimate AppBar height, or use theme.mixins.toolbar
-              xs: '56px', // Default mobile AppBar height
-              sm: '64px'  // Default desktop AppBar height
-          }
-                // width: { sm: `calc(100% - ${drawerWidth}px)` },
-                // mt: `${theme.mixins.toolbar.minHeight}px`,
-                // overflowX: 'hidden',
-                // boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
+                mt: {  
+                    xs: '56px',
+                    sm: '64px'
+                },
+                width: { sm: `calc(100% - ${drawerWidth}px)` },
+                // ml: `${theme.mixins.toolbar.minHeight}px`,
+                overflowX: 'hidden',
+                boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
                 // [theme.breakpoints.up('md')]: {
                 //     mt: '64px',
                 //     marginLeft: `${drawerWidth}px`,
