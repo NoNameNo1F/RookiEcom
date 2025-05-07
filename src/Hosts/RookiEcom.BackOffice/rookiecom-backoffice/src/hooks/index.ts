@@ -16,5 +16,5 @@ export {
     useUpdateProduct,
     useDeleteProduct,
     useGetCustomers,
-    useGetProfile
+    useGetProfile,
 };

@@ -5,13 +5,14 @@ import { apiWebClient, ProblemDetailsError } from "../apis/apiClient";
 import { toast } from "react-toastify";
 
 const productService = new ProductService(apiWebClient);
-export const useGetProductsPaging = (pageNumber: number = 1, pageSize: number = 25) => {
+export const useGetProductsPaging = (pageNumber: number = 1, pageSize: number = 25, ) => {
     return useQuery({
         queryKey: ['products', pageNumber, pageSize],
         queryFn: () =>
             productService.getProductsPaging(pageNumber, pageSize),
     });
 };
+
 
 export const useGetProductsByCategory = (categoryId: number, pageNumber: number = 1, pageSize: number = 25) => {
     return useQuery({
@@ -34,7 +35,7 @@ export const useGetProductBySKU = (sku: string) => {
 export const useCreateProduct = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (product: IProductCreateForm) => 
+        mutationFn: (product: IProductCreateForm) =>
             productService.createProduct(product),
         onSuccess: () => {
             toast.success('Product created successfully!');
