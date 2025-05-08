@@ -17,6 +17,9 @@ builder.Services.AddInfrastructure(configuration);
 builder.Services.AddProductModule(
     opt => configuration.GetSection("ConnectionString").Bind(opt));
 
+builder.Services.AddCartModule(
+    opt => configuration.GetSection("ConnectionString").Bind(opt));
+
 builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<ApiExceptionHandler>();
 builder.Services.AddEndpointsApiExplorer();
@@ -45,7 +48,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("AllowClients");
 app.UseHttpsRedirection();
-app.UseExceptionHandler();
+app.UseExceptionHandler(_ => { });
 
 app.UseAuthentication();
 app.UseAuthorization();

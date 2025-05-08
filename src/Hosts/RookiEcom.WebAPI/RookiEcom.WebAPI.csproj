@@ -29,6 +29,9 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\BuildingBlocks\RookiEcom.Infrastructure\RookiEcom.Infrastructure.csproj" />
+      <ProjectReference Include="..\..\Modules\Cart\RookiEcom.Modules.Cart.Application\RookiEcom.Modules.Cart.Application.csproj" />
+        <ProjectReference Include="..\..\Modules\Cart\RookiEcom.Modules.Cart.Domain\RookiEcom.Modules.Cart.Domain.csproj" />
+        <ProjectReference Include="..\..\Modules\Cart\RookiEcom.Modules.Cart.Infrastructure\RookiEcom.Modules.Cart.Infrastructure.csproj" />
       <ProjectReference Include="..\..\Modules\ProductModule\RookiEcom.Modules.Product.Application\RookiEcom.Modules.Product.Application.csproj" />
       <ProjectReference Include="..\..\Modules\ProductModule\RookiEcom.Modules.Product.Contracts\RookiEcom.Modules.Product.Contracts.csproj" />
       <ProjectReference Include="..\..\Modules\ProductModule\RookiEcom.Modules.Product.Infrastructure\RookiEcom.Modules.Product.Infrastructure.csproj" />
