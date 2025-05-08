@@ -97,7 +97,7 @@ public class UpdateCategoryCommandHandler : ICommandHandler<UpdateCategoryComman
 
             await transaction.CommitAsync(cancellationToken);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             await transaction.RollbackAsync(cancellationToken);
             if (newUploadedBlob.HasValue)
@@ -105,7 +105,7 @@ public class UpdateCategoryCommandHandler : ICommandHandler<UpdateCategoryComman
                 await _blobService.DeleteBlob(newUploadedBlob.Value.BlobName, newUploadedBlob.Value.ContainerName);
             }
 
-            throw new ApplicationException($"Failed to update category: {ex.Message}", ex);
+            throw;
         }
     }
 }

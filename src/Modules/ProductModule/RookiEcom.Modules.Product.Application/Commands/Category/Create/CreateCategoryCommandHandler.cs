@@ -70,7 +70,7 @@ public class CreateCategoryCommandHandler : ICommandHandler<CreateCategoryComman
             await _dbContext.SaveChangesAsync(cancellationToken);
             await transaction.CommitAsync(cancellationToken);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             await transaction.RollbackAsync(cancellationToken);
             if (uploadedBlob.HasValue)
@@ -78,7 +78,7 @@ public class CreateCategoryCommandHandler : ICommandHandler<CreateCategoryComman
                 await _blobService.DeleteBlob(uploadedBlob.Value.BlobName, uploadedBlob.Value.ContainerName);
             }
 
-            throw new ApplicationException($"Failed to create category: {ex.Message}", ex);
+            throw;
         }
     }
 }

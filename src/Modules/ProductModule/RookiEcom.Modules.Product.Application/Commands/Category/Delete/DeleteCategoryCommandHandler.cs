@@ -68,10 +68,10 @@ public class DeleteCategoryCommandHandler : ICommandHandler<DeleteCategoryComman
 
             await transaction.CommitAsync(cancellationToken);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             await transaction.RollbackAsync(cancellationToken);
-            throw new ApplicationException($"Failed to delete category: {ex.Message}", ex);
+            throw;
         }
     }
 }

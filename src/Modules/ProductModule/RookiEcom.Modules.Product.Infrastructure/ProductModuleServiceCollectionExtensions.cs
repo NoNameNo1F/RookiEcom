@@ -23,6 +23,8 @@ public static class ProductModuleServiceCollectionExtensions
         services.AddScoped<ProductContext, ProductContextImpl>();
         services.AddScoped<ProductService>();
         services.AddScoped<CategoryService>();
+        services.AddScoped<ProductRatingService>();
+        
         return services;
     }
 }

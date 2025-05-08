@@ -49,11 +49,11 @@ public class DeleteProductCommandHandler : ICommandHandler<DeleteProductCommand>
 
             await transaction.CommitAsync(cancellationToken);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             await transaction.RollbackAsync(cancellationToken);
 
-            throw new ApplicationException($"Failed to delete product: {ex.Message}", ex);
+            throw;
         }
     }
 }

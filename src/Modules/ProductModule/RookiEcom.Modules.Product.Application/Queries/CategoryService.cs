@@ -53,21 +53,23 @@ public class CategoryService
     {
         var query = @"
                     WITH CategoryTree AS (
-                        SELECT Id, Name, Description, ParentId, IsPrimary, Image, HasChild
-                        FROM Categories
+                        SELECT Id, Name, Description, ParentId, IsPrimary, Image, HasChild, CreatedDateTime, UpdatedDateTime
+                        FROM [catalog].Categories
                         WHERE Id = @categoryId
                         UNION ALL
-                        SELECT c.Id, c.Name, c.Description, c.ParentId, c.IsPrimary, c.Image, c.HasChild
-                        FROM Categories c
+                        SELECT c.Id, c.Name, c.Description, c.ParentId, c.IsPrimary, c.Image, c.HasChild, c.CreatedDateTime, c.UpdatedDateTime
+                        FROM [catalog].Categories c
                         INNER JOIN CategoryTree ct ON c.Id = ct.ParentId
                     )
                     SELECT * FROM CategoryTree
                     ORDER BY CASE WHEN ParentId IS NULL THEN 0 ELSE 1 END";
 
-        return await _dbContext.Categories
+        var categories =  await _dbContext.Categories
             .FromSqlRaw(query, new Microsoft.Data.SqlClient.SqlParameter("@categoryId", categoryId))
-            .Select(ToCategoryDto())
             .ToListAsync(cancellationToken);
+        
+        Func<Category, CategoryDto> mapToDto = ToCategoryDto().Compile();
+        return categories.Select(mapToDto).ToList();
     }
 
     public async Task<CategoryDto> GetCategoryById(int categoryId, CancellationToken cancellationToken)
