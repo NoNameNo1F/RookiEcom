@@ -1,6 +1,5 @@
 ﻿using System.Text.Json;
 using RookiEcom.Application.Common;
-using RookiEcom.FrontStore.Abstractions;
 using RookiEcom.Modules.Product.Contracts.Dtos;
 
 namespace RookiEcom.FrontStore.Infrastructure.Services;
