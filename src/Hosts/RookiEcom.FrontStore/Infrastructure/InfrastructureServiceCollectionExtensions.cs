@@ -21,6 +21,7 @@ public static class InfrastructureServiceCollectionExtensions
         services.AddScoped<ICategoryService, CategoryService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IProductRatingService, ProductRatingService>();
+        services.AddScoped<ICartService, CartService>();
 
         return services;
     }

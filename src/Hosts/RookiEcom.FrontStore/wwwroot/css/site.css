@@ -248,11 +248,19 @@ a:hover {
   border-top-left-radius: var(--rke-border-radius-lg);
   border-top-right-radius: var(--rke-border-radius-lg);
 }
-.product-card .card-body {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  padding: 1rem;
+
+.product-card-bottom {
+  position: relative;
+  z-index: 2;
+}
+
+
+.product-card-title-link {
+  color: var(--rke-text-dark);
+}
+.product-card-title-link:hover {
+  color: var(--rke-primary);
+  text-decoration: none;
 }
 .product-card .card-title {
   font-size: 1rem;
@@ -790,4 +798,61 @@ a:hover {
 .product-card h5.card-title a.stretched-link,
 .product-card h5.card-title a.stretched-link:hover {
   text-decoration: none !important;
+}
+
+.toast-container {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  z-index: 1100;
+}
+
+.toast {
+  display: none;
+  opacity: 0;
+  min-width: 250px;
+  max-width: 350px;
+  margin-bottom: 0.5rem;
+  background-color: rgba(33, 37, 41, 0.85);
+  color: #fff;
+  text-align: left;
+  border-radius: var(--rke-border-radius-sm);
+  padding: 0.75rem 1rem;
+  box-shadow: var(--rke-box-shadow);
+  transition: opacity 0.5s ease-in-out;
+}
+
+.toast.show {
+  display: block;
+  opacity: 1;
+}
+
+.toast.success {
+  background-color: rgba(76, 175, 80, 0.9);
+}
+
+.toast.error {
+  background-color: rgba(244, 67, 54, 0.9);
+}
+
+.toast-body {
+  padding: 0;
+  font-size: 0.9rem;
+}
+
+.toast-close-button {
+  float: right;
+  font-size: 1.2rem;
+  font-weight: bold;
+  line-height: 1;
+  color: #fff;
+  text-shadow: 0 1px 0 #000;
+  opacity: 0.5;
+  background: transparent;
+  border: 0;
+  padding: 0 0 0 0.75rem;
+  cursor: pointer;
+}
+.toast-close-button:hover {
+  opacity: 0.8;
 }
