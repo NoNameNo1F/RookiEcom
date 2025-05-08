@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="11.11.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.15" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\RookiEcom.Application\RookiEcom.Application.csproj" />
+    <ProjectReference Include="..\RookiEcom.Modules.Cart.Contracts\RookiEcom.Modules.Cart.Contracts.csproj" />
+    <ProjectReference Include="..\RookiEcom.Modules.Cart.Domain\RookiEcom.Modules.Cart.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
