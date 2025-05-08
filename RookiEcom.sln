@@ -35,6 +35,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RookiEcom.Modules.Product.A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RookiEcom.Modules.Product.Contracts", "src\Modules\ProductModule\RookiEcom.Modules.Product.Contracts\RookiEcom.Modules.Product.Contracts.csproj", "{8495ACBA-A65F-4DE6-B19B-E396D0F98E63}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cart", "Cart", "{B5EF8E0C-98E6-4CC7-99BA-C50F2FDD8005}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RookiEcom.Modules.Cart.Application", "src\Modules\Cart\RookiEcom.Modules.Cart.Application\RookiEcom.Modules.Cart.Application.csproj", "{8DFD2172-2B1B-4B9E-AC1C-517C2D7B8DBD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RookiEcom.Modules.Cart.Domain", "src\Modules\Cart\RookiEcom.Modules.Cart.Domain\RookiEcom.Modules.Cart.Domain.csproj", "{9EBB26B0-EB25-475D-BE38-55F289DCB49B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RookiEcom.Modules.Cart.Infrastructure", "src\Modules\Cart\RookiEcom.Modules.Cart.Infrastructure\RookiEcom.Modules.Cart.Infrastructure.csproj", "{B3327612-6D85-4165-B876-1FEB31D65F0B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RookiEcom.Modules.Cart.Contracts", "src\Modules\Cart\RookiEcom.Modules.Cart.Contracts\RookiEcom.Modules.Cart.Contracts.csproj", "{456ABE2E-ECF2-4E26-AD8E-39BA614651DA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +67,11 @@ Global
 		{9B568626-FF93-4031-8EC4-7229FA38BE55} = {01F286FA-E020-4699-AE85-9CC065BA935A}
 		{6595CDFF-2A66-4BB7-875B-ED1E30EEB8AB} = {9B568626-FF93-4031-8EC4-7229FA38BE55}
 		{8495ACBA-A65F-4DE6-B19B-E396D0F98E63} = {01F286FA-E020-4699-AE85-9CC065BA935A}
+		{B5EF8E0C-98E6-4CC7-99BA-C50F2FDD8005} = {345F54A6-A9FA-4604-A205-5A48998E106E}
+		{8DFD2172-2B1B-4B9E-AC1C-517C2D7B8DBD} = {B5EF8E0C-98E6-4CC7-99BA-C50F2FDD8005}
+		{9EBB26B0-EB25-475D-BE38-55F289DCB49B} = {B5EF8E0C-98E6-4CC7-99BA-C50F2FDD8005}
+		{B3327612-6D85-4165-B876-1FEB31D65F0B} = {B5EF8E0C-98E6-4CC7-99BA-C50F2FDD8005}
+		{456ABE2E-ECF2-4E26-AD8E-39BA614651DA} = {B5EF8E0C-98E6-4CC7-99BA-C50F2FDD8005}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{EBB6E6A4-C20D-4243-826C-498483C4BF89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -103,5 +118,21 @@ Global
 		{8495ACBA-A65F-4DE6-B19B-E396D0F98E63}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8495ACBA-A65F-4DE6-B19B-E396D0F98E63}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8495ACBA-A65F-4DE6-B19B-E396D0F98E63}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8DFD2172-2B1B-4B9E-AC1C-517C2D7B8DBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DFD2172-2B1B-4B9E-AC1C-517C2D7B8DBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DFD2172-2B1B-4B9E-AC1C-517C2D7B8DBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DFD2172-2B1B-4B9E-AC1C-517C2D7B8DBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9EBB26B0-EB25-475D-BE38-55F289DCB49B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9EBB26B0-EB25-475D-BE38-55F289DCB49B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9EBB26B0-EB25-475D-BE38-55F289DCB49B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9EBB26B0-EB25-475D-BE38-55F289DCB49B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3327612-6D85-4165-B876-1FEB31D65F0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3327612-6D85-4165-B876-1FEB31D65F0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3327612-6D85-4165-B876-1FEB31D65F0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3327612-6D85-4165-B876-1FEB31D65F0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{456ABE2E-ECF2-4E26-AD8E-39BA614651DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{456ABE2E-ECF2-4E26-AD8E-39BA614651DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{456ABE2E-ECF2-4E26-AD8E-39BA614651DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{456ABE2E-ECF2-4E26-AD8E-39BA614651DA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

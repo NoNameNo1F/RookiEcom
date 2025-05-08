@@ -1,8 +1,8 @@
-﻿using System.Net;
-using FluentValidation;
+﻿using FluentValidation;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using RookiEcom.Application.Exceptions;
+using RookiEcom.Modules.Cart.Application.Exceptions;
 using RookiEcom.Modules.Product.Application.Exceptions;
 
 namespace RookiEcom.WebAPI.ExceptionHandlers;
@@ -32,12 +32,12 @@ public class ApiExceptionHandler : IExceptionHandler
                 };
                 break;
             
-            case ProductSKUExistedException:
+            case ProductSkuExistedException:
                 problemDetails = new ProblemDetails
                 {
                     Title = "Product SKU exists",
                     Detail = exception.Message,
-                    Status = StatusCodes.Status404NotFound,
+                    Status = StatusCodes.Status400BadRequest,
                     Type = nameof(ProductNotFoundException)
                 };
                 break;
@@ -70,6 +70,16 @@ public class ApiExceptionHandler : IExceptionHandler
                     Status = StatusCodes.Status400BadRequest,
                     Type = nameof(ValidationException),
                     Extensions = { { "errors", validationException.Errors.Select(e => new { e.PropertyName, e.ErrorMessage }) } }
+                };
+                break;
+            
+            case CartNotFoundException:
+                problemDetails = new ProblemDetails
+                {
+                    Title = "User Cart was Not Found",
+                    Detail = exception.Message,
+                    Status = StatusCodes.Status404NotFound,
+                    Type = nameof(CartNotFoundException)
                 };
                 break;
             
