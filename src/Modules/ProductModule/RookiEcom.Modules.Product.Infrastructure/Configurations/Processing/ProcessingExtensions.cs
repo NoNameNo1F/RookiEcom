@@ -11,10 +11,6 @@ public static class ProcessingExtensions
     {
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assemblies.Application));
         services.AddValidatorsFromAssembly(Assemblies.Application);
-
-        services.AddScoped<ProductService>();
-        services.AddScoped<CategoryService>();
-        services.AddScoped<ProductRatingService>();
         
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingCommandHandlerBehaviorWithoutResult<,>));
         return services;

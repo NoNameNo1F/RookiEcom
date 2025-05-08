@@ -71,15 +71,15 @@ public class CreateProductRatingCommandHandler : ICommandHandler<CreateProductRa
             await _dbContext.SaveChangesAsync(cancellationToken);
             await transaction.CommitAsync(cancellationToken);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             await transaction.RollbackAsync(cancellationToken);
             if (uploadedBlobInfo.HasValue)
             {
                 await _blobService.DeleteBlob(uploadedBlobInfo.Value.BlobName, uploadedBlobInfo.Value.ContainerName);
             }
-            
-            throw new ApplicationException($"Failed to create product rating: {ex.Message}", ex);
+
+            throw;
         }
     }
 }

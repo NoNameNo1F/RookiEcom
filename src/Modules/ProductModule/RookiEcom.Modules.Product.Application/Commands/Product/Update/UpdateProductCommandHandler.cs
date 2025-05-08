@@ -67,7 +67,7 @@ public class UpdateProductCommandHandler : ICommandHandler<UpdateProductCommand>
 
             if (product.SKU != request.SKU && await _productContext.Products.AnyAsync(p => p.SKU == request.SKU, cancellationToken))
             {
-                throw new ProductSKUExistedException(request.SKU);
+                throw new ProductSkuExistedException(request.SKU);
             }
             
             product.SKU = request.SKU;
@@ -98,7 +98,7 @@ public class UpdateProductCommandHandler : ICommandHandler<UpdateProductCommand>
 
             await transaction.CommitAsync(cancellationToken);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             await transaction.RollbackAsync(cancellationToken);
 
@@ -107,7 +107,7 @@ public class UpdateProductCommandHandler : ICommandHandler<UpdateProductCommand>
                 await _blobService.DeleteBlob(blobName, containerName);
             }
 
-            throw new ApplicationException($"Failed to update product: {ex.Message}", ex);
+            throw;
         }
     }
 }

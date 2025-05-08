@@ -34,7 +34,7 @@ public class CreateProductCommandHandler : ICommandHandler<CreateProductCommand>
 
         if (await _dbContext.Products.AnyAsync(p => p.SKU == request.SKU, cancellationToken))
         {
-            throw new ProductSKUExistedException(request.SKU);
+            throw new ProductSkuExistedException(request.SKU);
         }
         
         try
@@ -74,7 +74,7 @@ public class CreateProductCommandHandler : ICommandHandler<CreateProductCommand>
             await _dbContext.SaveChangesAsync(cancellationToken);
             await transaction.CommitAsync(cancellationToken);
         }
-        catch (Exception e)
+        catch (Exception)
         {
             await transaction.RollbackAsync(cancellationToken);
             foreach (var (blobName, containerName) in uploadedBlobs)
@@ -82,7 +82,7 @@ public class CreateProductCommandHandler : ICommandHandler<CreateProductCommand>
                 await _blobService.DeleteBlob(blobName, containerName);
             }
 
-            throw new ApplicationException($"Failed to create product: {e.Message}", e);
+            throw;
         }
     }
 }

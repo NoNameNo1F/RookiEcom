@@ -32,8 +32,8 @@ public class ProductRatingService
     
     public async Task<PagedResult<ProductRatingDto>> GetRatingsPaging(
         int productId,
-        int pageSize,
         int pageNumber,
+        int pageSize,
         CancellationToken cancellationToken)
     {
         var product = await _dbContext.Products
