@@ -1,0 +1,56 @@
+# Docker
+# Build a Docker image
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+pool:
+  name: Test
+
+trigger:
+- main
+
+resources:
+- repo: self
+
+variables:
+  tag: '$(Build.BuildId)'
+  frontStoreImageName: 'rookiecom-frontstore'
+  webApiImageName: 'rookiecom-webapi'
+  identityServerImageName: 'rookiecom-identityserver'
+
+stages:
+- stage: Build
+  displayName: Build Docker Images
+  jobs:
+  - job: BuildAllImages
+    displayName: Build Application Images
+    
+    steps:
+    - task: Docker@2
+      displayName: Build WebAPI Image
+      inputs:
+        command: build
+        dockerfile: '$(Build.SourcesDirectory)/src/Hosts/RookiEcom.WebAPI/Dockerfile'
+        buildContext: '$(Build.SourcesDirectory)'
+        repository: $(webApiImageName)
+        tags: |
+          $(tag)
+          latest
+    # - task: Docker@2
+    #   displayName: Build FrontStore image
+    #   inputs:
+    #     command: build
+    #     dockerfile: '$(Build.SourcesDirectory)/src/Hosts/RookiEcom.FrontStore/Dockerfile'
+    #     repository: $(frontStoreImageName)
+    #     tags: |
+    #       $(tag)
+    #       latest
+
+    - task: Docker@2
+      displayName: Build IdentityServer Image
+      inputs:
+        command: build
+        dockerfile: '$(Build.SourcesDirectory)/src/Hosts/RookiEcom.IdentityServer/Dockerfile'
+        buildContext: '$(Build.SourcesDirectory)'
+        repository: $(identityServerImageName)
+        tags: |
+          $(tag)
+          latest
