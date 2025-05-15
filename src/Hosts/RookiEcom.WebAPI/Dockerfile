@@ -15,19 +15,20 @@ COPY ["src/Hosts/RookiEcom.WebAPI/RookiEcom.WebAPI.csproj", "src/Hosts/RookiEcom
 
 # Copy project files for BuildingBlocks
 COPY ["src/BuildingBlocks/RookiEcom.Infrastructure/RookiEcom.Infrastructure.csproj", "src/BuildingBlocks/RookiEcom.Infrastructure/"]
+COPY ["src/BuildingBlocks/RookiEcom.Application/RookiEcom.Application.csproj", "src/BuildingBlocks/RookiEcom.Application/"]
+COPY ["src/BuildingBlocks/RookiEcom.Domain/RookiEcom.Domain.csproj", "src/BuildingBlocks/RookiEcom.Domain/"] 
 
 # Copy project files for Cart Module
 COPY ["src/Modules/Cart/RookiEcom.Modules.Cart.Application/RookiEcom.Modules.Cart.Application.csproj", "src/Modules/Cart/RookiEcom.Modules.Cart.Application/"]
 COPY ["src/Modules/Cart/RookiEcom.Modules.Cart.Domain/RookiEcom.Modules.Cart.Domain.csproj", "src/Modules/Cart/RookiEcom.Modules.Cart.Domain/"]
 COPY ["src/Modules/Cart/RookiEcom.Modules.Cart.Infrastructure/RookiEcom.Modules.Cart.Infrastructure.csproj", "src/Modules/Cart/RookiEcom.Modules.Cart.Infrastructure/"]
+COPY ["src/Modules/Cart/RookiEcom.Modules.Cart.Contracts/RookiEcom.Modules.Cart.Contracts.csproj", "src/Modules/Cart/RookiEcom.Modules.Cart.Contracts/"]
 
 # Copy project files for Product Module
 COPY ["src/Modules/ProductModule/RookiEcom.Modules.Product.Application/RookiEcom.Modules.Product.Application.csproj", "src/Modules/ProductModule/RookiEcom.Modules.Product.Application/"]
 COPY ["src/Modules/ProductModule/RookiEcom.Modules.Product.Contracts/RookiEcom.Modules.Product.Contracts.csproj", "src/Modules/ProductModule/RookiEcom.Modules.Product.Contracts/"]
+COPY ["src/Modules/ProductModule/RookiEcom.Modules.Product.Domain/RookiEcom.Modules.Product.Domain.csproj", "src/Modules/ProductModule/RookiEcom.Modules.Product.Domain/"]
 COPY ["src/Modules/ProductModule/RookiEcom.Modules.Product.Infrastructure/RookiEcom.Modules.Product.Infrastructure.csproj", "src/Modules/ProductModule/RookiEcom.Modules.Product.Infrastructure/"]
-
-# If you have a NuGet.config at the root of your repo, copy it too:
-# COPY ["NuGet.config", "."]
 
 # Restore dependencies for the WebAPI project (or the entire solution if preferred)
 # This will ensure all project references are resolved.
