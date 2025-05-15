@@ -1,6 +1,8 @@
 # Docker
 # Build a Docker image
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+pool:
+  name: Test
 
 trigger:
 - main
@@ -63,5 +65,4 @@ stages:
         tags: |
           $(tag)
           latest
-          buildArgs: |
-          VITE_API_URL=0.0.0.0:7670
+          buildArgs: VITE_API_URL=0.0.0.0:7670
