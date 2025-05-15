@@ -36,6 +36,8 @@ WORKDIR "/src/src/Hosts/RookiEcom.IdentityServer"
 # ARG BUILD_CONFIGURATION is inherited
 RUN dotnet publish "RookiEcom.IdentityServer.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false --no-restore
 
+COPY ["tempkey.jwk", "/app/publish/tempkey.jwk"]
+
 # Stage 3: Create the final runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
@@ -50,7 +52,7 @@ COPY --from=publish /app/publish .
 # Copy the tempkey.jwk for Duende IdentityServer development signing credential
 # Ensure this path is correct relative to the IdentityServer project directory in the publish output
 # If tempkey.jwk is in the root of the publish output for IdentityServer, this is correct.
-COPY --from=publish /app/publish/tempkey.jwk ./tempkey.jwk
+# COPY --from=publish /app/publish/tempkey.jwk ./tempkey.jwk
 
 # Copy Views and wwwroot if they are not embedded or handled by SDK publish for Razor pages/MVC
 # The default `dotnet publish` for web projects usually includes these.
