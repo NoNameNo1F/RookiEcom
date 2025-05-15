@@ -1,5 +1,5 @@
 # Stage 1: Restore dependencies
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS sdk_base
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
@@ -27,19 +27,20 @@ RUN dotnet restore "RookiEcom.sln"
 
 # Stage 2: Build and publish the application
 # Copy the rest of the source code now that dependencies are restored
+FROM sdk_base AS publish
 COPY . .
 WORKDIR "/src/src/Hosts/RookiEcom.IdentityServer"
-RUN dotnet build "RookiEcom.IdentityServer.csproj" -c $BUILD_CONFIGURATION -o /app/build --no-restore
+# RUN dotnet build "RookiEcom.IdentityServer.csproj" -c $BUILD_CONFIGURATION -o /app/build --no-restore
 
-FROM build AS publish
+# FROM build AS publish
 # ARG BUILD_CONFIGURATION is inherited
-RUN dotnet publish "RookiEcom.IdentityServer.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false --no-build
+RUN dotnet publish "RookiEcom.IdentityServer.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false --no-restore
 
 # Stage 3: Create the final runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 EXPOSE 8080
-EXPOSE 8081 # Default HTTPS port
+# EXPOSE 8081 # Default HTTPS port
 
 # Create a non-root user and group
 RUN addgroup --system appgroup && adduser --system --ingroup appgroup appuser
