@@ -1,4 +1,4 @@
-# RookiEcom - Clean Modulith RookiEcom with IdentityServer( plus .NET Identity), BackOffice(Vite React Typescripts), FrontStore(.NET MVC), and .NET WebAPI
+# RookiEcom - Clean Modulith RookiEcom with IdentityServer( plus .NET Identity), BackOffice(Vite React Typescripts), FrontStore(.NET MVC), and .NET WebAPI lmao
 
 Welcome to RookiEcom! This is a full-stack e-commerce application developed as part of the Nashtech Rookies program, demonstrating a modern web application built using .NET 8, React, and following Clean Architecture principles with a Modulith approach.
 
