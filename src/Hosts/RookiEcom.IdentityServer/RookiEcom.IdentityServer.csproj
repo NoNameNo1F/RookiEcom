@@ -35,6 +35,13 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Content Update="tempkey.jwk">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        </Content>
+    </ItemGroup>
+
+    <ItemGroup>
       <ProjectReference Include="..\..\BuildingBlocks\RookiEcom.Application\RookiEcom.Application.csproj" />
       <ProjectReference Include="..\..\BuildingBlocks\RookiEcom.Domain\RookiEcom.Domain.csproj" />
       <ProjectReference Include="..\..\BuildingBlocks\RookiEcom.Infrastructure\RookiEcom.Infrastructure.csproj" />
