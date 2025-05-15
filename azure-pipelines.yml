@@ -49,6 +49,7 @@ stages:
       inputs:
         command: build
         dockerfile: '$(Build.SourcesDirectory)/src/Hosts/RookiEcom.IdentityServer/Dockerfile'
+        buildContext: '$(Build.SourcesDirectory)'
         repository: $(identityServerImageName)
         tags: |
           $(tag)
