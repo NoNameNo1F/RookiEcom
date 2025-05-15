@@ -1,5 +1,5 @@
 # Stage 1: Restore dependencies
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS sdk_base
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
@@ -32,19 +32,20 @@ COPY ["src/Modules/ProductModule/RookiEcom.Modules.Product.Infrastructure/RookiE
 
 # Restore dependencies for the WebAPI project (or the entire solution if preferred)
 # This will ensure all project references are resolved.
-RUN dotnet restore "src/Hosts/RookiEcom.WebAPI/RookiEcom.WebAPI.csproj"
+# RUN dotnet restore "src/Hosts/RookiEcom.WebAPI/RookiEcom.WebAPI.csproj"
 # Alternatively, to restore the entire solution (often more robust):
-# RUN dotnet restore "RookiEcom.sln"
+RUN dotnet restore "RookiEcom.sln"
 
 # Stage 2: Build and publish the application
 # Copy the rest of the source code now that dependencies are restored
+FROM sdk_base AS publish
 COPY . .
 WORKDIR "/src/src/Hosts/RookiEcom.WebAPI"
-RUN dotnet build "RookiEcom.WebAPI.csproj" -c $BUILD_CONFIGURATION -o /app/build --no-restore
+RUN dotnet build "RookiEcom.WebAPI.csproj" -c $BUILD_CONFIGURATION -o /app/build /p:UseAppHost=false --no-restore
 
-FROM build AS publish
+# FROM build AS publish
 # ARG BUILD_CONFIGURATION is inherited from the 'build' stage
-RUN dotnet publish "RookiEcom.WebAPI.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false --no-build
+# RUN dotnet publish "RookiEcom.WebAPI.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false --no-build
 
 # Stage 3: Create the final runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
