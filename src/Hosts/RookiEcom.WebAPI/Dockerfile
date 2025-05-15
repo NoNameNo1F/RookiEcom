@@ -32,9 +32,9 @@ COPY ["src/Modules/ProductModule/RookiEcom.Modules.Product.Infrastructure/RookiE
 
 # Restore dependencies for the WebAPI project (or the entire solution if preferred)
 # This will ensure all project references are resolved.
-# RUN dotnet restore "src/Hosts/RookiEcom.WebAPI/RookiEcom.WebAPI.csproj"
+RUN dotnet restore "src/Hosts/RookiEcom.WebAPI/RookiEcom.WebAPI.csproj"
 # Alternatively, to restore the entire solution (often more robust):
-RUN dotnet restore "RookiEcom.sln"
+# RUN dotnet restore "RookiEcom.sln"
 
 # Stage 2: Build and publish the application
 # Copy the rest of the source code now that dependencies are restored
