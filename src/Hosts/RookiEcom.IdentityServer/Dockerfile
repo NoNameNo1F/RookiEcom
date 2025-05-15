@@ -36,7 +36,7 @@ WORKDIR "/src/src/Hosts/RookiEcom.IdentityServer"
 # ARG BUILD_CONFIGURATION is inherited
 RUN dotnet publish "RookiEcom.IdentityServer.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false --no-restore
 
-COPY ["tempkey.jwk", "/app/publish/tempkey.jwk"]
+# COPY ["tempkey.jwk", "/app/publish/tempkey.jwk"]
 
 # Stage 3: Create the final runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
