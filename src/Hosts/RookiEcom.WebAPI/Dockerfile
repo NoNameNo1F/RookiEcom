@@ -41,7 +41,7 @@ RUN dotnet restore "RookiEcom.sln"
 FROM sdk_base AS publish
 COPY . .
 WORKDIR "/src/src/Hosts/RookiEcom.WebAPI"
-RUN dotnet build "RookiEcom.WebAPI.csproj" -c $BUILD_CONFIGURATION -o /app/build /p:UseAppHost=false --no-restore
+RUN dotnet build "RookiEcom.WebAPI.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false --no-restore
 
 # FROM build AS publish
 # ARG BUILD_CONFIGURATION is inherited from the 'build' stage
