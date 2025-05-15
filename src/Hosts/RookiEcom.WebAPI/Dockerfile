@@ -50,7 +50,6 @@ RUN dotnet publish "RookiEcom.WebAPI.csproj" -c $BUILD_CONFIGURATION -o /app/pub
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 EXPOSE 7670
-EXPOSE 7671 # ASP.NET Core default HTTPS port in containers; adjust if your app uses different ports
 
 # Create a non-root user and group for security
 # The $APP_UID from your original Dockerfile is not standardly defined inside Docker build
