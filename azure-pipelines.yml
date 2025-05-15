@@ -29,6 +29,7 @@ stages:
       inputs:
         command: build
         dockerfile: '$(Build.SourcesDirectory)/src/Hosts/RookiEcom.WebAPI/Dockerfile'
+        buildContext: '$(Build.SourcesDirectory)'
         repository: $(webApiImageName)
         tags: |
           $(tag)
