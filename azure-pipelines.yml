@@ -15,7 +15,6 @@ variables:
   frontStoreImageName: 'rookiecom-frontstore'
   webApiImageName: 'rookiecom-webapi'
   identityServerImageName: 'rookiecom-identityserver'
-  backofficeImageName: 'rookiecom-backoffice'
 
 stages:
 - stage: Build
@@ -23,8 +22,7 @@ stages:
   jobs:
   - job: BuildAllImages
     displayName: Build Application Images
-    pool:
-      vmImage: ubuntu-latest
+    
     steps:
     - task: Docker@2
       displayName: Build FrontStore image
@@ -55,14 +53,3 @@ stages:
         tags: |
           $(tag)
           latest
-    
-    - task: Docker@2
-      displayName: 'Build Backoffice Image'
-      inputs:
-        command: build
-        dockerfile: '$(Build.SourcesDirectory)/src/Hosts/RookiEcom.BackOffice/Dockerfile'
-        repository: $(backofficeImageName)
-        tags: |
-          $(tag)
-          latest
-          buildArgs: VITE_API_URL=0.0.0.0:7670
