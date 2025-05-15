@@ -21,9 +21,9 @@ COPY ["src/BuildingBlocks/RookiEcom.Infrastructure/RookiEcom.Infrastructure.cspr
 
 # Restore dependencies using the solution file for robustness
 # This ensures all project references within the solution are resolved correctly.
-RUN dotnet restore "RookiEcom.sln"
+# RUN dotnet restore "RookiEcom.sln"
 # Or, if you prefer to restore only the specific project and its dependencies:
-# RUN dotnet restore "src/Hosts/RookiEcom.IdentityServer/RookiEcom.IdentityServer.csproj"
+RUN dotnet restore "src/Hosts/RookiEcom.IdentityServer/RookiEcom.IdentityServer.csproj"
 
 # Stage 2: Build and publish the application
 # Copy the rest of the source code now that dependencies are restored
